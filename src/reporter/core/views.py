@@ -13,7 +13,6 @@ import models
 
 
 LIMITS = [20, 50, 100, 200]
-NODES = ['travis-ci', 'sphinx']
 
 
 def index_post(request):
