@@ -1,0 +1,33 @@
+{% load staticfiles %}<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-GB" xml:lang="en-GB" dir="ltr">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <link href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'libs/elusive-webfont/elusive-webfont.css' %}" rel="stylesheet" />
+    <link href="{% static 'base.css' %}" rel="stylesheet" />
+    <title>{% block title %}Reporter{% endblock %}</title>
+{% block extrahead %}{% endblock %}
+  </head>
+  <body>
+
+    <nav class="navbar navbar-fixed-top navbar-inverse">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/">ObsPy Reporter</a>
+          <ul class="nav pull-right">
+            <li><a href="https://github.com/obspy/obspy"><i class="icon-github icon-white"></i> GitHub</a></li>
+            <li><a href="http://docs.obspy.org"><i class="icon-book icon-white"></i> Documentation</a></li>
+            <li><a href="http://docs.obspy.org/master/pep8/index.html"><i class="icon-check icon-white"></i> PEP8</a></li>
+            <li><a href="http://docs.obspy.org/master/coverage/index.html"><i class="icon-check icon-white"></i> Coverage</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+{% block content %}{% endblock %}
+    </div>
+{% block extrafoot %}{% endblock %}
+  </body>
+</html>

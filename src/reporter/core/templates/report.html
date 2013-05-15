@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+
+{% block title %}{{ block.super }} - #{{ report.pk }}{% endblock %}
+
+
+{% block extrahead %}
+<script type="text/javascript">
+  var shiftWindow = function() { scrollBy(0, -90) };
+  if (location.hash) shiftWindow();
+  window.addEventListener("hashchange", shiftWindow);
+</script>
+{% endblock %}
+
+
+{% block content %}
+<div class="hero-unit">
+  <h1>
+    <i class="pull-right text-{{ report.status }} {{ report.status_icon }}"></i>
+    <small>#</small>{{ report.pk }}
+  </h1>
+  <p class="muted">
+    Test report by node <b>{{ report.node }}</b> covered <b>{{ report.tests }}</b> test cases from
+    <b>{{ report.modules }}</b> modules resulted into
+    <b>{{ report.errors|default:'</b>no<b>' }}</b> errors and
+    <b>{{ report.failures|default:'</b>no<b>' }}</b> failures
+  </p>
+</div>
+
+<ul class="pager">
+{% if report.previous_id %}
+  <li class="previous"><a href="{% url 'report_html' report.previous_id %}">&laquo; Previous</a></li>
+{% else %}
+  <li class="previous disabled"><a href="{% url 'report_html' report.id %}">&laquo; Previous</a></li>
+{% endif %}
+  <li><a href="/">Return to Overview</a></li>
+{% if report.next_id %}
+  <li class="next"><a href="{% url 'report_html' report.next_id %}">Next &raquo;</a></li>
+{% else %}
+  <li class="next disabled"><a href="{% url 'report_html' report.id %}">Next &raquo;</a></li>
+{% endif %}
+</ul>
+
+
+<div class="row">
+  <div class="span6">
+    <h3>Report</h3>
+    <dl class="dl-horizontal">
+{% if one_version %}
+      <dt>ObsPy Version</dt>
+      <dd>{{ report.installed }}</dd>
+{% endif %}
+      <dt>Report File</dt>
+      <dd><a href="{% url 'report_xml' report.pk %}">XML Document</a></dd>
+      <dt>Node Name</dt>
+      <dd>{{ report.node }}</dd>
+      <dt>Total Runtime</dt>
+      <dd>{{ report.timetaken|floatformat }} sec</dd>
+      <dt>Finished</dt>
+      <dd>{{ report.datetime }}</dd>
+    </dl>
+    <h3>Dependencies</h3>
+    <dl class="dl-horizontal">
+{% for item in dependencies %} 
+      <dt>{{ item.0 }}</dt>
+      <dd>{{ item.1 }}</dd>
+{% endfor %}
+    </dl>
+  </div>
+  <div class="span6">
+    <h3>System / Python</h3>
+    <dl class="dl-horizontal">
+{% for item in platform %} 
+      <dt>{{ item.0 }}</dt>
+      <dd>{{ item.1 }}</dd>
+{% endfor %}
+    </dl>
+  </div>
+</div>
+
+
+<h3>Modules <small>({{ report.modules }})</small></h3>
+<table class="table table-hover table-condensed">
+  <thead>
+    <tr>
+      <th>Module</th>
+{% if not one_version %}
+      <th>Version</th>
+{% endif %}
+      <th>Errors</th>
+      <th>Failures</th>
+      <th>Skipped</th>
+      <th>Tests</th>
+      <th>Runtime</th>
+      <th>Tracebacks</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for module in modules %} 
+    <tr>
+      <td>{{ module.name }}</td>
+{% if not one_version %}
+      <td>{{ module.version }}</td>
+{% endif %}
+{% if module.tested %}
+      <td>{{ module.errors|default:'<span class="muted">-</span>' }}</td>
+      <td>{{ module.failures|default:'<span class="muted">-</span>' }}</td>
+      <td>{{ module.skipped|default:'<span class="muted">-</span>' }}</td>
+      <td>{{ module.tests }}</td>
+      <td>{{ module.timetaken|floatformat }} sec</td>
+{% else %}
+      <td colspan="6" class="muted">Not tested</td>
+{% endif %}
+      <td>
+{% for traceback in module.tracebacks %}
+  <a href="#{{ traceback.id }}"><span class="label label-{{ traceback.label }}">#{{ traceback.id }}</span></a>
+{% endfor %}
+      </td>
+    </tr>
+{% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <th>Summary</th>
+{% if not one_version %}
+      <th></th>
+{% endif %}
+      <th>{{ report.errors|default:'<span class="muted">-</span>' }}</th>
+      <th>{{ report.failures|default:'<span class="muted">-</span>' }}</th>
+      <th>{{ report.skipped|default:'<span class="muted">-</span>' }}</th>
+      <th>{{ report.tests }}</th>
+      <th>{{ report.timetaken|floatformat }} sec</th>
+      <th></th>
+      
+    </tr>
+  </tfoot>
+</table>
+
+{% if tracebacks %}
+<h3>Tracebacks <small>({{ tracebacks|length }})</small></h3>
+<div class="accordion">
+{% for traceback in tracebacks %}
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <div class="accordion-inner">
+        <span class="label label-{{ traceback.label }}">#{{ traceback.id }}</span>
+        <a class="text-{{ traceback.status }}"
+           data-toggle="collapse" href="#{{ traceback.id }}"
+           name="{{ traceback.id }}">
+          <strong>{{ traceback.module }}</strong>
+        </a>
+      </div>
+    </div>
+    <div id="{{ traceback.id }}" class="accordion-body collapse in">
+        <pre>{{ traceback.log }}</pre>
+    </div>
+  </div>
+{% endfor %}
+</div>
+{% endif %}
+
+{% if log %}
+<h3>Install Log</h3>
+<pre>{{ log }}</pre>
+{% endif %}
+{% endblock %}
+
+
+{% block extrafoot %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+{% endblock %}

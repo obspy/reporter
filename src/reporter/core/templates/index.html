@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load staticfiles append_to_get sectodur %}
+
+
+{% block title %}{{ block.super }} - Last {{ limit }} reports{% endblock %}
+
+
+{% block content %}
+<div class="hero-unit">
+  <h1><i class="pull-right icon-check"></i>Reports</h1>
+  <p class="muted">Overview of the latest {{ limit }} test reports</p>
+</div>
+
+<form action="{% url 'index' %}" method="get" class="form-inline">
+
+<div class="row">
+  <div class="span10">
+
+    <label>
+      <select name="limit" size="1" class="span1" onchange="submit();">
+{% for value in limits %}
+        <option value="{{ value }}"{% if value == limit %} selected="selected"{% endif %}>{{ value }}</option>
+{% endfor %}
+      </select> records per page
+    </label>
+
+    <div class="pull-right">
+      <label class="radio">
+        <input type="radio" name="show" value="" onchange="submit();"
+          {% if not show %}checked="checked"{% endif %}>
+          all
+      </label>
+      <label class="radio">
+        <input type="radio" name="show" value="errors" onchange="submit();"
+          {% if show == 'errors' %}checked="checked"{% endif %}>
+          errors only
+      </label>
+    </div>
+
+    <table class="table table-hover table-condensed">
+      <thead>
+        <tr>
+          <th>Report</th>
+          <th>Errors</th>
+          <th>Failures</th>
+          <th class="hidden-phone">Tests</th>
+          <th class="hidden-phone">Modules</th>
+          <th class="hidden-phone">Node Name</th>
+          <th class="hidden-phone">Python</th>
+          <th class="hidden-phone">System</th>
+          <th class="hidden-phone">Architecture</th>
+          <th class="hidden-phone hidden-tablet">Duration</th>
+          <th class="hidden-phone hidden-tablet">Finished</th>
+        </tr>
+      </thead>
+      <tbody>
+{% for report in reports %}
+        <tr class="{{ report.status }}">
+          <td>
+            <i class="text-{{ report.status }} {{ report.status_icon }}"></i>
+            <a class="text-{{ report.status }}" href="{% url 'report_html' report.pk %}"><small>#</small>{{ report.id }}</a>
+          </td>
+          <td>{{ report.errors|default:'<span class="muted">-</span>' }}</td>
+          <td>{{ report.failures|default:'<span class="muted">-</span>' }}</td>
+          <td class="hidden-phone">{{ report.tests }}</td>
+          <td class="hidden-phone">{{ report.modules }}</td>
+          <td class="hidden-phone">{{ report.node }}</td>
+          <td class="hidden-phone">{{ report.version }}</td>
+          <td class="hidden-phone">{{ report.system }}</td>
+          <td class="hidden-phone">{{ report.architecture }}</td>
+          <td class="hidden-phone hidden-tablet">{{ report.timetaken|sectodur }}</td>
+          <td class="hidden-phone hidden-tablet"><span data-livestamp="{{ report.timestamp }}">{{ report.datetime|timesince }} ago</span></td>
+        </tr>
+{% endfor %}
+      </tbody>
+    </table>
+
+    <ul class="pager">
+    {% if reports.has_previous %}
+      <li class="previous"><a href="{% append_to_get page=reports.previous_page_number %}">&laquo; Newer</a></li>
+    {% else %}
+      <li class="previous disabled"><a href="">&laquo; Newer</a></li>
+    {% endif %}
+    
+      <li>Page {{ reports.number }} of {{ reports.paginator.num_pages }}</li>
+    
+    {% if reports.has_next %}
+      <li class="next"><a href="{% append_to_get page=reports.next_page_number %}">Older &raquo;</a></li>
+    {% else %}
+      <li class="next disabled"><a href="">Older &raquo;</a></li>
+    {% endif %}
+    </ul>
+
+  </div>
+  <div class="span2">
+
+    <div class="row-fluid">
+      <div class="span8 offset4">
+        <h5>System</h5>
+        <input type="hidden" name="system" value="{{ system }}" />
+        <ul>
+          <li><a href="{% append_to_get system=None %}"{% if not system %} class="enabled"{% endif %}>all</a></li>
+{% for value in systems %}
+          <li><a href="{% append_to_get system=value %}"{% if system == value %} class="enabled"{% endif %}>{{ value }}</a></li>
+{% endfor %}
+        </ul>
+        <h5>Architecture</h5>
+        <input type="hidden" name="architecture" value="{{ architecture }}" />
+        <ul>
+          <li><a href="{% append_to_get architecture=None %}"{% if not architecture %} class="enabled"{% endif %}>all</a></li>
+{% for value in architectures %}
+          <li><a href="{% append_to_get architecture=value %}"{% if architecture == value %} class="enabled"{% endif %}>{{ value }}</a></li>
+{% endfor %}
+        </ul>
+
+        <h5>Python</h5>
+        <input type="hidden" name="version" value="{{ version }}" />
+        <ul>
+          <li><a href="{% append_to_get version=None %}"{% if not version %} class="enabled"{% endif %}>all</a></li>
+{% for value in versions %}
+          <li><a href="{% append_to_get version=value %}"{% if version == value %} class="enabled"{% endif %}>{{ value }}</a></li>
+{% endfor %}
+        </ul>
+
+        <h5>Selected Nodes</h5>
+        <input type="hidden" name="node" value="{{ node }}" />
+        <ul>
+          <li><a href="{% append_to_get node=None %}"{% if not node %} class="enabled"{% endif %}>all</a></li>
+{% for value in nodes %}
+          <li><a href="{% append_to_get node=value,version=None,architecture=None,system=None %}"{% if node == value %} class="enabled"{% endif %}>{{ value }}</a></li>
+{% endfor %}
+        </ul>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+</form>
+{% endblock %}
+
+
+{% block extrafoot %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script src="{% static 'libs/moment.min.js' %}"></script>
+<script src="{% static 'libs/livestamp.min.js' %}"></script>
+{% endblock %}
