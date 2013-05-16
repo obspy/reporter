@@ -35,8 +35,7 @@ def index_post(request):
             system=system, architecture=architecture, version=version,
             xml=xml, **kwargs)
         report.save()
-    except Exception, e:
-        print e
+    except:
         return HttpResponseBadRequest()
     return HttpResponse()
 
@@ -197,6 +196,7 @@ def report_html(request, pk):
                 one_version = False
         obj['version'] = version
         obj['tested'] = False
+        obj['status'] = 'success'
         tested = item.find('tested')
         if tested is not None:
             module_tracebacks = []
@@ -205,17 +205,6 @@ def report_html(request, pk):
                 timetaken = float(item.findtext('timetaken'))
             except:
                 timetaken = None
-            # errors
-            errors = item.find('errors').getchildren()
-            for error in errors:
-                tb = {}
-                tb['module'] = obj['name']
-                tb['id'] = len(tracebacks) + 1
-                tb['log'] = unicode(error.text).encode("utf-8")
-                tb['status'] = 'error'
-                tb['label'] = 'important'
-                module_tracebacks.append(tb)
-                tracebacks.append(tb)
             # failures
             failures = item.find('failures').getchildren()
             for error in failures:
@@ -227,6 +216,19 @@ def report_html(request, pk):
                 tb['label'] = 'default'
                 module_tracebacks.append(tb)
                 tracebacks.append(tb)
+                obj['status'] = tb['status']
+            # errors
+            errors = item.find('errors').getchildren()
+            for error in errors:
+                tb = {}
+                tb['module'] = obj['name']
+                tb['id'] = len(tracebacks) + 1
+                tb['log'] = unicode(error.text).encode("utf-8")
+                tb['status'] = 'error'
+                tb['label'] = 'important'
+                module_tracebacks.append(tb)
+                tracebacks.append(tb)
+                obj['status'] = tb['status']
             obj['tested'] = True
             obj['tests'] = int(item.findtext('tests'))
             try:

@@ -97,7 +97,7 @@
   </thead>
   <tbody>
 {% for module in modules %} 
-    <tr>
+    <tr class="{{ module.status }}">
       <td>{{ module.name }}</td>
 {% if not one_version %}
       <td>{{ module.version }}</td>
