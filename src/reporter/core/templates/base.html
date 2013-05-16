@@ -5,7 +5,20 @@
     <meta charset="UTF-8" />
     <link href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
     <link href="{% static 'libs/elusive-webfont/elusive-webfont.css' %}" rel="stylesheet" />
-    <link href="{% static 'base.css' %}" rel="stylesheet" />
+    <style type="text/css">
+      .table tbody tr.success>td { background-color: #FAFFFA; }
+      .table-hover tbody tr.success:hover>td { background-color: #DCFFDC; }
+      .text-success { color: #038035; }
+      .text-warning { color: #666666; }
+      .text-error { color: #CC0000; }
+      a.enabled { color: black; cursor: default; font-weight: bold; }
+      a.enabled:hover { text-decoration: none; }
+      .hero-unit h1 small { font-size: 85%; color: inherit; }
+      .hero-unit h1 i { font-size: 150%; }
+      .hero-unit { padding: 60px 60px 20px; }
+      .accordion-body pre { margin: 0; border: none; }
+      .muted b { color: #333333; }
+    </style>
     <title>{% block title %}Reporter{% endblock %}</title>
 {% block extrahead %}{% endblock %}
   </head>
