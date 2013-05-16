@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load staticfiles append_to_get sectodur %}
+{% load staticfiles append_to_get %}
 
 
 {% block title %}{{ block.super }} - Last {{ limit }} reports{% endblock %}
@@ -28,7 +28,7 @@
       <label class="radio">
         <input type="radio" name="show" value="" onchange="submit();"
           {% if not show %}checked="checked"{% endif %}>
-          all
+          show all
       </label>
       <label class="radio">
         <input type="radio" name="show" value="errors" onchange="submit();"
@@ -43,13 +43,12 @@
           <th>Report</th>
           <th>Errors</th>
           <th>Failures</th>
+          <th>ObsPy<br />Version</th>
           <th class="hidden-phone">Tests</th>
           <th class="hidden-phone">Modules</th>
-          <th class="hidden-phone">Node Name</th>
-          <th class="hidden-phone">Python</th>
+          <th class="hidden-phone">Node<br />Name</th>
+          <th class="hidden-phone">Python<br />Version</th>
           <th class="hidden-phone">System</th>
-          <th class="hidden-phone">Architecture</th>
-          <th class="hidden-phone hidden-tablet">Duration</th>
           <th class="hidden-phone hidden-tablet">Finished</th>
         </tr>
       </thead>
@@ -62,13 +61,12 @@
           </td>
           <td>{{ report.errors|default:'<span class="muted">-</span>' }}</td>
           <td>{{ report.failures|default:'<span class="muted">-</span>' }}</td>
+          <td>{{ report.installed|default:'Unknown' }}</td>
           <td class="hidden-phone">{{ report.tests }}</td>
           <td class="hidden-phone">{{ report.modules }}</td>
           <td class="hidden-phone">{{ report.node }}</td>
           <td class="hidden-phone">{{ report.version }}</td>
-          <td class="hidden-phone">{{ report.system }}</td>
-          <td class="hidden-phone">{{ report.architecture }}</td>
-          <td class="hidden-phone hidden-tablet">{{ report.timetaken|sectodur }}</td>
+          <td class="hidden-phone">{{ report.system }} ({{ report.architecture }})</td>
           <td class="hidden-phone hidden-tablet"><span data-livestamp="{{ report.timestamp }}">{{ report.datetime|timesince }} ago</span></td>
         </tr>
 {% endfor %}

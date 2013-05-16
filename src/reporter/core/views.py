@@ -189,13 +189,16 @@ def report_html(request, pk):
     for key, item in temp:
         obj = {}
         obj['name'] = "obspy.%s" % (key)
-        obj['version'] = version = item.findtext('installed')
-        if version and version != report.installed:
-            one_version = False
+        version = item.findtext('installed')
+        if version:
+            if version.startswith('0.0.0-'):
+                version = version[6:]
+            if version != report.installed:
+                one_version = False
+        obj['version'] = version
         obj['tested'] = False
         tested = item.find('tested')
         if tested is not None:
-            sum = 0
             module_tracebacks = []
             # timetaken
             try:
