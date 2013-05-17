@@ -1,0 +1,17 @@
+<ul>
+  <li><b>Date / Time</b>: {{ report.datetime }}</li>
+  <li><b>Errors / Failures</b>: {{ report.sum }}</li>
+  <li><b>ObsPy Version</b>:
+{% if report.is_git %}
+     <a href="https://github.com/obspy/obspy/tree/{{ report.installed }}">{{ report.installed }}</a>
+{% else %}
+     {{ report.installed }}
+{% endif %}
+  </li>
+  <li><b>Tested Modules</b>: {{ report.modules }}</li>
+  <li><b>Number of Tests</b>: {{ report.tests }}</li>
+  <li><b>Skipped Tests</b>: {{ report.skipped }}</li>
+  <li><b>Node Name</b>: {{ report.node }}</li>
+  <li><b>System</b>: {{ report.system }} ({{ report.architecture }})</li>
+  <li><b>Python Version</b>: {{ report.version }}</li>
+</ul>

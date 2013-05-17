@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
+from django.contrib.syndication.views import Feed
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template.context import RequestContext
 from django.views.decorators.cache import cache_page
 from lxml import etree
-from reporter.core.utils import parse_report_xml, link_traceback
+from reporter.core.utils import parse_report_xml, format_traceback
 import models
+from django.template import loader
 
 
 LIMITS = [20, 50, 100, 200]
@@ -185,6 +188,7 @@ def report_html(request, pk):
     modules = []
     tracebacks = []
     one_version = True
+    git_hash = report.git_commit_hash
     for key, item in temp:
         obj = {}
         obj['name'] = "obspy.%s" % (key)
@@ -211,7 +215,7 @@ def report_html(request, pk):
                 tb = {}
                 tb['module'] = obj['name']
                 tb['id'] = len(tracebacks) + 1
-                tb['log'] = link_traceback(unicode(error.text).encode("utf-8"))
+                tb['log'] = format_traceback(error.text, git_hash)
                 tb['status'] = 'warning'
                 tb['label'] = 'default'
                 module_tracebacks.append(tb)
@@ -223,7 +227,7 @@ def report_html(request, pk):
                 tb = {}
                 tb['module'] = obj['name']
                 tb['id'] = len(tracebacks) + 1
-                tb['log'] = link_traceback(unicode(error.text).encode("utf-8"))
+                tb['log'] = format_traceback(error.text, git_hash)
                 tb['status'] = 'error'
                 tb['label'] = 'important'
                 module_tracebacks.append(tb)
@@ -256,6 +260,64 @@ def report_html(request, pk):
         'log': log,
     }
     return render_to_response("report.html", options, RequestContext(request))
+
+
+class LatestReportsFeed(Feed):
+    title = "ObsPy Reporter"
+    link = "/rss/"
+    description = "Latest failing test reports on tests.obspy.org."
+
+    def items(self):
+        return models.Report.objects.\
+            filter(Q(failures__gt=0) | Q(errors__gt=0)).\
+            order_by('-datetime')[:5]
+
+    def item_title(self, report):
+        return "%s errors for %s" % (report.sum or 'No', report.installed)
+
+    def item_description(self, report):
+        return loader.render_to_string('rss.html', {'report': report})
+
+    # item_link is only needed if NewsItem has no get_absolute_url method.
+    def item_link(self, item):
+        return reverse('report_html', args=[item.pk])
+
+report_rss = LatestReportsFeed()
+
+
+class SelectedNodeReportsFeed(Feed):
+    description = "Latest updates on tests.obspy.org"
+
+    def get_object(self, request, name):  # @UnusedVariable
+        return get_object_or_404(models.SelectedNode, name=name)
+
+    def title(self, node):
+        return "ObsPy Reporter (%s)" % (node.name)
+
+    def link(self, node):
+        return reverse('report_rss_selectednode', args=[node.name])
+
+    def description(self, node):
+        return "Latest failing test reports on tests.obspy.org for node " + \
+            "%s" % (node.name)
+
+    def items(self, node):
+        return models.Report.objects.\
+            filter(Q(failures__gt=0) | Q(errors__gt=0)).\
+            filter(node=node.name).\
+            order_by('-datetime')[:5]
+
+    def item_title(self, report):
+        return "%s errors for %s" % (report.sum or 'No', report.installed)
+
+    def item_description(self, report):
+        return loader.render_to_string('rss.html', {'report': report})
+
+    # item_link is only needed if NewsItem has no get_absolute_url method.
+    def item_link(self, item):
+        return reverse('report_html', args=[item.pk])
+
+report_rss_selectednode = SelectedNodeReportsFeed()
 
 
 @cache_page(60 * 60 * 24 * 7)

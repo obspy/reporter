@@ -154,7 +154,7 @@
       </div>
     </div>
     <div id="{{ traceback.id }}" class="accordion-body collapse in">
-        <pre>{{ traceback.log }}</pre>
+        <pre>{{ traceback.log|safe }}</pre>
     </div>
   </div>
 {% endfor %}

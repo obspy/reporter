@@ -28,11 +28,14 @@
       <div class="navbar-inner">
         <div class="container">
           <a class="brand" href="/">ObsPy Reporter</a>
-          <ul class="nav pull-right">
+          <ul class="nav">
             <li><a href="https://github.com/obspy/obspy"><i class="icon-github icon-white"></i> GitHub</a></li>
             <li><a href="http://docs.obspy.org"><i class="icon-book icon-white"></i> Documentation</a></li>
             <li><a href="http://docs.obspy.org/master/pep8/index.html"><i class="icon-check icon-white"></i> PEP8</a></li>
             <li><a href="http://docs.obspy.org/master/coverage/index.html"><i class="icon-check icon-white"></i> Coverage</a></li>
+          </ul>
+          <ul class="nav pull-right">
+            <li><a href="{% url 'report_rss' %}"><i class="icon-rss icon-white"></i></a></li>
           </ul>
         </div>
       </div>

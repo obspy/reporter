@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from lxml import etree
 from datetime import datetime
+from django.db import connection
+from django.utils.html import escape
+from lxml import etree
 from reporter.core import models
 import os
-from django.db import connection
+import re
 
 
 def parse_report_xml(xml):
@@ -93,8 +95,20 @@ def set_default_selected_nodes():
     print 'Selected nodes have been created ...'
 
 
-def link_traceback(text):
+def format_traceback(text, tree=None):
     """
     Links directly to source files in tracebacks
+
+    Credits for regexp magic: Tobias Megies (@megies)
     """
-    return text
+    if tree is None:
+        tree = "master"
+        linelink = ""
+    else:
+        linelink = r'#L\5'
+    text = escape(unicode(text).encode("utf-8"))
+    regex = '(File &quot;)(.*/(obspy/[^&]*))(&quot;, line ([0-9]+),)'
+    regex = re.compile(regex, re.UNICODE)
+    regex_sub = r'\1<a href="https://github.com/obspy/obspy/blob/' + \
+        r'%s/\3%s">\2</a>\4' % (tree, linelink)
+    return regex.sub(regex_sub, text)

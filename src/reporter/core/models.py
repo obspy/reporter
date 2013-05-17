@@ -91,6 +91,17 @@ class Report(models.Model):
             return True
         return False
 
+    @property
+    def git_commit_hash(self):
+        if self.installed.endswith('-dirty'):
+            return None
+        if '-g' in self.installed:
+            try:
+                return self.installed.rsplit('g')[1]
+            except:
+                pass
+        return None
+
 
 class SelectedNode(models.Model):
     """
