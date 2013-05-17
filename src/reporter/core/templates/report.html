@@ -91,12 +91,12 @@
     <tr>
       <th>Module</th>
 {% if not one_version %}
-      <th>Version</th>
+      <th class="hidden-phone">Version</th>
 {% endif %}
       <th>Errors /<br />Failures</th>
-      <th>Skipped</th>
-      <th>Tests</th>
-      <th>Runtime</th>
+      <th class="hidden-phone">Skipped</th>
+      <th class="hidden-phone">Tests</th>
+      <th class="hidden-phone">Runtime</th>
       <th>Tracebacks</th>
     </tr>
   </thead>
@@ -105,19 +105,20 @@
     <tr class="{{ module.status }}">
       <td>{{ module.name }}</td>
 {% if not one_version %}
-      <td>{{ module.version }}</td>
+      <td class="hidden-phone">{{ module.version }}</td>
 {% endif %}
 {% if module.tested %}
       <td>{{ module.sum|default:'<span class="muted">-</span>' }}</td>
-      <td>{{ module.skipped|default:'<span class="muted">-</span>' }}</td>
-      <td>{{ module.tests }}</td>
-      <td>{{ module.timetaken|floatformat }} sec</td>
+      <td class="hidden-phone">{{ module.skipped|default:'<span class="muted">-</span>' }}</td>
+      <td class="hidden-phone">{{ module.tests }}</td>
+      <td class="hidden-phone">{{ module.timetaken|floatformat }} sec</td>
 {% else %}
-      <td colspan="6" class="muted">Not tested</td>
+      <td class="muted">Not tested</td>
+      <td class="hidden-phone" colspan="3"> </td>
 {% endif %}
       <td>
 {% for traceback in module.tracebacks %}
-  <a href="#{{ traceback.id }}"><span class="label label-{{ traceback.label }}">#{{ traceback.id }}</span></a>
+        <a href="#{{ traceback.id }}"><span class="label label-{{ traceback.label }}">#{{ traceback.id }}</span></a>
 {% endfor %}
       </td>
     </tr>
@@ -127,14 +128,13 @@
     <tr>
       <th>Summary</th>
 {% if not one_version %}
-      <th></th>
+      <th class="hidden-phone"></th>
 {% endif %}
       <th>{{ report.sum|default:'<span class="muted">-</span>' }}</th>
-      <th>{{ report.skipped|default:'<span class="muted">-</span>' }}</th>
-      <th>{{ report.tests }}</th>
-      <th>{{ report.timetaken|floatformat }} sec</th>
-      <th></th>
-      
+      <th class="hidden-phone">{{ report.skipped|default:'<span class="muted">-</span>' }}</th>
+      <th class="hidden-phone">{{ report.tests }}</th>
+      <th class="hidden-phone">{{ report.timetaken|floatformat }} sec</th>
+      <th> </th>
     </tr>
   </tfoot>
 </table>
