@@ -71,6 +71,24 @@ class Report(models.Model):
             return obj.id
         return False
 
+    @property
+    def is_git(self):
+        if self.installed.endswith('-dirty'):
+            return False
+        if '-g' in self.installed:
+            # GIT
+            return True
+        if '.dev-r' in self.installed:
+            # SVN
+            return False
+        if self.installed.startswith('0.5.'):
+            return False
+        if self.installed.startswith('0.6.'):
+            return False
+        if self.installed.startswith('0.7.'):
+            return False
+        return False
+
 
 class SelectedNode(models.Model):
     """
