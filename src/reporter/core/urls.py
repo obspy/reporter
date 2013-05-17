@@ -19,7 +19,7 @@ urlpatterns = patterns('reporter.core.views',
     url(r'^rss/$',
         view='report_rss',
         name='report_rss'),
-    url(r'^rss/(?P<name>[\w-_]+)/$',
+    url(r'^rss/(?P<name>[\w-]+)/$',
         view='report_rss_selectednode',
         name='report_rss_selectednode'),
 )
