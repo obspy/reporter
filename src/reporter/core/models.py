@@ -93,13 +93,8 @@ class Report(models.Model):
 
     @property
     def git_commit_hash(self):
-        if self.installed.endswith('-dirty'):
-            return None
-        if '-g' in self.installed:
-            try:
-                return self.installed.rsplit('g')[1]
-            except:
-                pass
+        if self.is_git:
+            return self.installed
         return None
 
 
