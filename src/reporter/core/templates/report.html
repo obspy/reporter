@@ -93,8 +93,7 @@
 {% if not one_version %}
       <th>Version</th>
 {% endif %}
-      <th>Errors</th>
-      <th>Failures</th>
+      <th>Errors /<br />Failures</th>
       <th>Skipped</th>
       <th>Tests</th>
       <th>Runtime</th>
@@ -109,8 +108,7 @@
       <td>{{ module.version }}</td>
 {% endif %}
 {% if module.tested %}
-      <td>{{ module.errors|default:'<span class="muted">-</span>' }}</td>
-      <td>{{ module.failures|default:'<span class="muted">-</span>' }}</td>
+      <td>{{ module.sum|default:'<span class="muted">-</span>' }}</td>
       <td>{{ module.skipped|default:'<span class="muted">-</span>' }}</td>
       <td>{{ module.tests }}</td>
       <td>{{ module.timetaken|floatformat }} sec</td>
@@ -131,8 +129,7 @@
 {% if not one_version %}
       <th></th>
 {% endif %}
-      <th>{{ report.errors|default:'<span class="muted">-</span>' }}</th>
-      <th>{{ report.failures|default:'<span class="muted">-</span>' }}</th>
+      <th>{{ report.sum|default:'<span class="muted">-</span>' }}</th>
       <th>{{ report.skipped|default:'<span class="muted">-</span>' }}</th>
       <th>{{ report.tests }}</th>
       <th>{{ report.timetaken|floatformat }} sec</th>

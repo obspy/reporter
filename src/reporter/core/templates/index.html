@@ -41,8 +41,7 @@
       <thead>
         <tr>
           <th>Report</th>
-          <th>Errors</th>
-          <th>Failures</th>
+          <th>Errors /<br/>Failures</th>
           <th>ObsPy<br />Version</th>
           <th class="hidden-phone">Tests</th>
           <th class="hidden-phone">Modules</th>
@@ -59,8 +58,7 @@
             <i class="text-{{ report.status }} {{ report.status_icon }}"></i>
             <a class="text-{{ report.status }}" href="{% url 'report_html' report.pk %}"><small>#</small>{{ report.id }}</a>
           </td>
-          <td>{{ report.errors|default:'<span class="muted">-</span>' }}</td>
-          <td>{{ report.failures|default:'<span class="muted">-</span>' }}</td>
+          <td>{{ report.sum|default:'<span class="muted">-</span>' }}</td>
           <td>
             {% if report.is_git %}
             <a href="https://github.com/obspy/obspy/tree/{{ report.installed }}">{{ report.installed }}</a>

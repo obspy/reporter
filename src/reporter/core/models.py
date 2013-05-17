@@ -87,6 +87,8 @@ class Report(models.Model):
             return False
         if self.installed.startswith('0.7.'):
             return False
+        if self.installed.count('.') == 2:
+            return True
         return False
 
 

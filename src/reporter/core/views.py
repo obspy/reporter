@@ -8,7 +8,7 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template.context import RequestContext
 from django.views.decorators.cache import cache_page
 from lxml import etree
-from reporter.core.utils import parse_report_xml
+from reporter.core.utils import parse_report_xml, link_traceback
 import models
 
 
@@ -211,7 +211,7 @@ def report_html(request, pk):
                 tb = {}
                 tb['module'] = obj['name']
                 tb['id'] = len(tracebacks) + 1
-                tb['log'] = unicode(error.text).encode("utf-8")
+                tb['log'] = link_traceback(unicode(error.text).encode("utf-8"))
                 tb['status'] = 'warning'
                 tb['label'] = 'default'
                 module_tracebacks.append(tb)
@@ -223,7 +223,7 @@ def report_html(request, pk):
                 tb = {}
                 tb['module'] = obj['name']
                 tb['id'] = len(tracebacks) + 1
-                tb['log'] = unicode(error.text).encode("utf-8")
+                tb['log'] = link_traceback(unicode(error.text).encode("utf-8"))
                 tb['status'] = 'error'
                 tb['label'] = 'important'
                 module_tracebacks.append(tb)
@@ -235,8 +235,7 @@ def report_html(request, pk):
                 obj['skipped'] = int(item.findtext('skipped'))
             except:
                 obj['skipped'] = ''
-            obj['errors'] = len(errors)
-            obj['failures'] = len(failures)
+            obj['sum'] = len(errors) + len(failures)
             obj['tracebacks'] = module_tracebacks
             obj['timetaken'] = timetaken
         modules.append(obj)

@@ -91,3 +91,10 @@ def set_default_selected_nodes():
         obj.save()
         print ' *', obj
     print 'Selected nodes have been created ...'
+
+
+def link_traceback(text):
+    """
+    Links directly to source files in tracebacks
+    """
+    return text
