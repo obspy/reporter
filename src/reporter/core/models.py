@@ -73,6 +73,8 @@ class Report(models.Model):
 
     @property
     def is_git(self):
+        if self.installed is None:
+            return False
         if self.installed.endswith('-dirty'):
             return False
         if '-g' in self.installed:
