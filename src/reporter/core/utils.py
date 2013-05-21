@@ -95,6 +95,14 @@ def set_default_selected_nodes():
     print 'Selected nodes have been created ...'
 
 
+def replace_backslashes(match):
+    """
+    Replaces single backslashes with single forward slashes.
+    Takes re match object as input (_sre.SRE_Match)
+    """
+    return match.group().replace('\\', '/')
+
+
 def format_traceback(text, tree=None):
     """
     Links directly to source files in tracebacks
@@ -107,8 +115,12 @@ def format_traceback(text, tree=None):
     else:
         linelink = r'#L\5'
     text = escape(unicode(text).encode("utf-8"))
-    regex = r'(File &quot;)(.*[/\\](obspy[/\\][^&]*))(&quot;, line ([0-9]+),)'
+    regex = '(File &quot;)(.*/(obspy/[^&]*))(&quot;, line ([0-9]+),)'
     regex = re.compile(regex, re.UNICODE)
     regex_sub = r'\1<a href="https://github.com/obspy/obspy/blob/' + \
         r'%s/\3%s">\2</a>\4' % (tree, linelink)
-    return regex.sub(regex_sub, text)
+    text = regex.sub(regex_sub, text)
+    # replace backslashes in href links
+    regex = r'<a href="http.*?\.*?>'
+    text = re.sub(regex, replace_backslashes, text)
+    return text
