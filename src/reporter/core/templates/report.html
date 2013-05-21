@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 
-{% block title %}{{ block.super }} - #{{ report.pk }}{% endblock %}
+{% block title %}{{ block.super }} - Report #{{ report.pk }}{% endblock %}
 
 
 {% block extrahead %}
@@ -20,10 +20,10 @@
     <small>#</small>{{ report.pk }}
   </h1>
   <p class="muted">
-    Test report by node <b>{{ report.node }}</b> covered <b>{{ report.tests }}</b> test cases from
+    Test report by node <b>{{ report.node }}</b> covering
+    <b>{{ report.tests }}</b> test cases from
     <b>{{ report.modules }}</b> modules resulted into
-    <b>{{ report.errors|default:'</b>no<b>' }}</b> errors and
-    <b>{{ report.failures|default:'</b>no<b>' }}</b> failures
+    <b>{{ report.sum|default:'</b>no<b>' }}</b> error{{ report.sum|pluralize }}
   </p>
 </div>
 
@@ -119,6 +119,8 @@
       <td>
 {% for traceback in module.tracebacks %}
         <a href="#{{ traceback.id }}"><span class="label label-{{ traceback.label }}">#{{ traceback.id }}</span></a>
+{% empty %}
+        <span class="muted">-</span>
 {% endfor %}
       </td>
     </tr>
@@ -134,7 +136,7 @@
       <th class="hidden-phone">{{ report.skipped|default:'<span class="muted">-</span>' }}</th>
       <th class="hidden-phone">{{ report.tests }}</th>
       <th class="hidden-phone">{{ report.timetaken|floatformat }} sec</th>
-      <th> </th>
+      <th>{{ tracebacks|length }}</th>
     </tr>
   </tfoot>
 </table>
