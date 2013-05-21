@@ -273,7 +273,7 @@ class LatestReportsFeed(Feed):
             order_by('-datetime')[:5]
 
     def item_title(self, report):
-        return "%s errors for %s" % (report.sum or 'No', report.installed)
+        return loader.render_to_string('rss_title.html', {'report': report})
 
     def item_description(self, report):
         return loader.render_to_string('rss.html', {'report': report})
@@ -308,7 +308,7 @@ class SelectedNodeReportsFeed(Feed):
             order_by('-datetime')[:5]
 
     def item_title(self, report):
-        return "%s errors for %s" % (report.sum or 'No', report.installed)
+        return loader.render_to_string('rss_title.html', {'report': report})
 
     def item_description(self, report):
         return loader.render_to_string('rss.html', {'report': report})

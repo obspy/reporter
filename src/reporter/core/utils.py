@@ -107,7 +107,7 @@ def format_traceback(text, tree=None):
     else:
         linelink = r'#L\5'
     text = escape(unicode(text).encode("utf-8"))
-    regex = '(File &quot;)(.*/(obspy/[^&]*))(&quot;, line ([0-9]+),)'
+    regex = r'(File &quot;)(.*[/\\](obspy[/\\][^&]*))(&quot;, line ([0-9]+),)'
     regex = re.compile(regex, re.UNICODE)
     regex_sub = r'\1<a href="https://github.com/obspy/obspy/blob/' + \
         r'%s/\3%s">\2</a>\4' % (tree, linelink)
