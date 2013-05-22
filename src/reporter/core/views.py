@@ -3,16 +3,16 @@
 from datetime import datetime
 from django.contrib.syndication.views import Feed
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db.models import Q
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.template import loader
 from django.template.context import RequestContext
 from django.views.decorators.cache import cache_page
 from lxml import etree
 from reporter.core.utils import parse_report_xml, format_traceback
 import models
-from django.template import loader
 
 
 LIMITS = [20, 50, 100, 200]
@@ -49,9 +49,15 @@ def index(request):
         return index_post(request)
     # redirect old GET URLs
     if 'id' in request.GET:
-        return redirect('report_html', pk=request.GET.get('id'))
+        try:
+            return redirect('report_html', pk=request.GET.get('id'))
+        except NoReverseMatch:
+            pass
     elif 'xml_id' in request.GET:
-        return redirect('report_xml', pk=request.GET.get('xml_id'))
+        try:
+            return redirect('report_xml', pk=request.GET.get('xml_id'))
+        except NoReverseMatch:
+            pass
 
     # limits
     try:

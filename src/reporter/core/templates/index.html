@@ -134,7 +134,9 @@
         <h5>Selected Nodes</h5>
         <input type="hidden" name="node" value="{{ node }}" />
         <ul>
-          <li><a href="{% append_to_get node=None %}"{% if not node %} class="enabled"{% endif %}>all</a></li>
+          <li>
+            <a href="{% append_to_get node=None %}"{% if not node %} class="enabled"{% endif %}>all</a>
+            <small><a href="{% url 'report_rss' %}"><i class="icon-rss"></i></a></small></li>
 {% for value in nodes %}
           <li>
             <a href="{% append_to_get node=value,version=None,architecture=None,system=None %}"{% if node == value %} class="enabled"{% endif %}>{{ value }}</a>
