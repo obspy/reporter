@@ -276,7 +276,7 @@ class LatestReportsFeed(Feed):
     def items(self):
         return models.Report.objects.\
             filter(Q(failures__gt=0) | Q(errors__gt=0)).\
-            order_by('-datetime')[:5]
+            order_by('-datetime')[:20]
 
     def item_title(self, report):
         return loader.render_to_string('rss_title.html', {'report': report})
