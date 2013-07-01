@@ -12,12 +12,14 @@
 {% endblock %}
 
 
-{% block content %}
-<div class="hero-unit">
-  <h1><i class="pull-right icon-check"></i>Reports</h1>
-  <p class="muted">Overview of the latest {{ limit }} test reports</p>
-</div>
+{% block header %}
+  <h1>Test Reports</h1>
+  <p class="muted lead">Overview of the latest {{ limit }} test reports</p>
+{% endblock %}
 
+
+{% block content %}
+<section id="reports">
 <form action="{% url 'index' %}" method="get" class="form-inline">
 
 <div class="row">
@@ -151,11 +153,11 @@
   </div>
 </div>
 </form>
+</section>
 {% endblock %}
 
 
 {% block extrafoot %}
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js" defer></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js" defer></script>
 <script src="{% static 'libs/livestamp.min.js' %}" defer></script>
 {% endblock %}

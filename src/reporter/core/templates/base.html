@@ -3,44 +3,48 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8" />
-    <link href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
     <link href="{% static 'libs/elusive-webfont/elusive-webfont.css' %}" rel="stylesheet" />
+    <link href="{% static 'base.css' %}" rel="stylesheet" />
     <style type="text/css">
-      .table tbody tr.success>td { background-color: #FAFFFA; }
-      .table-hover tbody tr.success:hover>td { background-color: #DCFFDC; }
-      .text-success { color: #038035; }
-      .text-warning { color: #666666; }
-      .text-error { color: #CC0000; }
-      a.enabled { color: black; cursor: default; font-weight: bold; }
-      a.enabled:hover { text-decoration: none; }
-      .hero-unit h1 small { font-size: 85%; color: inherit; }
-      .hero-unit h1 i { font-size: 150%; }
-      .hero-unit { padding: 60px 60px 20px; }
-      .accordion-body pre { margin: 0; border: none; }
-      .muted b { color: #333333; }
+      .jumbotron:after {
+        background: url("{% static 'img/black_thread.png' %}") repeat center center transparent;
+      }
     </style>
-    <title>{% block title %}Reporter{% endblock %}</title>
 {% block extrahead %}{% endblock %}
+    <title>{% block title %}ObsPy - Test Reports{% endblock %}</title>
   </head>
-  <body>
+  <body data-spy="scroll" data-target=".bs-docs-sidebar">
 
     <nav class="navbar navbar-fixed-top navbar-inverse">
       <div class="navbar-inner">
-        <div class="container">
-          <a class="brand" href="/">ObsPy Reporter</a>
-          <ul class="nav">
-            <li><a href="https://github.com/obspy/obspy"><i class="icon-github icon-white"></i> GitHub</a></li>
-            <li><a href="http://docs.obspy.org"><i class="icon-book icon-white"></i> Documentation</a></li>
-            <li><a href="http://pep8.obspy.org"><i class="icon-check icon-white"></i> PEP8</a></li>
-            <li><a href="http://coverage.obspy.org"><i class="icon-check icon-white"></i> Coverage</a></li>
-          </ul>
+        <div class="container-fluid">
+{% include 'navbar.html' %}
         </div>
       </div>
     </nav>
 
+    <header class="jumbotron subhead">
+      <div class="container">
+{% block header %}{% endblock %}
+      </div>
+    </header>
+
     <div class="container">
 {% block content %}{% endblock %}
     </div>
+
+    <footer>
+      <div class="container">
+{% include 'footer.html' %}
+      </div>
+    </footer>
+
+
+{% include 'contributers.html' %}
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js" defer></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js" defer></script>
 {% block extrafoot %}{% endblock %}
   </body>
 </html>

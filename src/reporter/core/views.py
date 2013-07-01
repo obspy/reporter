@@ -150,6 +150,10 @@ def index(request):
     return render_to_response("index.html", options, RequestContext(request))
 
 
+def home(request):
+    return render_to_response("home.html", {}, RequestContext(request))
+
+
 def cache_page_if_not_latest(decorator):
     def _decorator(view):
         decorated_view = decorator(view)

@@ -13,37 +13,38 @@
 {% endblock %}
 
 
-{% block content %}
-<div class="hero-unit">
+{% block header %}
   <h1>
-    <i class="pull-right text-{{ report.status }} {{ report.status_icon }}"></i>
     <small>#</small>{{ report.pk }}
   </h1>
-  <p class="muted">
+  <p class="muted lead">
     Test report by node <b>{{ report.node }}</b> covering
     <b>{{ report.tests }}</b> test cases from
     <b>{{ report.modules }}</b> modules resulted into
     <b>{{ report.sum|default:'no' }}</b> error{{ report.sum|pluralize }}
   </p>
-</div>
+{% endblock %}
 
+
+{% block content %}
+<section id="report">
 <ul class="pager">
-{% if report.previous_id %}
-  <li class="previous"><a href="{% url 'report_html' report.previous_id %}">&laquo; Previous</a></li>
+{% if report.next_id %}
+  <li class="previous"><a href="{% url 'report_html' report.next_id %}">&laquo; Next</a></li>
 {% else %}
-  <li class="previous disabled"><a href="{% url 'report_html' report.id %}">&laquo; Previous</a></li>
+  <li class="previous disabled"><a href="{% url 'report_html' report.id %}">&laquo; Next</a></li>
 {% endif %}
   <li><a href="/">Return to Overview</a></li>
-{% if report.next_id %}
-  <li class="next"><a href="{% url 'report_html' report.next_id %}">Next &raquo;</a></li>
+{% if report.previous_id %}
+  <li class="next"><a href="{% url 'report_html' report.previous_id %}">Previous &raquo;</a></li>
 {% else %}
-  <li class="next disabled"><a href="{% url 'report_html' report.id %}">Next &raquo;</a></li>
+  <li class="next disabled"><a href="{% url 'report_html' report.id %}">Previous &raquo;</a></li>
 {% endif %}
 </ul>
 
 
 <div class="row">
-  <div class="span6">
+  <div class="span5">
     <h3>Report</h3>
     <dl class="dl-horizontal">
 {% if one_version %}
@@ -73,7 +74,7 @@
 {% endfor %}
     </dl>
   </div>
-  <div class="span6">
+  <div class="span5">
     <h3>System / Python</h3>
     <dl class="dl-horizontal">
 {% for item in platform %} 
@@ -81,6 +82,9 @@
       <dd>{{ item.1 }}</dd>
 {% endfor %}
     </dl>
+  </div>
+  <div class="span2">
+    <h3 style="font-size: 100px;" class="pull-right text-{{ report.status }} {{ report.status_icon }}"></h3>
   </div>
 </div>
 
@@ -167,10 +171,5 @@
 <h3>Install Log</h3>
 <pre>{{ log }}</pre>
 {% endif %}
-{% endblock %}
-
-
-{% block extrafoot %}
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js" defer></script>
-    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js" defer></script>
+</section>
 {% endblock %}
