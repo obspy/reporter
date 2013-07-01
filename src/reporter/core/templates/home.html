@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+
+{% block title %}ObsPy{% endblock %}
+
+
+{% block header %}
+  <h1>ObsPy</h1>
+  <p class="muted lead">A Python framework for Seismology</p>
+{% endblock %}
+
+
+{% block content %}
+    <div class="row">
+
+      <div class="span3 bs-docs-sidebar">
+        <ul class="nav nav-list bs-docs-sidenav">
+          <li><a href="#obspy-features"><i class="icon-chevron-right"></i> Features</a></li>
+          <li><a href="#obspy-examples"><i class="icon-chevron-right"></i> Examples</a></li>
+          <li><a href="#contents"><i class="icon-chevron-right"></i> What's included</a></li>
+          <li><a href="#html-template"><i class="icon-chevron-right"></i> HTML template</a></li>
+          <li><a href="#examples"><i class="icon-chevron-right"></i> Examples</a></li>
+          <li><a href="#what-next"><i class="icon-chevron-right"></i> What next?</a></li>
+        </ul>
+      </div>
+
+      <div class="span9">
+
+        <section id="obspy-features">
+          <div class="page-header">
+            <h1>Features</h1>
+          </div>
+
+          <h3>Read and Write Various Waveform Formats</h3>
+          <div class="row-fluid">
+            <div class="span4">
+              <p>ObsPy enables you to painlessly read and write all commonly used waveform data formats with a unified interface. It automatically detects a file's format meaning that you never need to worry about the format of your data again. Simply combine data from heterogeneous sources and get straight to work.</p>
+            </div>
+            <div class="span4">
+              <p>We currently support importing waveform data in MiniSEED, SAC, SEGY, GSE2, GSE1, DATAMARK, CSS, SEISAN, SEG2, SEED, WAV, and the SeismicHandler formats. Most formats can also be exported again. The employed plug-in architecture even enables you to add support for your own custom formats.</p>
+            </div>
+            <div class="span4">
+              <img alt="Kitten!" src="http://placekitten.com/g/275/180" width="275" height="180" />
+            </div>
+          </div>
+
+          <h3>Webservice and Database Access Clients</h3>
+          <div class="row-fluid">
+            <div class="span4">
+              <img alt="Kitten!" src="http://placekitten.com/g/275/160" width="275" height="160" />
+            </div>
+            <div class="span4">
+              <p>ObsPy offers clients for accessing data from the biggest and most often used datacenters. No matter the origin of the data, the processing within ObsPy does not differ, enabling the easy creation of workflows combining heterogeneous data sets.</p>
+            </div>
+            <div class="span4">
+              <p>It currently supports data retrieval from IRIS, Orfeus, NERIES, and NEIC datacenters and the Earthworm and SeisHub databases. All clients support waveform and oftentimes also station and event metadata downloading, depending on the backend.</p>
+            </div>
+          </div>
+
+          <h3>Comprehensive Signal Processing Library</h3>
+          <div class="row-fluid">
+            <div class="span4">
+              <p>ObsPy contains a fairly comprehensive seismological signal processing library. It aims to offer all commonly used and agreed upon processing functionality.</p>
+            </div>
+            <div class="span4">
+              <p>It contains various filtering, triggering, rotation, array analysis, instrument correction and simulation, time frequency and many more routines with and intuitive interface.</p>
+            </div>
+            <div class="span4">
+              <img alt="Kitten!" src="http://placekitten.com/g/275/150" width="275" height="150" />
+            </div>
+          </div>
+
+          <h3>Event and Station Metadata support</h3>
+          <div class="row-fluid">
+            <div class="span4">
+              <img alt="Kitten!" src="http://placekitten.com/g/275/175" width="275" height="175" />
+            </div>
+            <div class="span4">
+              <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            </div>
+            <div class="span4">
+              <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+            </div>
+          </div>
+
+        </section>
+
+
+        <section id="obspy-examples">
+          <div class="page-header">
+            <h1>Examples</h1>
+          </div>
+          <div id="myCarousel" class="carousel slide">
+            <ol class="carousel-indicators">
+              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+              <li data-target="#myCarousel" data-slide-to="1"></li>
+              <li data-target="#myCarousel" data-slide-to="2"></li>
+            </ol>
+            <!-- Carousel items -->
+            <div class="carousel-inner">
+              <div class="active item">
+                <pre class="prettyprint">
+>>> from obspy.core import read
+>>> st = read('http://examples.obspy.org/RJOB_061005_072159.ehz.new')
+>>> print st
+1 Trace(s) in Stream:
+BW.RJOB..Z | 2005-10-06T07:21:59.849998Z - 2005-10-06T07:24:59.844998Z | 200.0 Hz, 36000 samples
+>>> len(st)
+1
+>>> tr = st[0]  # assign first and only trace to new variable
+>>> print tr
+BW.RJOB..Z | 2005-10-06T07:21:59.849998Z - 2005-10-06T07:24:59.844998Z | 200.0 Hz, 36000 samples
+                </pre>
+                <div class="carousel-caption">
+                  <p>Effortlessly read and write various waveform file formats</p>
+                </div>
+              </div>
+              <div class="item">
+                <pre class="prettyprint">
+>>> from obspy.core import read
+>>> st = read('http://examples.obspy.org/RJOB_061005_072159.ehz.new')
+>>> print st
+1 Trace(s) in Stream:
+BW.RJOB..Z | 2005-10-06T07:21:59.849998Z - 2005-10-06T07:24:59.844998Z | 200.0 Hz, 36000 samples
+>>> len(st)
+1
+>>> tr = st[0]  # assign first and only trace to new variable
+>>> print tr
+BW.RJOB..Z | 2005-10-06T07:21:59.849998Z - 2005-10-06T07:24:59.844998Z | 200.0 Hz, 36000 samples
+                </pre>
+                <div class="carousel-caption">
+                  <p>blah blöah blah</p>
+                </div>
+              </div>
+            </div>
+            <!-- Carousel nav -->
+            <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+            <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+          </div>
+        </section>
+      </div>
+    </div>
+{% endblock %}
+
+
+{% block extrafoot %}
+  <script src="http://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+  <script src="{% static 'base.js' %}" defer></script>
+{% endblock %}
