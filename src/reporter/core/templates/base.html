@@ -6,12 +6,12 @@
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
     <link href="{% static 'libs/elusive-webfont/elusive-webfont.css' %}" rel="stylesheet" />
     <link href="{% static 'base.css' %}" rel="stylesheet" />
+{% block extrahead %}{% endblock %}
     <style type="text/css">
       .jumbotron:after {
-        background: url("{% static 'img/black_thread.png' %}") repeat center center transparent;
+        background: url("{% static 'img/triangles.png' %}") repeat center center transparent;
       }
     </style>
-{% block extrahead %}{% endblock %}
     <title>{% block title %}ObsPy - Test Reports{% endblock %}</title>
   </head>
   <body data-spy="scroll" data-target=".bs-docs-sidebar">

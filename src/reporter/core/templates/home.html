@@ -2,12 +2,11 @@
 {% load staticfiles %}
 
 
-{% block title %}ObsPy{% endblock %}
+{% block title %}ObsPy - A Python framework for Seismology{% endblock %}
 
 
 {% block header %}
-  <h1>ObsPy</h1>
-  <p class="muted lead">A Python framework for Seismology</p>
+  <h1>ObsPy <small>A Python framework for Seismology</small></h1>
 {% endblock %}
 
 
@@ -16,18 +15,37 @@
 
       <div class="span3 bs-docs-sidebar">
         <ul class="nav nav-list bs-docs-sidenav">
-          <li><a href="#obspy-features"><i class="icon-chevron-right"></i> Features</a></li>
-          <li><a href="#obspy-examples"><i class="icon-chevron-right"></i> Examples</a></li>
-          <li><a href="#contents"><i class="icon-chevron-right"></i> What's included</a></li>
-          <li><a href="#html-template"><i class="icon-chevron-right"></i> HTML template</a></li>
+          <li><a href="#features"><i class="icon-chevron-right"></i> Features</a></li>
           <li><a href="#examples"><i class="icon-chevron-right"></i> Examples</a></li>
-          <li><a href="#what-next"><i class="icon-chevron-right"></i> What next?</a></li>
+          <li><a href="#getting-started"><i class="icon-chevron-right"></i> Getting Started</a></li>
+          <li><a href="#download"><i class="icon-chevron-right"></i> Download</a></li>
         </ul>
       </div>
 
       <div class="span9">
+          <img class="pull-right" width="180" src="{{ STATIC_URL }}img/obspy_logo_no_text_highres.png" />
 
-        <section id="obspy-features">
+        <section id="introduction">
+          <p class="lead">ObsPy is a community-driven, open-source project dedicated to
+            provide a Python framework for processing seismological data. It
+            provides parsers for common file formats, clients to access data
+            centers and seismological signal processing routines which allow
+            the manipulation of seismological time series (see Beyreuther et
+            al. 2010, Megies et al. 2011).</p>
+          <p class="lead">The goal of the ObsPy project is to facilitate rapid
+            application and workflow development for seismology.</p>
+
+
+<iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=obspy&repo=obspy&type=watch&count=true&size=large" allowtransparency="true" frameborder="0" scrolling="0" width="170" height="30"></iframe>
+<iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=obspy&repo=obspy&type=fork&count=true&size=large" allowtransparency="true" frameborder="0" scrolling="0" width="170" height="30"></iframe>
+
+
+    <a href="https://twitter.com/obspy" class="twitter-follow-button" data-show-count="true" data-lang="en" data-size="large">Follow @obspy</a>
+
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+        </section>
+
+        <section id="features">
           <div class="page-header">
             <h1>Features</h1>
           </div>
@@ -87,7 +105,7 @@
         </section>
 
 
-        <section id="obspy-examples">
+        <section id="examples">
           <div class="page-header">
             <h1>Examples</h1>
           </div>
@@ -139,6 +157,35 @@ BW.RJOB..Z | 2005-10-06T07:21:59.849998Z - 2005-10-06T07:24:59.844998Z | 200.0 H
             <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
           </div>
         </section>
+
+        <section id="getting-started">
+          <div class="page-header">
+            <h1>Getting Started</h1>
+            <p>The ObsPy Gallery and its related ObsPy Tutorial are
+              maybe the best point to get a first impression of what ObsPy
+              is all about. The tutorial is a collection of short example
+              programs with explanations and program output. For help
+              getting started with Python, have a look at this collection of
+              links to Tutorials.</p>
+          </div>
+        </section>
+
+
+        <section id="download">
+          <div class="page-header">
+            <h1>Download</h1>
+            <p>Choose your operation system or install from source</p>
+            
+            <div class="row-fluid">
+              <div class="span3"><a class="btn btn-large" href="#"><img src="{{ STATIC_URL }}img/linux.png" />Linux Debian/Ubuntu</a></div>
+              <div class="span3"><a class="btn btn-large" href="#"><img src="{{ STATIC_URL }}img/apple.png" />Mac OS X</a></div>
+              <div class="span3"><a class="btn btn-large" href="#"><img src="{{ STATIC_URL }}img/windows.png" />Windows XP/Vista/7/8</a></div>
+              <div class="span3"><a class="btn btn-large" href="#"><img src="{{ STATIC_URL }}img/python.png" />Source</a></div>
+            </div>
+          </div>
+
+        </section>
+
       </div>
     </div>
 {% endblock %}

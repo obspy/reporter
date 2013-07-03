@@ -15,14 +15,14 @@
 
 {% block header %}
   <h1>
-    <small>#</small>{{ report.pk }}
+    #{{ report.pk }}
+    <small>
+      Test report by node <b>{{ report.node }}</b> covering
+      <b>{{ report.tests }}</b> test cases from
+      <b>{{ report.modules }}</b> modules resulted into
+      <b>{{ report.sum|default:'no' }}</b> error{{ report.sum|pluralize }}
+    </small>
   </h1>
-  <p class="muted lead">
-    Test report by node <b>{{ report.node }}</b> covering
-    <b>{{ report.tests }}</b> test cases from
-    <b>{{ report.modules }}</b> modules resulted into
-    <b>{{ report.sum|default:'no' }}</b> error{{ report.sum|pluralize }}
-  </p>
 {% endblock %}
 
 
@@ -84,7 +84,7 @@
     </dl>
   </div>
   <div class="span2">
-    <h3 style="font-size: 100px;" class="pull-right text-{{ report.status }} {{ report.status_icon }}"></h3>
+    <h3 style="font-size: 100px; padding-top: 50px;" class="pull-right text-{{ report.status }} {{ report.status_icon }}"></h3>
   </div>
 </div>
 
