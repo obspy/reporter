@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
+
 from django.contrib.syndication.views import Feed
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse, NoReverseMatch
@@ -12,6 +13,7 @@ from django.template.context import RequestContext
 from django.views.decorators.cache import cache_page
 from lxml import etree
 from reporter.core.utils import parse_report_xml, format_traceback
+
 import models
 
 
@@ -19,6 +21,7 @@ LIMITS = [20, 50, 100, 200]
 
 
 def index_post(request):
+    # get headers
     try:
         # parse POST parameters
         xml = request.POST.get('xml')
@@ -30,16 +33,26 @@ def index_post(request):
         modules = int(request.POST.get('modules'))
         system = request.POST.get('system')
         architecture = request.POST.get('architecture')
-        # parse XML document
-        kwargs = parse_report_xml(xml)
-        # create report
-        report = models.Report(datetime=datetime.fromtimestamp(timestamp),
-            tests=tests, errors=errors, failures=failures, modules=modules,
-            system=system, architecture=architecture, version=version,
-            xml=xml, **kwargs)
-        report.save()
+    except Exception, e:
+        return HttpResponseBadRequest(str(e))
+    # check if XML is parseable
+    try:
+        etree.fromstring(xml)
     except:
-        return HttpResponseBadRequest()
+        # otherwise try to correct broken XML
+        try:
+            parser = etree.XMLParser(recover=True)
+            xml = etree.tostring(etree.fromstring(xml, parser=parser))
+        except Exception, e:
+            return HttpResponseBadRequest(str(e))
+    # parse XML document
+    kwargs = parse_report_xml(xml)
+    # create report
+    report = models.Report(datetime=datetime.fromtimestamp(timestamp),
+        tests=tests, errors=errors, failures=failures, modules=modules,
+        system=system, architecture=architecture, version=version,
+        xml=xml, **kwargs)
+    report.save()
     return HttpResponse()
 
 

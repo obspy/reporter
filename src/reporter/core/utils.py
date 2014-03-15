@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
+import os
+import re
+
 from django.db import connection
 from django.utils.html import escape
 from lxml import etree
 from reporter.core import models
-import os
-import re
 
 
 def parse_report_xml(xml):
