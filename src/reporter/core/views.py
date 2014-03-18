@@ -28,11 +28,11 @@ def index_post(request):
         tests = int(request.POST.get('tests'))
         errors = int(request.POST.get('errors'))
         failures = int(request.POST.get('failures'))
-        version = request.POST.get('python_version')
+        version = request.POST.get('python_version')[:16]
         timestamp = int(request.POST.get('timestamp'))
         modules = int(request.POST.get('modules'))
-        system = request.POST.get('system')
-        architecture = request.POST.get('architecture')
+        system = request.POST.get('system')[:16]
+        architecture = request.POST.get('architecture')[:16]
     except Exception, e:
         return HttpResponseBadRequest(str(e))
     # check if XML is parseable
