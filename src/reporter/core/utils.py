@@ -132,6 +132,6 @@ def format_traceback(text, tree=None):
     # display imgur images
     regex = r'>(http://i.imgur.com/\S*)</a>'
     regex = re.compile(regex, re.UNICODE)
-    regex_sub = r'><img src="\1" alt="\1"></a>'
+    regex_sub = r'><img src="\1" alt="\1" /></a>'
     text = regex.sub(regex_sub, text)
     return text
