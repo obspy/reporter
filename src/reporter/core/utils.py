@@ -124,4 +124,9 @@ def format_traceback(text, tree=None):
     # replace backslashes in href links
     regex = r'<a href="http.*?\.*?>'
     text = re.sub(regex, replace_backslashes, text)
+    # make hyperlinks clickable
+    regex = r'(http://\S*)'
+    regex = re.compile(regex, re.UNICODE)
+    regex_sub = r'<a href="\1">\1</a>'
+    text = regex.sub(regex_sub, text)
     return text
