@@ -6,6 +6,7 @@
       a.enabled { color: black; cursor: default; font-weight: bold; }
       a.enabled:hover { text-decoration: none; }
       .accordion-body pre { margin: 0; border: none; }
+      .accordion-body pre img { padding-bottom: 5px; }
       .subhead small b { color: #FFFFFF!important; font-weight: normal; }
       footer { text-align: center; background-color: #F5F5F5; margin-top: 20px;
         padding-top: 1em; }
