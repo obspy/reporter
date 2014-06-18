@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
     <link href="{% static 'libs/elusive-webfont/elusive-webfont.css' %}" rel="stylesheet" />
+    <link href="{% static 'libs/twentytwenty/css/twentytwenty.css' %}" rel="stylesheet" />
     <link href="{% static 'base.css' %}" rel="stylesheet" />
 {% block extrahead %}{% endblock %}
     <style type="text/css">
@@ -43,8 +44,11 @@
 
 {% include 'contributers.html' %}
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js" defer></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" defer></script>
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js" defer></script>
+    <script src="{% static 'base.js' %}" defer></script>
+    <script src="{% static 'libs/twentytwenty/js/jquery.event.move.js' %}" defer></script>
+    <script src="{% static 'libs/twentytwenty/js/jquery.twentytwenty.js' %}" defer></script>
 {% block extrafoot %}{% endblock %}
   </body>
 </html>
