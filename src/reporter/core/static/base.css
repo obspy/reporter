@@ -6,12 +6,23 @@
       a.enabled { color: black; cursor: default; font-weight: bold; }
       a.enabled:hover { text-decoration: none; }
       .accordion-body pre { margin: 0; border: none; }
-      .accordion-body pre img { padding-bottom: 5px; }
       .subhead small b { color: #FFFFFF!important; font-weight: normal; }
       footer { text-align: center; background-color: #F5F5F5; margin-top: 20px;
         padding-top: 1em; }
       img.logo { padding: 5px 5px 5px 0; }
       .pager { margin: 0; }
+
+/* TwentyTwenty */
+.twentytwenty-wrapper {
+  background-color: #f5f5f5;
+  padding: 9.5px;
+}
+.twentytwenty-before-label:before {
+    content: "Baseline Image";
+}
+.twentytwenty-after-label:before {
+    content: "Failed Image";
+}
 
 
 /* Body and structure

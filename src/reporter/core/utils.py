@@ -116,6 +116,14 @@ def format_traceback(text, tree=None):
     else:
         linelink = r'#L\5'
     text = escape(unicode(text).encode("utf-8"))
+    # extract imgur images
+    parts = text.split("Baseline image", 1)
+    text = parts[0].strip()
+    if len(parts) == 2:
+        imgurs = re.findall('http://i.imgur.com/[\w]*.png', parts[1])
+    else:
+        imgurs = []
+    # linkify
     regex = r'(File &quot;)(.*[/\\](obspy[/\\][^&]*))(&quot;, line ([0-9]+),)'
     regex = re.compile(regex, re.UNICODE)
     regex_sub = r'\1<a href="https://github.com/obspy/obspy/blob/' + \
@@ -129,9 +137,4 @@ def format_traceback(text, tree=None):
     regex = re.compile(regex, re.UNICODE)
     regex_sub = r'<a href="\1">\1</a>'
     text = regex.sub(regex_sub, text)
-    # display imgur images
-    regex = r'>(http://i.imgur.com/\S*)</a>'
-    regex = re.compile(regex, re.UNICODE)
-    regex_sub = r'><img src="\1" alt="\1" /></a>'
-    text = regex.sub(regex_sub, text)
-    return text
+    return text, imgurs

@@ -194,6 +194,7 @@ def cache_page_if_not_latest(decorator):
 @cache_page_if_not_latest(decorator=cache_page(60 * 60))
 def report_html(request, pk):
     report = get_object_or_404(models.Report, pk=pk)
+    # check if XML is parseable
     root = etree.fromstring(report.xml)
     # system
     platform = \
@@ -238,7 +239,8 @@ def report_html(request, pk):
                 tb = {}
                 tb['module'] = obj['name']
                 tb['id'] = len(tracebacks) + 1
-                tb['log'] = format_traceback(error.text, git_hash)
+                tb['log'], tb['imgurs'] = \
+                    format_traceback(error.text, git_hash)
                 tb['status'] = 'warning'
                 tb['label'] = 'default'
                 module_tracebacks.append(tb)
@@ -250,7 +252,8 @@ def report_html(request, pk):
                 tb = {}
                 tb['module'] = obj['name']
                 tb['id'] = len(tracebacks) + 1
-                tb['log'] = format_traceback(error.text, git_hash)
+                tb['log'], tb['imgurs'] = \
+                    format_traceback(error.text, git_hash)
                 tb['status'] = 'error'
                 tb['label'] = 'important'
                 module_tracebacks.append(tb)

@@ -161,6 +161,12 @@
     </div>
     <div id="{{ traceback.id }}" class="accordion-body collapse in">
         <pre>{{ traceback.log|safe }}</pre>
+{% if traceback.imgurs %}
+        <div class="twentytwenty-container">
+          <img src="{{ traceback.imgurs.0 }}" alt="Baseline Image" />
+          <img src="{{ traceback.imgurs.1 }}" alt="Failing Image" />
+        </div>
+{% endif %}
     </div>
   </div>
 {% endfor %}
