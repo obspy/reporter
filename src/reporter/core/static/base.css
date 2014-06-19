@@ -10,13 +10,13 @@ a.enabled:hover { text-decoration: none; }
 
 /* TwentyTwenty */
 .twentytwenty-wrapper {
-  margin-top: 2em;
+  margin-top: 1em;
 }
 .twentytwenty-before-label:before {
-    content: "Baseline Image";
+    content: "Baseline Image" !important;
 }
 .twentytwenty-after-label:before {
-    content: "Failed Image";
+    content: "Failed Image" !important;
 }
 
 
