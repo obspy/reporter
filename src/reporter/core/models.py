@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from django.db import models
 import time
+
+from django.db import models
+from django.db.models import signals
+from mptt.models import MPTTModel, TreeForeignKey
 
 
 class Report(models.Model):
@@ -41,7 +44,7 @@ class Report(models.Model):
     def status(self):
         if self.sum:
             if self.errors:
-                return "error"
+                return "danger"
             else:
                 return "warning"
         else:
@@ -51,11 +54,11 @@ class Report(models.Model):
     def status_icon(self):
         if self.sum:
             if self.errors:
-                return "icon-remove"
+                return "glyphicon glyphicon-remove"
             else:
-                return "icon-remove"
+                return "glyphicon glyphicon-remove"
         else:
-            return "icon-ok"
+            return "glyphicon glyphicon-ok"
 
     @property
     def next_id(self):
@@ -75,21 +78,21 @@ class Report(models.Model):
     def is_git(self):
         if self.installed is None:
             return False
-        if self.installed.endswith('-dirty'):
+        elif self.installed.endswith('-dirty'):
             return False
-        if '-g' in self.installed:
+        elif '-g' in self.installed:
             # GIT
             return True
-        if '.dev-r' in self.installed:
+        elif '.dev-r' in self.installed:
             # SVN
             return False
-        if self.installed.startswith('0.5.'):
+        elif self.installed.startswith('0.5.'):
             return False
-        if self.installed.startswith('0.6.'):
+        elif self.installed.startswith('0.6.'):
             return False
-        if self.installed.startswith('0.7.'):
+        elif self.installed.startswith('0.7.'):
             return False
-        if self.installed.count('.') == 2:
+        elif self.installed.count('.') == 2:
             return True
         return False
 
@@ -111,3 +114,20 @@ class SelectedNode(models.Model):
 
     class Meta:
         ordering = ['name']
+
+
+class MenuItem(MPTTModel):
+    parent = TreeForeignKey('self', null=True, blank=True,
+        related_name='children')
+    name = models.CharField(max_length=50, help_text='Use "-" for dividers')
+    icon = models.CharField(max_length=100, blank=True, null=True,
+        help_text="see http://getbootstrap.com/components/#glyphicons-glyphs")
+    url = models.CharField(max_length=200, blank=True, null=True)
+
+    def __unicode__(self):
+        return "%s" % (self.name)
+
+    def move_to(self, *args, **kwargs):
+        # manually submit post_save signal on node move
+        signals.post_save.send(sender=MenuItem, instance=self, created=False)
+        return super(MenuItem, self).move_to(*args, **kwargs)

@@ -1,3 +1,6 @@
-django 1.5.x
+django 1.6.x
 django-debug-toolbar
+django-debug-toolbar-template-timings
+django-mptt
+django-mptt-admin
 lxml

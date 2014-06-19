@@ -1,164 +1,60 @@
-{% load staticfiles %}
-<a class="btn btn-navbar" data-toggle="collapse"
-  data-target=".nav-collapse">
-  <span class="icon-bar"></span>
-  <span class="icon-bar"></span>
-  <span class="icon-bar"></span>
-</a>
-
-<a class="pull-left" href="/"><img class="logo"
-  src="{% static 'img/logo.png' %}" alt="Logo" /></a>
-<a class="brand" href="/">ObsPy</a>
-
-<div class="nav-collapse collapse">
-  <ul class="nav pull-right">
-    <li><a href="https://github.com/obspy/obspy/"><i
-        class="icon-github icon-white"></i>&nbsp;GitHub</a></li>
-    <li class="dropdown"><a data-toggle="dropdown"
-      class="dropdown-toggle" href="#"><i
-        class="icon-check icon-white"></i>&nbsp;Developer&nbsp;Resources<b
-        class="caret"></b></a>
-      <ul class="dropdown-menu">
-        <li><a
-          href="https://github.com/obspy/obspy/blob/master/CONTRIBUTING.md">Contribute</a></li>
-        <li><a href="http://docs.obspy.org/coding_style.html">Coding
-            Style Guide</a></li>
-        <li><a href="https://github.com/obspy/obspy/releases/">All Releases</a></li>
-        <li class="divider"></li>
-        <li class="nav-header">Code&nbsp;Analysis</li>
-        <li><a href="http://pep8.obspy.org/"><i
-            class="icon-check icon-white"></i>&nbsp;PEP8</a></li>
-        <li><a href="http://coverage.obspy.org/"><i
-            class="icon-check icon-white"></i>&nbsp;Python Coverage</a></li>
-        <li><a href="http://ccoverage.obspy.org/"><i
-            class="icon-check icon-white"></i>&nbsp;C Coverage</a></li>
-        <li><a
-          href="https://coveralls.io/r/obspy/obspy?branch=master"><i
-            class="icon-star icon-white"></i>&nbsp;Coveralls</a></li>
-        <li class="divider"></li>
-        <li class="nav-header">Continuous&nbsp;Integration</li>
-        <li><a href="http://tests.obspy.org/"><i
-            class="icon-check icon-white"></i>&nbsp;Test Reports</a></li>
-        <li><a href="https://travis-ci.org/obspy/obspy/"><i
-            class="icon-star icon-white"></i>&nbsp;Travis CI</a></li>
-      </ul></li>
-    <li class="dropdown"><a data-toggle="dropdown"
-      class="dropdown-toggle" href="#"><i
-        class="icon-group icon-white"></i>&nbsp;Mailing&nbsp;Lists&nbsp;<b
-        class="caret"></b></a>
-      <ul class="dropdown-menu">
-        <li class="nav-header">Users&nbsp;Mailing&nbsp;List&nbsp;(public)</li>
-        <li><a
-          href="http://lists.swapbytes.de/mailman/listinfo/obspy-users"><i
-            class="icon-user icon-white"></i>&nbsp;Subscribe</a></li>
-        <li><a
-          href="http://lists.swapbytes.de/archives/obspy-users"><i
-            class="icon-folder-close icon-white"></i>&nbsp;Archives</a></li>
-        <li><a href="mailto:users@obspy.org"><i
-            class="icon-envelope icon-white"></i>&nbsp;Post a message</a></li>
-        <li class="divider"></li>
-        <li class="nav-header">Developer&nbsp;Mailing&nbsp;List&nbsp;(restricted)</li>
-        <li><a href="mailto:devs@obspy.org"><i
-            class="icon-envelope icon-white"></i>&nbsp;Post a message</a></li>
-      </ul></li>
-    <li class="dropdown"><a data-toggle="dropdown"
-      class="dropdown-toggle" href="#"><i
-        class="icon-book icon-white"></i>&nbsp;Documentation <b
-        class="caret"></b></a>
-      <ul class="dropdown-menu">
-        <li class="nav-header">Getting Started</li>
-        <li><a href="http://tutorial.obspy.org/">Tutorial</a></li>
-        <li><a href="http://gallery.obspy.org/">Gallery</a></li>
-        <li class="divider"></li>
-        <li class="nav-header">API&nbsp;Documentation&nbsp;(stable)</li>
-        <li class="dropdown-submenu"><a href="#">General
-            Packages</a>
-          <ul class="dropdown-menu">
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.core.html">obspy.core</a></li>
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.imaging.html">obspy.imaging</a></li>
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.realtime.html">obspy.realtime</a></li>
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.signal.html">obspy.signal</a></li>
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.xseed.html">obspy.xseed</a></li>
-          </ul></li>
-        <li class="dropdown-submenu"><a href="#">Waveform
-            Import/Export</a>
-          <ul class="dropdown-menu">
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.datamark.html">obspy.datamark</a></li>
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.gse2.html">obspy.gse2</a></li>
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.mseed.html">obspy.mseed</a></li>
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.sac.html">obspy.sac</a></li>
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.seisan.html">obspy.seisan</a></li>
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.seg2.html">obspy.seg2</a></li>
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.segy.html">obspy.segy</a></li>
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.sh.html">obspy.sh</a></li>
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.wav.html">obspy.wav</a></li>
-          </ul></li>
-        <li class="dropdown-submenu"><a href="#">Database and
-            Web Clients</a>
-          <ul class="dropdown-menu">
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.arclink.html">obspy.arclink</a></li>
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.earthworm.html">obspy.earthworm</a></li>
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.iris.html">obspy.iris</a></li>
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.neries.html">obspy.neries</a></li>
-            <li><a
-              href="http://docs.obspy.org/packages/obspy.seishub.html">obspy.seishub</a></li>
-          </ul></li>
-        <li class="divider"></li>
-        <li class="nav-header">API&nbsp;Documentation&nbsp;(current&nbsp;master)</li>
-        <li class="dropdown-submenu"><a href="#">General
-            Packages</a>
-          <ul class="dropdown-menu">
-            <li><a href="http://docs.obspy.org/master/packages/obspy.core.html">obspy.core</a></li>
-            <li><a href="http://docs.obspy.org/master/packages/obspy.imaging.html">obspy.imaging</a></li>
-            <li><a href="http://docs.obspy.org/master/packages/obspy.realtime.html">obspy.realtime</a></li>
-            <li><a href="http://docs.obspy.org/master/packages/obspy.signal.html">obspy.signal</a></li>
-            <li><a href="http://docs.obspy.org/master/packages/obspy.xseed.html">obspy.xseed</a></li>
-          </ul></li>
-        <li class="dropdown-submenu"><a href="#">Waveform
-            Import/Export</a>
-          <ul class="dropdown-menu">
-            <li><a href="http://docs.obspy.org/master/packages/obspy.css.html">obspy.css</a></li>
-            <li><a href="http://docs.obspy.org/master/packages/obspy.datamark.html">obspy.datamark</a></li>
-            <li><a href="http://docs.obspy.org/master/packages/obspy.gse2.html">obspy.gse2</a></li>
-            <li><a href="http://docs.obspy.org/master/packages/obspy.mseed.html">obspy.mseed</a></li>
-            <li><a href="http://docs.obspy.org/master/packages/obspy.sac.html">obspy.sac</a></li>
-            <li><a href="http://docs.obspy.org/master/packages/obspy.seisan.html">obspy.seisan</a></li>
-            <li><a href="http://docs.obspy.org/master/packages/obspy.seg2.html">obspy.seg2</a></li>
-            <li><a href="http://docs.obspy.org/master/packages/obspy.segy.html">obspy.segy</a></li>
-            <li><a href="http://docs.obspy.org/master/packages/obspy.sh.html">obspy.sh</a></li>
-            <li><a href="http://docs.obspy.org/master/packages/obspy.wav.html">obspy.wav</a></li>
-          </ul></li>
-        <li class="dropdown-submenu"><a href="#">Database and
-            Web Clients</a>
-          <ul class="dropdown-menu">
-            <li><a href="http://docs.obspy.org/master/packages/obspy.arclink.html">obspy.arclink</a></li>
-            <li><a href="http://docs.obspy.org/master/packages/obspy.earthworm.html">obspy.earthworm</a></li>
-            <li><a href="http://docs.obspy.org/master/packages/obspy.iris.html">obspy.iris</a></li>
-            <li><a href="http://docs.obspy.org/master/packages/obspy.neries.html">obspy.neries</a></li>
-            <li><a href="http://docs.obspy.org/master/packages/obspy.seishub.html">obspy.seishub</a></li>
-          </ul></li>
-      </ul></li>
-
-      <form class="navbar-search pull-left" method="get" action="http://docs.obspy.org/search.html">
-        <input type="text" class="search-query"  placeholder="Search Docs" name="q" />
+{% load static cache %}
+{% cache 5000000 rendered_menu %}
+    <div class="navbar-header">
+      <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand"><span class="icon-obspy"></span>&nbsp;ObsPy</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <form class="navbar-form navbar-right" role="search" method="get" action="http://docs.obspy.org/search.html">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search Docs" name="q">
+        </div>
       </form>
-  </ul>
-</div>
+      <ul class="nav navbar-nav navbar-right">
+{% for node in menu %}
+{% if node.is_leaf_node %}
+        <li><a href="{{ node.url }}">{% if node.icon %}<span class="{{ node.icon }}"></span>&nbsp;{% endif %}{{ node.name }}</a></li>
+{% else %}
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% if node.icon %}<span class="{{ node.icon }}"></span>&nbsp;{% endif %}{{ node.name }} <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+{% for child in node.children %}
+{% if child.is_leaf_node %}
+  {% if child.name == '-' %}
+    <li class="divider"></li>
+  {% elif not child.url %}
+    <li class="dropdown-header">{{ child.name }}</li>
+  {% else %}
+    <li><a href="{{ child.url }}">{% if child.icon %}<span class="{{ child.icon }}"></span>&nbsp;{% endif %}{{ child.name }}</a></li>
+  {% endif %}
+{% else %}
+    <li class="dropdown-submenu">
+      <a href="#">{% if child.icon %}<span class="{{ child.icon }}"></span>&nbsp;{% endif %}{{ child.name }}</a>
+      <ul class="dropdown-menu">
+
+{% for child1 in child.children %}
+  {% if child1.name == '-' %}
+    <li class="divider"></li>
+  {% elif not child1.url %}
+    <li class="dropdown-header">{{ child1.name }}</li>
+  {% else %}
+    <li><a href="{{ child1.url }}">{% if child1.icon %}<span class="{{ child1.icon }}"></span>&nbsp;{% endif %}{{ child1.name }}</a></li>
+  {% endif %}
+{% endfor %}
+
+      </ul>
+    </li>
+{% endif %}
+{% endfor %}
+          </ul>
+        </li>
+{% endif %}
+{% endfor %}
+      </ul>
+    </div>
+{% endcache %}

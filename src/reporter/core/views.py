@@ -14,7 +14,7 @@ from django.views.decorators.cache import cache_page
 from lxml import etree
 from reporter.core.utils import parse_report_xml, format_traceback
 
-import models
+from reporter.core import models
 
 
 LIMITS = [20, 50, 100, 200]
@@ -242,7 +242,6 @@ def report_html(request, pk):
                 tb['log'], tb['imgurs'] = \
                     format_traceback(error.text, git_hash)
                 tb['status'] = 'warning'
-                tb['label'] = 'default'
                 module_tracebacks.append(tb)
                 tracebacks.append(tb)
                 obj['status'] = tb['status']
@@ -254,8 +253,7 @@ def report_html(request, pk):
                 tb['id'] = len(tracebacks) + 1
                 tb['log'], tb['imgurs'] = \
                     format_traceback(error.text, git_hash)
-                tb['status'] = 'error'
-                tb['label'] = 'important'
+                tb['status'] = 'danger'
                 module_tracebacks.append(tb)
                 tracebacks.append(tb)
                 obj['status'] = tb['status']

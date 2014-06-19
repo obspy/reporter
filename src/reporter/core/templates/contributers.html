@@ -1,74 +1,49 @@
-<div id="contributers" class="modal hide fade" tabindex="-1"
-  role="dialog" aria-labelledby="" contributersLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal"
-      aria-hidden="true">×</button>
-    <h3>Thank you!</h3>
-  </div>
-  <div class="modal-body">
-    <p>We would like to thank our contributors, whose efforts make
-      this software what it is. These people have helped by writing code
-      and documentation, and by testing. They have created and
-      maintained this product, its associated libraries and
-      applications, our build tools and our web sites.</p>
-    <h4>Contributers</h4>
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span6">
-          <ul>
-            <li>Charles J. Ammon</li>
-            <li>Robert Barsch</li>
-            <li>Yannik Behr</li>
-            <li>Felix Bernauer</li>
-            <li>Moritz Beyreuther</li>
-            <li>Martin van Driel</li>
-            <li>Fabian Engels</li>
-            <li>Sven Egdorf</li>
-            <li>Conny Hammer</li>
-            <li>Sebastian Heimann</li>
-            <li>Seyed Kasra Hosseini Zad</li>
-            <li>Heiner Igel</li>
-            <li>Adolfo Inza</li>
-            <li>Simon Kremers</li>
-            <li>Victor Kress</li>
-            <li>Lars Krieger</li>
-            <li>Lion Krischer</li>
-          </ul>
+{% load static %}
+<div id="contributers" class="modal fade" tabindex="-1"
+  role="dialog" aria-labelledby="contributersLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"
+          aria-hidden="true">&times;</button>
+        <h3 class="modal-title" id="contributersLabel">Thank you!</h3>
+      </div>
+      <div class="modal-body">
+        <p>We would like to thank our contributors, whose efforts make
+          this software what it is. These people have helped by writing code
+          and documentation, and by testing. They have created and
+          maintained this product, its associated libraries and
+          applications, our build tools and our web sites.</p>
+        <h4>Contributers</h4>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-6">
+              <ul>
+{% for contributer in contributers.0 %}
+                <li>{{ contributer }}</li>
+{% endfor %}
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <ul>
+{% for contributer in contributers.1 %}
+                <li>{{ contributer }}</li>
+{% endfor %}
+              </ul>
+            </div>
+          </div>
         </div>
-        <div class="span6">
-          <ul>
-            <li>Thomas Lecocq</li>
-            <li>Philippe Lesage</li>
-            <li>Anthony Lomax</li>
-            <li>Tobias Megies</li>
-            <li>Alberto Michelini</li>
-            <li>Nathaniel C. Miller</li>
-            <li>Tom Richter</li>
-            <li>Emiliano Russo</li>
-            <li>Claudio Satriano</li>
-            <li>Joachim Saul</li>
-            <li>Chris Scheingraber</li>
-            <li>Christian Sippl</li>
-            <li>Arthur Snoke</li>
-            <li>Stefan Stange</li>
-            <li>Chad Trabant</li>
-            <li>Marcus Walther</li>
-            <li>Joachim Wassermann</li>
-          </ul>
-        </div>
+        <h4>Funds</h4>
+        <p>ObsPy was partially funded by the</p>
+        <ul>
+{% for fund in funds %}
+          <li>{{ fund }}</li>
+{% endfor %}
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
-    <h4>Funds</h4>
-    <p>ObsPy was partially funded by the</p>
-    <ul>
-      <li>German Science Foundation (DFG) via grant DFG IG 16/9-1</li>
-      <li>German Ministry for Education and Research (BMBF),
-        GEOTECHNOLOGIEN grant 03G0646H.</li>
-      <li>NERA project (Network of European Research
-        Infrastructures for Earthquake Risk Assessment and Mitigation)
-        under the European Community’s Seventh Framework Programme
-        (FP7/2007-2013) grant agreement n° 262330</li>
-      <li>Leibniz Institute for Applied Geophysics (LIAG)</li>
-    </ul>
   </div>
 </div>

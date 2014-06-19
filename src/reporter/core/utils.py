@@ -3,10 +3,12 @@
 from datetime import datetime
 import os
 import re
+import urllib2
 
 from django.db import connection
 from django.utils.html import escape
 from lxml import etree
+
 from reporter.core import models
 
 
@@ -138,3 +140,15 @@ def format_traceback(text, tree=None):
     regex_sub = r'<a href="\1">\1</a>'
     text = regex.sub(regex_sub, text)
     return text, imgurs
+
+
+def fetch_credits():
+    contributers = urllib2.urlopen('https://raw.githubusercontent.com/obspy/' \
+        'obspy/master/misc/docs/source/credits/CONTRIBUTERS.txt').read()
+    funds = urllib2.urlopen('https://raw.githubusercontent.com/obspy/' \
+        'obspy/master/misc/docs/source/credits/FUNDS.txt').read()
+    # sort and split
+    contributers = sorted(contributers.splitlines())
+    funds = funds.splitlines()
+    contributers = (contributers[0::2], contributers[1::2])
+    return contributers, funds

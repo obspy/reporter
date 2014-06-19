@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
+from django_mptt_admin.admin import DjangoMpttAdmin
+
 from reporter.core import models
 
 
@@ -20,5 +22,10 @@ admin.site.register(models.Report, ReportAdmin)
 class SelectedNodeAdmin(admin.ModelAdmin):
     list_display = ['name']
 
-
 admin.site.register(models.SelectedNode, SelectedNodeAdmin)
+
+
+class MenuItemAdmin(DjangoMpttAdmin):
+    list_display = ['name']
+
+admin.site.register(models.MenuItem, MenuItemAdmin)

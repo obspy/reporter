@@ -1,10 +1,12 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 
 {% block title %}{{ block.super }} - Report #{{ report.pk }}{% endblock %}
 
 
 {% block extrahead %}
+<link href="{% static 'libs/twentytwenty/css/twentytwenty.css' %}" rel="stylesheet" />
 <script type="text/javascript">
   var shiftWindow = function() { scrollBy(0, -90) };
   if (location.hash) shiftWindow();
@@ -13,12 +15,17 @@
 {% endblock %}
 
 
+{% block extrafoot %}
+<script src="{% static 'libs/twentytwenty/js/jquery.twentytwenty.js' %}" defer></script>
+{% endblock %}
+
+
 {% block header %}
   <h1>
     #{{ report.pk }}
     <small>
-      Test report by node <b>{{ report.node }}</b> covering
-      <b>{{ report.tests }}</b> test cases from
+      Report by node <b>{{ report.node }}</b> covering
+      <b>{{ report.tests }}</b> tests from
       <b>{{ report.modules }}</b> modules resulted into
       <b>{{ report.sum|default:'no' }}</b> error{{ report.sum|pluralize }}
     </small>
@@ -44,7 +51,7 @@
 
 
 <div class="row">
-  <div class="span5">
+  <div class="col-md-4">
     <h3>Report</h3>
     <dl class="dl-horizontal">
 {% if one_version %}
@@ -66,15 +73,8 @@
       <dt>Finished</dt>
       <dd>{{ report.datetime }}</dd>
     </dl>
-    <h3>Dependencies</h3>
-    <dl class="dl-horizontal">
-{% for item in dependencies %} 
-      <dt>{{ item.0 }}</dt>
-      <dd>{{ item.1 }}</dd>
-{% endfor %}
-    </dl>
   </div>
-  <div class="span5">
+  <div class="col-md-4">
     <h3>System / Python</h3>
     <dl class="dl-horizontal">
 {% for item in platform %} 
@@ -83,24 +83,31 @@
 {% endfor %}
     </dl>
   </div>
-  <div class="span2">
-    <h3 style="font-size: 100px; padding-top: 50px;" class="pull-right text-{{ report.status }} {{ report.status_icon }}"></h3>
+  <div class="col-md-4">
+    <h3>Dependencies</h3>
+    <dl class="dl-horizontal">
+{% for item in dependencies %} 
+      <dt>{{ item.0 }}</dt>
+      <dd>{{ item.1 }}</dd>
+{% endfor %}
+    </dl>
   </div>
 </div>
 
 
+<div style="font-size: 3em;" class="pull-right text-{{ report.status }} {{ report.status_icon }}"></div>
 <h3>Modules <small>({{ report.modules }})</small></h3>
 <table class="table table-hover table-condensed">
   <thead>
     <tr>
       <th>Module</th>
 {% if not one_version %}
-      <th class="hidden-phone">Version</th>
+      <th class="hidden-xs">Version</th>
 {% endif %}
       <th>Errors /<br />Failures</th>
-      <th class="hidden-phone">Skipped</th>
-      <th class="hidden-phone">Tests</th>
-      <th class="hidden-phone">Runtime</th>
+      <th class="hidden-xs">Skipped</th>
+      <th class="hidden-xs">Tests</th>
+      <th class="hidden-xs">Runtime</th>
       <th>Tracebacks</th>
     </tr>
   </thead>
@@ -109,20 +116,20 @@
     <tr class="{{ module.status }}">
       <td>{{ module.name }}</td>
 {% if not one_version %}
-      <td class="hidden-phone">{{ module.version }}</td>
+      <td class="hidden-xs">{{ module.version }}</td>
 {% endif %}
 {% if module.tested %}
       <td>{{ module.sum|default:'<span class="muted">-</span>' }}</td>
-      <td class="hidden-phone">{{ module.skipped|default:'<span class="muted">-</span>' }}</td>
-      <td class="hidden-phone">{{ module.tests }}</td>
-      <td class="hidden-phone">{{ module.timetaken|floatformat }} sec</td>
+      <td class="hidden-xs">{{ module.skipped|default:'<span class="muted">-</span>' }}</td>
+      <td class="hidden-xs">{{ module.tests }}</td>
+      <td class="hidden-xs">{{ module.timetaken|floatformat }} sec</td>
 {% else %}
       <td class="muted">Not tested</td>
-      <td class="hidden-phone" colspan="3"> </td>
+      <td class="hidden-xs" colspan="3"> </td>
 {% endif %}
       <td>
 {% for traceback in module.tracebacks %}
-        <a href="#{{ traceback.id }}"><span class="label label-{{ traceback.label }}">#{{ traceback.id }}</span></a>
+        <a href="#{{ traceback.id }}"><span class="badge badge-{{ traceback.status }}">{{ traceback.id }}</span></a>
 {% empty %}
         <span class="muted">-</span>
 {% endfor %}
@@ -134,12 +141,12 @@
     <tr>
       <th>Summary</th>
 {% if not one_version %}
-      <th class="hidden-phone"></th>
+      <th class="hidden-xs"></th>
 {% endif %}
       <th>{{ report.sum|default:'<span class="muted">-</span>' }}</th>
-      <th class="hidden-phone">{{ report.skipped|default:'<span class="muted">-</span>' }}</th>
-      <th class="hidden-phone">{{ report.tests }}</th>
-      <th class="hidden-phone">{{ report.timetaken|floatformat }} sec</th>
+      <th class="hidden-xs">{{ report.skipped|default:'<span class="muted">-</span>' }}</th>
+      <th class="hidden-xs">{{ report.tests }}</th>
+      <th class="hidden-xs">{{ report.timetaken|floatformat }} sec</th>
       <th>{{ tracebacks|length }}</th>
     </tr>
   </tfoot>
@@ -147,25 +154,25 @@
 
 {% if tracebacks %}
 <h3>Tracebacks <small>({{ tracebacks|length }})</small></h3>
-<div class="accordion">
+<div class="panel-group">
 {% for traceback in tracebacks %}
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <div class="accordion-inner">
-        <a href="#{{ traceback.id }}"><span class="label label-{{ traceback.label }}">#{{ traceback.id }}</span></a>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
         <a class="text-{{ traceback.status }}"
            data-toggle="collapse" href="#{{ traceback.id }}">
-          <strong>{{ traceback.module }}</strong>
+          <span class="badge badge-{{ traceback.status }}">{{ traceback.id }}</span>
+          {{ traceback.module }}
         </a>
-      </div>
+      </h4>
     </div>
-    <div id="{{ traceback.id }}" class="accordion-body collapse in">
-        <pre>{{ traceback.log|safe }}</pre>
+    <div id="{{ traceback.id }}" class="panel-body collapse in">
+      <pre>{{ traceback.log|safe }}</pre>
 {% if traceback.imgurs %}
-        <div class="twentytwenty-container">
-          <img src="{{ traceback.imgurs.0 }}" alt="Baseline Image" />
-          <img src="{{ traceback.imgurs.1 }}" alt="Failing Image" />
-        </div>
+      <div class="twentytwenty-container">
+        <img src="{{ traceback.imgurs.0 }}" alt="Baseline Image" />
+        <img src="{{ traceback.imgurs.1 }}" alt="Failing Image" />
+      </div>
 {% endif %}
     </div>
   </div>

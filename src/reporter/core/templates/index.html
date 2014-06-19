@@ -13,8 +13,7 @@
 
 
 {% block header %}
-  <h1>
-    Test Reports
+  <h1>Test Reports
     <small>Overview of the latest {{ limit }} test reports</small>
   </h1>
 {% endblock %}
@@ -22,31 +21,35 @@
 
 {% block content %}
 <section id="reports">
-<form action="{% url 'index' %}" method="get" class="form-inline">
 
 <div class="row">
-  <div class="span10">
+  <div class="col-sm-10">
 
-    <label>
-      <select name="limit" size="1" class="span1" onchange="submit();">
+    <form class="form-inline" role="form" action="{% url 'index' %}" method="get">
+      <div class="checkbox">
+        <select name="limit" class="form-control input-sm" onchange="submit();">
 {% for value in limits %}
-        <option value="{{ value }}"{% if value == limit %} selected="selected"{% endif %}>{{ value }}</option>
+          <option value="{{ value }}"{% if value == limit %} selected="selected"{% endif %}>{{ value }}</option>
 {% endfor %}
-      </select> records per page
-    </label>
+        </select>
+        <label for="limit">records per page</label>
+      </div>
 
-    <div class="pull-right">
-      <label class="radio">
-        <input type="radio" name="show" value="" onchange="submit();"
-          {% if not show %}checked="checked"{% endif %}>
-          show all
-      </label>
-      <label class="radio">
-        <input type="radio" name="show" value="errors" onchange="submit();"
-          {% if show == 'errors' %}checked="checked"{% endif %}>
-          errors only
-      </label>
-    </div>
+      <div class="pull-right">
+        <label class="radio-inline">
+          <input type="radio" name="show" value="" onchange="submit();"
+            {% if not show %}checked="checked"{% endif %}>
+            show all
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="show" value="errors" onchange="submit();"
+            {% if show == 'errors' %}checked="checked"{% endif %}>
+            errors only
+        </label>
+      </div>
+    </form>
+
+    <br />
 
     <table class="table table-hover table-condensed">
       <thead>
@@ -54,12 +57,12 @@
           <th>Report</th>
           <th>Errors /<br/>Failures</th>
           <th>ObsPy<br />Version</th>
-          <th class="hidden-phone">Tests</th>
-          <th class="hidden-phone">Modules</th>
-          <th class="hidden-phone">Node<br />Name</th>
-          <th class="hidden-phone">Python<br />Version</th>
-          <th class="hidden-phone">System</th>
-          <th class="hidden-phone hidden-tablet">Finished</th>
+          <th class="hidden-xs">Tests</th>
+          <th class="hidden-xs">Modules</th>
+          <th class="hidden-xs">Node<br />Name</th>
+          <th class="hidden-xs">Python<br />Version</th>
+          <th class="hidden-xs">System</th>
+          <th class="hidden-xs hidden-sm">Finished</th>
         </tr>
       </thead>
       <tbody>
@@ -77,12 +80,12 @@
             {{ report.installed|default:'Unknown' }}
             {% endif %}
           </td>
-          <td class="hidden-phone">{{ report.tests }}</td>
-          <td class="hidden-phone">{{ report.modules }}</td>
-          <td class="hidden-phone">{{ report.node }}</td>
-          <td class="hidden-phone">{{ report.version }}</td>
-          <td class="hidden-phone">{{ report.system }} ({{ report.architecture }})</td>
-          <td class="hidden-phone hidden-tablet"><span data-livestamp="{{ report.timestamp }}">{{ report.datetime|timesince }} ago</span></td>
+          <td class="hidden-xs">{{ report.tests }}</td>
+          <td class="hidden-xs">{{ report.modules }}</td>
+          <td class="hidden-xs">{{ report.node }}</td>
+          <td class="hidden-xs">{{ report.version }}</td>
+          <td class="hidden-xs">{{ report.system }} ({{ report.architecture }})</td>
+          <td class="hidden-xs hidden-sm"><span data-livestamp="{{ report.timestamp }}">{{ report.datetime|timesince }} ago</span></td>
         </tr>
 {% endfor %}
       </tbody>
@@ -105,14 +108,14 @@
     </ul>
 
   </div>
-  <div class="span2">
+  <div class="col-sm-2">
 
-    <div class="row-fluid">
-      <div class="span8 offset4">
+    <div class="row">
+      <div class="col-sm-9 col-sm-offset-3">
         <h5>System</h5>
         <input type="hidden" name="system" value="{{ system }}" />
         <ul>
-          <li><a href="{% append_to_get system=None %}"{% if not system %} class="enabled"{% endif %}>all</a></li>
+          <li><a href="{% append_to_get system='' %}"{% if not system %} class="enabled"{% endif %}>all</a></li>
 {% for value in systems %}
           <li><a href="{% append_to_get system=value %}"{% if system == value %} class="enabled"{% endif %}>{{ value }}</a></li>
 {% endfor %}
@@ -120,7 +123,7 @@
         <h5>Architecture</h5>
         <input type="hidden" name="architecture" value="{{ architecture }}" />
         <ul>
-          <li><a href="{% append_to_get architecture=None %}"{% if not architecture %} class="enabled"{% endif %}>all</a></li>
+          <li><a href="{% append_to_get architecture='' %}"{% if not architecture %} class="enabled"{% endif %}>all</a></li>
 {% for value in architectures %}
           <li><a href="{% append_to_get architecture=value %}"{% if architecture == value %} class="enabled"{% endif %}>{{ value }}</a></li>
 {% endfor %}
@@ -129,7 +132,7 @@
         <h5>Python</h5>
         <input type="hidden" name="version" value="{{ version }}" />
         <ul>
-          <li><a href="{% append_to_get version=None %}"{% if not version %} class="enabled"{% endif %}>all</a></li>
+          <li><a href="{% append_to_get version='' %}"{% if not version %} class="enabled"{% endif %}>all</a></li>
 {% for value in versions %}
           <li><a href="{% append_to_get version=value %}"{% if version == value %} class="enabled"{% endif %}>{{ value }}</a></li>
 {% endfor %}
@@ -139,12 +142,12 @@
         <input type="hidden" name="node" value="{{ node }}" />
         <ul>
           <li>
-            <a href="{% append_to_get node=None %}"{% if not node %} class="enabled"{% endif %}>all</a>
+            <a href="{% append_to_get node='' %}"{% if not node %} class="enabled"{% endif %}>all</a>
             <small><a href="{% url 'report_rss' %}"><i class="icon-rss"></i></a></small></li>
 {% for value in nodes %}
           <li>
-            <a href="{% append_to_get node=value,version=None,architecture=None,system=None %}"{% if node == value %} class="enabled"{% endif %}>{{ value }}</a>
-            <small><a href="{% url 'report_rss_selectednode' name=value %}"><i class="icon-rss"></i></a></small>
+            <a href="{% append_to_get node=value,version='',architecture='',system='' %}"{% if node == value %} class="enabled"{% endif %}>{{ value }}</a>
+            <small><a href="{% url 'report_rss_selectednode' name=value %}"><i class="icon-feed"></i></a></small>
           </li>
 {% endfor %}
         </ul>
@@ -154,7 +157,6 @@
 
   </div>
 </div>
-</form>
 </section>
 {% endblock %}
 

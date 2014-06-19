@@ -103,7 +103,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.core.context_processors.request',
-    'django.contrib.messages.context_processors.messages'
+    'django.contrib.messages.context_processors.messages',
+    'reporter.core.context_processors.static',
 )
 
 ROOT_URLCONF = 'reporter.urls'
@@ -121,6 +122,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'mptt',
+    'django_mptt_admin',
     'reporter.core',
 ]
 
@@ -154,8 +157,8 @@ LOGGING = {
 }
 
 
-# django-debug-toolbar
-INSTALLED_APPS += ['debug_toolbar']
+# django-debug-toolbar + django-debug-toolbar-template-timings
+INSTALLED_APPS += ['debug_toolbar', 'template_timings_panel']
 
 
 def show_toolbar(request):
@@ -166,6 +169,21 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 MIDDLEWARE_CLASSES += [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+DEBUG_TOOLBAR_PANELS = [
+    'debug_toolbar.panels.versions.VersionsPanel',
+    'debug_toolbar.panels.timer.TimerPanel',
+    'debug_toolbar.panels.settings.SettingsPanel',
+    'debug_toolbar.panels.headers.HeadersPanel',
+    'debug_toolbar.panels.request.RequestPanel',
+    'debug_toolbar.panels.sql.SQLPanel',
+    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+    'debug_toolbar.panels.templates.TemplatesPanel',
+    'debug_toolbar.panels.cache.CachePanel',
+    'debug_toolbar.panels.signals.SignalsPanel',
+    'debug_toolbar.panels.logging.LoggingPanel',
+    'debug_toolbar.panels.redirects.RedirectsPanel',
+    'template_timings_panel.panels.TemplateTimings.TemplateTimings',
 ]
 
 
