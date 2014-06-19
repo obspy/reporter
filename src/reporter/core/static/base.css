@@ -10,8 +10,7 @@ a.enabled:hover { text-decoration: none; }
 
 /* TwentyTwenty */
 .twentytwenty-wrapper {
-  background-color: #f5f5f5;
-  padding: 9.5px;
+  margin-top: 2em;
 }
 .twentytwenty-before-label:before {
     content: "Baseline Image";
