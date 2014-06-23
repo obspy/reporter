@@ -1,5 +1,7 @@
 {% load static cache %}
 {% cache 5000000 rendered_menu %}
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
     <div class="navbar-header">
       <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
         <span class="sr-only">Toggle navigation</span>
@@ -57,4 +59,6 @@
 {% endfor %}
       </ul>
     </div>
+  </div>
+</nav>
 {% endcache %}

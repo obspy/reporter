@@ -357,3 +357,11 @@ def report_latest(request):  # @UnusedVariable
     # redirect to latest report
     obj = models.Report.objects.latest('datetime')
     return redirect('report_html', pk=obj.id)
+
+
+def snippet_navbar(request):
+    return render_to_response("navbar.html", {}, RequestContext(request))
+
+
+def snippet_footer(request):
+    return render_to_response("footer.html", {}, RequestContext(request))
