@@ -9,7 +9,7 @@ from reporter.core.utils import fetch_credits
 CACHE_TIMEOUT = 60 * 60 * 24
 
 # get credits + split contributers
-CONTRIBUTERS, FUNDS = fetch_credits()
+CONTRIBUTORS, FUNDS = fetch_credits()
 
 
 def _recursive_node(node):
@@ -35,6 +35,6 @@ def static(request):  # @UnusedVariable
         cache.set('menu', menu, CACHE_TIMEOUT)
     return {
         'menu': menu,
-        'contributers': CONTRIBUTERS,
+        'contributors': CONTRIBUTORS,
         'funds': FUNDS,
     }
