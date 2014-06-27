@@ -94,6 +94,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'reporter.core.middleware.MinifyHTMLMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -125,6 +126,8 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'mptt',
     'django_mptt_admin',
+    'debug_toolbar',
+    'template_timings_panel',
     'reporter.core',
 ]
 
@@ -159,18 +162,18 @@ LOGGING = {
 
 
 # django-debug-toolbar + django-debug-toolbar-template-timings
-INSTALLED_APPS += ['debug_toolbar', 'template_timings_panel']
-
 
 def show_toolbar(request):
-    return request.user.is_superuser
+    if not request.user.is_superuser:
+        return False
+    if request.GET.get('dtb'):
+        return True
+    return False
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': 'reporter.settings.show_toolbar',
 }
-MIDDLEWARE_CLASSES += [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-]
+
 DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.versions.VersionsPanel',
     'debug_toolbar.panels.timer.TimerPanel',
