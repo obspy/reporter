@@ -9,7 +9,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a href="/" class="navbar-brand"><span class="icon-obspy"></span>&nbsp;ObsPy</a>
+      <a href="/" class="navbar-brand" title="Home"><span class="icon-obspy"></span>&nbsp;ObsPy</a>
     </div>
     <div class="navbar-collapse collapse">
       <form class="navbar-form navbar-right" role="search" method="get" action="http://docs.obspy.org/search.html">
@@ -20,10 +20,10 @@
       <ul class="nav navbar-nav navbar-right">
 {% for node in menu %}
 {% if node.is_leaf_node %}
-        <li><a href="{{ node.url }}">{% if node.icon %}<span class="{{ node.icon }}"></span>&nbsp;{% endif %}{{ node.name }}</a></li>
+        <li><a href="{{ node.url }}" title="{{ node.name }}">{% if node.icon %}<span class="{{ node.icon }} iconx2"></span>{% endif %}<span class="hidden-sm">&nbsp;{{ node.name }}</span></a></li>
 {% else %}
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% if node.icon %}<span class="{{ node.icon }}"></span>&nbsp;{% endif %}{{ node.name }} <b class="caret"></b></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="{{ node.name }}">{% if node.icon %}<span class="{{ node.icon }} iconx2"></span>{% endif %}<span class="hidden-sm">&nbsp;{{ node.name }}</span>&nbsp;<b class="caret"></b></a>
           <ul class="dropdown-menu">
 {% for child in node.children %}
 {% if child.is_leaf_node %}

@@ -15,6 +15,17 @@ h1:first-of-type {
     padding-bottom: 19px;
 }
 
+/* duplicate icon size in navbar for sm and xs devices */
+@media (min-width: 768px) and (max-width: 991px) {
+  .iconx2 {
+    font-size: 18px;
+  } 
+  .navbar-nav > li > a {
+    padding-bottom: 11px;
+  }
+}
+
+
 /* TwentyTwenty */
 .twentytwenty-wrapper {
   margin-top: 1em;
