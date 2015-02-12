@@ -144,7 +144,7 @@ def format_traceback(text, tree=None):
 
 def fetch_credits():
     contributors = urllib2.urlopen('https://raw.githubusercontent.com/obspy/' \
-        'obspy/master/misc/docs/source/credits/CONTRIBUTORS.txt').read()
+        'obspy/master/obspy/CONTRIBUTORS.txt').read()
     funds = urllib2.urlopen('https://raw.githubusercontent.com/obspy/' \
         'obspy/master/misc/docs/source/credits/FUNDS.txt').read()
     # sort and split
