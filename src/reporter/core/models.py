@@ -76,24 +76,36 @@ class Report(models.Model):
 
     @property
     def is_git(self):
-        if self.installed is None:
+        # new style dev version (see obspy/obspy#955)
+        # e.g. 0.9.2.dev0+2003.g1b283f1b40.dirty.qulogic.pep440
+        if '.dev0+' in self.installed:
+            local_version = self.installed.split("+")[1].split(".")
+            if len(local_version) > 2 and local_version[2]:
+                return False
+            if len(local_version) > 1 and local_version[1].startswith("g"):
+                return True
+        elif self.installed == '0.0.0+archive':
             return False
-        elif self.installed.endswith('-dirty'):
-            return False
-        elif '-g' in self.installed:
-            # GIT
-            return True
-        elif '.dev-r' in self.installed:
-            # SVN
-            return False
-        elif self.installed.startswith('0.5.'):
-            return False
-        elif self.installed.startswith('0.6.'):
-            return False
-        elif self.installed.startswith('0.7.'):
-            return False
-        elif self.installed.count('.') == 2:
-            return True
+        # old style dev version
+        else:
+            if self.installed is None:
+                return False
+            elif self.installed.endswith('-dirty'):
+                return False
+            elif '-g' in self.installed:
+                # GIT
+                return True
+            elif '.dev-r' in self.installed:
+                # SVN
+                return False
+            elif self.installed.startswith('0.5.'):
+                return False
+            elif self.installed.startswith('0.6.'):
+                return False
+            elif self.installed.startswith('0.7.'):
+                return False
+            elif self.installed.count('.') == 2:
+                return True
         return False
 
     @property
