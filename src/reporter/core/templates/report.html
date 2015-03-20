@@ -56,11 +56,11 @@
     <dl class="dl-horizontal">
 {% if one_version %}
       <dt>ObsPy Version</dt>
-      <dd>
+      <dd title="{{ report.installed }}">
         {% if report.is_git %}
-        <a href="https://github.com/obspy/obspy/tree/{{ report.installed }}">{{ report.installed }}</a>
+        <a href="https://github.com/obspy/obspy/tree/{{ report.git_commit_hash }}">{{ report.installed|truncatechars:15 }}</a>
         {% else %}
-        {{ report.installed }}
+        {{ report.installed|truncatechars:15 }}
         {% endif %}
       </dd>
 {% endif %}
