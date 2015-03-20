@@ -149,3 +149,7 @@ footer {
   vertical-align: middle;
   padding-top: 12px;
 }
+
+.table {
+  font-size: 12px!important;
+}
