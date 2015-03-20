@@ -58,9 +58,9 @@
       <dt>ObsPy Version</dt>
       <dd title="{{ report.installed }}">
         {% if report.is_git %}
-        <a href="https://github.com/obspy/obspy/tree/{{ report.git_commit_hash }}">{{ report.installed|truncatechars:15 }}</a>
+        <a href="https://github.com/obspy/obspy/tree/{{ report.git_commit_hash }}">{{ report.installed|truncatechars:30 }}</a>
         {% else %}
-        {{ report.installed|truncatechars:15 }}
+        {{ report.installed|truncatechars:30 }}
         {% endif %}
       </dd>
 {% endif %}
