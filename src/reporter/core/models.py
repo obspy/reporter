@@ -80,11 +80,11 @@ class Report(models.Model):
         # e.g. 0.9.2.dev0+2003.g1b283f1b40.dirty.qulogic.pep440
         if '.dev0+' in self.installed:
             local_version = self.installed.split("+")[1].split(".")
-            if len(local_version) > 2 and local_version[2]:
-                return False
             if len(local_version) > 1 and local_version[1].startswith("g"):
                 return True
-        elif self.installed == '0.0.0+archive':
+            else:
+                return False
+        elif '0.0.0+archive' in self.installed:
             return False
         # old style dev version
         else:
