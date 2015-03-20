@@ -81,6 +81,8 @@ class Report(models.Model):
         if '.dev0+' in self.installed:
             local_version = self.installed.split("+")[1].split(".")
             if len(local_version) > 1 and local_version[1].startswith("g"):
+                if len(local_version[1]) != 11:
+                    return False
                 return True
             else:
                 return False
