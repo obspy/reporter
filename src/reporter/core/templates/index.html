@@ -75,7 +75,7 @@
           <td>{{ report.sum|default:'<span class="muted">-</span>' }}</td>
           <td>
             {% if report.is_git %}
-            <a href="https://github.com/obspy/obspy/tree/{{ report.installed }}">{{ report.installed }}</a>
+            <a href="https://github.com/obspy/obspy/tree/{{ report.git_commit_hash }}">{{ report.installed }}</a>
             {% else %}
             {{ report.installed|default:'Unknown' }}
             {% endif %}
