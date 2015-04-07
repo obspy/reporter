@@ -255,6 +255,8 @@ def report_html(request, pk):
                     module_tracebacks.append(tb)
                     tracebacks.append(tb)
                     obj['status'] = tb['status']
+            else:
+                failure = []
             # errors
             if item.find('errors'):
                 errors = item.find('errors').getchildren()
@@ -268,6 +270,8 @@ def report_html(request, pk):
                     module_tracebacks.append(tb)
                     tracebacks.append(tb)
                     obj['status'] = tb['status']
+            else:
+                errors = []
             obj['tested'] = True
             obj['tests'] = int(item.findtext('tests'))
             try:
