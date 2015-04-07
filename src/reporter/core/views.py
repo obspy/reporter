@@ -256,7 +256,7 @@ def report_html(request, pk):
                     tracebacks.append(tb)
                     obj['status'] = tb['status']
             else:
-                failure = []
+                failures = []
             # errors
             if item.find('errors'):
                 errors = item.find('errors').getchildren()
