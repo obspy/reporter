@@ -197,9 +197,12 @@ def report_html(request, pk):
     # check if XML is parseable
     root = etree.fromstring(report.xml)
     # system
-    platform = \
-        sorted([(i.tag.replace('_', ' ').title(), i.text)
-                for i in root.find('platform').getchildren()])
+    if root.find('platform'):
+        platform = \
+            sorted([(i.tag.replace('_', ' ').title(), i.text)
+                    for i in root.find('platform').getchildren()])
+    else:
+        platform = []
     # dependencies
     if root.find('dependencies'):
         dependencies = \
@@ -208,10 +211,13 @@ def report_html(request, pk):
     else:
         dependencies = []
     # modules
-    temp = \
-        sorted([(c.tag, c)
-                for c in root.find('obspy').getchildren()
-                if c.tag != 'installed'])
+    if root.find('obspy'):
+        temp = \
+            sorted([(c.tag, c)
+                    for c in root.find('obspy').getchildren()
+                    if c.tag != 'installed'])
+    else:
+        temp = []
     modules = []
     tracebacks = []
     one_version = True
@@ -237,29 +243,31 @@ def report_html(request, pk):
             except:
                 timetaken = None
             # failures
-            failures = item.find('failures').getchildren()
-            for error in failures:
-                tb = {}
-                tb['module'] = obj['name']
-                tb['id'] = len(tracebacks) + 1
-                tb['log'], tb['imgurs'] = \
-                    format_traceback(error.text, git_hash)
-                tb['status'] = 'warning'
-                module_tracebacks.append(tb)
-                tracebacks.append(tb)
-                obj['status'] = tb['status']
+            if item.find('failures'):
+                failures = item.find('failures').getchildren()
+                for error in failures:
+                    tb = {}
+                    tb['module'] = obj['name']
+                    tb['id'] = len(tracebacks) + 1
+                    tb['log'], tb['imgurs'] = \
+                        format_traceback(error.text, git_hash)
+                    tb['status'] = 'warning'
+                    module_tracebacks.append(tb)
+                    tracebacks.append(tb)
+                    obj['status'] = tb['status']
             # errors
-            errors = item.find('errors').getchildren()
-            for error in errors:
-                tb = {}
-                tb['module'] = obj['name']
-                tb['id'] = len(tracebacks) + 1
-                tb['log'], tb['imgurs'] = \
-                    format_traceback(error.text, git_hash)
-                tb['status'] = 'danger'
-                module_tracebacks.append(tb)
-                tracebacks.append(tb)
-                obj['status'] = tb['status']
+            if item.find('errors'):
+                errors = item.find('errors').getchildren()
+                for error in errors:
+                    tb = {}
+                    tb['module'] = obj['name']
+                    tb['id'] = len(tracebacks) + 1
+                    tb['log'], tb['imgurs'] = \
+                        format_traceback(error.text, git_hash)
+                    tb['status'] = 'danger'
+                    module_tracebacks.append(tb)
+                    tracebacks.append(tb)
+                    obj['status'] = tb['status']
             obj['tested'] = True
             obj['tests'] = int(item.findtext('tests'))
             try:
