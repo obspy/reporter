@@ -201,9 +201,12 @@ def report_html(request, pk):
         sorted([(i.tag.replace('_', ' ').title(), i.text)
                 for i in root.find('platform').getchildren()])
     # dependencies
-    dependencies = \
-        sorted([(i.tag, i.text or 'Not Installed')
-                for i in root.find('dependencies').getchildren()])
+    if root.find('dependencies'):
+        dependencies = \
+            sorted([(i.tag, i.text or 'Not Installed')
+                    for i in root.find('dependencies').getchildren()])
+    else:
+        dependencies = []
     # modules
     temp = \
         sorted([(c.tag, c)

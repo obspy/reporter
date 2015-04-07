@@ -76,6 +76,8 @@ class Report(models.Model):
 
     @property
     def is_git(self):
+        if not self.installed:
+            return False
         # new style dev version (see obspy/obspy#955)
         # e.g. 0.9.2.dev0+2003.g1b283f1b40.dirty.qulogic.pep440
         if '.dev0+' in self.installed:
