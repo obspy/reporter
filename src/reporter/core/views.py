@@ -126,7 +126,9 @@ def index(request):
         version = None
 
     # nodes
-    nodes = models.SelectedNode.objects.values_list('name', flat=True)
+    nodes = models.Report.objects.\
+        values_list('node', flat=True).\
+        distinct().order_by('node')
     try:
         node = request.GET.get('node')
         if node not in nodes:
