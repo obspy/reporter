@@ -126,14 +126,11 @@ def index(request):
         version = None
 
     # nodes
-    nodes = models.Report.objects.\
-        values_list('node', flat=True).\
-        distinct().order_by('node')
+    nodes = models.SelectedNode.objects.values_list('name', flat=True)
     try:
-        node = request.GET.get('node')
-        if node not in nodes:
-            raise
-        queryset = queryset.filter(node=node)
+        node = request.GET.get('node') or None
+        if node:
+            queryset = queryset.filter(node=node)
     except:
         node = None
 
