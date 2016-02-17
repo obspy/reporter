@@ -180,6 +180,11 @@
 </div>
 {% endif %}
 
+{% if slowest_tests %}
+<h3>Slowest Tests</h3>
+<pre>{{ slowest_tests }}</pre>
+{% endif %}
+
 {% if log %}
 <h3>Install Log</h3>
 <pre>{{ log }}</pre>

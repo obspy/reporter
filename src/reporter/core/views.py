@@ -209,6 +209,11 @@ def report_html(request, pk):
                     for i in root.find('dependencies').getchildren()])
     else:
         dependencies = []
+    # slowest tests
+    if root.find('slowest_tests'):
+        slowest_tests = root.find('slowest_tests').getchildren()
+    else:
+        slowest_tests = []
     # modules
     if root.find('obspy'):
         temp = \
@@ -296,6 +301,7 @@ def report_html(request, pk):
         'modules': modules,
         'tracebacks': tracebacks,
         'log': log,
+        'slowest_tests': slowest_tests,
     }
     return render_to_response("report.html", options, RequestContext(request))
 
