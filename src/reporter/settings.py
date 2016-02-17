@@ -2,7 +2,6 @@
 
 
 DEBUG = False
-TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -79,15 +78,6 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    ('django.template.loaders.cached.Loader', (
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
-    )),
-)
-
-
 MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -97,25 +87,10 @@ MIDDLEWARE_CLASSES = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-#    'django.core.context_processors.i18n',
-#    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'django.core.context_processors.tz',
-    'django.core.context_processors.request',
-    'django.contrib.messages.context_processors.messages',
-    'reporter.core.context_processors.static',
-)
-
 ROOT_URLCONF = 'reporter.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'reporter.wsgi.application'
-
-TEMPLATE_DIRS = (
-)
 
 INSTALLED_APPS = [
     'django.contrib.auth',
@@ -127,7 +102,7 @@ INSTALLED_APPS = [
     'mptt',
     'django_mptt_admin',
     'debug_toolbar',
-    'template_timings_panel',
+#    'template_timings_panel',
     'reporter.core',
 ]
 
@@ -161,6 +136,27 @@ LOGGING = {
 }
 
 
+TEMPLATES = [{
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'DIRS': [],
+    'APP_DIRS': True,
+    'OPTIONS': {
+        'debug': DEBUG,
+        'context_processors': [
+            'django.contrib.auth.context_processors.auth',
+            'django.template.context_processors.debug',
+        #    'django.core.context_processors.i18n',
+        #    'django.core.context_processors.media',
+            'django.template.context_processors.static',
+            'django.template.context_processors.tz',
+            'django.template.context_processors.request',
+            'django.contrib.messages.context_processors.messages',
+            'django.template.context_processors.static',
+        ],
+    },
+}]
+
+
 # django-debug-toolbar + django-debug-toolbar-template-timings
 
 def show_toolbar(request):
@@ -187,7 +183,7 @@ DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.signals.SignalsPanel',
     'debug_toolbar.panels.logging.LoggingPanel',
     'debug_toolbar.panels.redirects.RedirectsPanel',
-    'template_timings_panel.panels.TemplateTimings.TemplateTimings',
+#    'template_timings_panel.panels.TemplateTimings.TemplateTimings',
 ]
 
 

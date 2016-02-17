@@ -196,26 +196,28 @@ def report_html(request, pk):
     # check if XML is parseable
     root = etree.fromstring(report.xml)
     # system
-    if root.find('platform'):
+    if root.find('platform') is not None:
         platform = \
             sorted([(i.tag.replace('_', ' ').title(), i.text)
                     for i in root.find('platform').getchildren()])
     else:
         platform = []
     # dependencies
-    if root.find('dependencies'):
+    if root.find('dependencies') is not None:
         dependencies = \
             sorted([(i.tag, i.text or 'Not Installed')
                     for i in root.find('dependencies').getchildren()])
     else:
         dependencies = []
     # slowest tests
-    if root.find('slowest_tests'):
-        slowest_tests = root.find('slowest_tests').getchildren()
+    if root.find('slowest_tests') is not None:
+        # Safely evaluate a string containing a Python expression
+        import ast
+        slowest_tests = ast.literal_eval(root.find('slowest_tests').text)
     else:
         slowest_tests = []
     # modules
-    if root.find('obspy'):
+    if root.find('obspy') is not None:
         temp = \
             sorted([(c.tag, c)
                     for c in root.find('obspy').getchildren()
@@ -247,7 +249,7 @@ def report_html(request, pk):
             except:
                 timetaken = None
             # failures
-            if item.find('failures'):
+            if item.find('failures') is not None:
                 failures = item.find('failures').getchildren()
                 for error in failures:
                     tb = {}
@@ -262,7 +264,7 @@ def report_html(request, pk):
             else:
                 failures = []
             # errors
-            if item.find('errors'):
+            if item.find('errors') is not None:
                 errors = item.find('errors').getchildren()
                 for error in errors:
                     tb = {}

@@ -1,4 +1,4 @@
-django 1.6.x
+django
 django-debug-toolbar
 django-debug-toolbar-template-timings
 django-mptt

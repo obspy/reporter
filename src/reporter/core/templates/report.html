@@ -106,8 +106,8 @@
 {% endif %}
       <th>Errors /<br />Failures</th>
       <th class="hidden-xs">Skipped</th>
-      <th class="hidden-xs">Tests</th>
-      <th class="hidden-xs">Runtime</th>
+      <th class="hidden-xs">Tests<br />(total)</th>
+      <th class="hidden-xs">Runtime<br />(total)</th>
       <th>Tracebacks</th>
     </tr>
   </thead>
@@ -122,7 +122,7 @@
       <td>{{ module.sum|default:'<span class="muted">-</span>' }}</td>
       <td class="hidden-xs">{{ module.skipped|default:'<span class="muted">-</span>' }}</td>
       <td class="hidden-xs">{{ module.tests }}</td>
-      <td class="hidden-xs">{{ module.timetaken|floatformat }} sec</td>
+      <td class="hidden-xs">{{ module.timetaken|floatformat }}s</td>
 {% else %}
       <td class="muted">Not tested</td>
       <td class="hidden-xs" colspan="3"> </td>
@@ -146,7 +146,7 @@
       <th>{{ report.sum|default:'<span class="muted">-</span>' }}</th>
       <th class="hidden-xs">{{ report.skipped|default:'<span class="muted">-</span>' }}</th>
       <th class="hidden-xs">{{ report.tests }}</th>
-      <th class="hidden-xs">{{ report.timetaken|floatformat }} sec</th>
+      <th class="hidden-xs">{{ report.timetaken|floatformat }}s</th>
       <th>{{ tracebacks|length }}</th>
     </tr>
   </tfoot>
@@ -182,7 +182,18 @@
 
 {% if slowest_tests %}
 <h3>Slowest Tests</h3>
-<pre>{{ slowest_tests }}</pre>
+<table class="table table-hover">
+  <tr>
+    <th>Runtime</th>
+    <th>Test</th>
+  </tr>
+{% for test in slowest_tests %}
+  <tr>
+    <td>{{ test.0 }}</td>
+    <td>{{ test.1 }}</td>
+  </tr>
+{% endfor %}
+</table>
 {% endif %}
 
 {% if log %}
