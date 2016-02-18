@@ -224,10 +224,10 @@ def report_html(request, pk):
     else:
         prurl = None
     # Continous Integration URL
-    if root.find('clurl') is not None:
-        clurl = root.find('clurl').text
+    if root.find('ciurl') is not None:
+        ciurl = root.find('ciurl').text
     else:
-        clurl = None
+        ciurl = None
     # api.icndb.com
     req = urllib2.Request("http://api.icndb.com/jokes/random?limitTo=[nerdy]&escape=javascript ")
     try:
@@ -324,7 +324,7 @@ def report_html(request, pk):
         'tracebacks': tracebacks,
         'log': log,
         'slowest_tests': slowest_tests,
-        'clurl': clurl,
+        'ciurl': ciurl,
         'prurl': prurl,
         'icndb': icndb
     }
