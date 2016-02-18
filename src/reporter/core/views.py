@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import urllib2
+import json
 from datetime import datetime
 
 from django.contrib.syndication.views import Feed
@@ -216,6 +218,24 @@ def report_html(request, pk):
         slowest_tests = ast.literal_eval(root.find('slowest_tests').text)
     else:
         slowest_tests = []
+    # GitHub pull request URL
+    if root.find('prurl') is not None:
+        prurl = root.find('prurl').text
+    else:
+        prurl = None
+    # Continous Integration URL
+    if root.find('clurl') is not None:
+        clurl = root.find('clurl').text
+    else:
+        clurl = None
+    # api.icndb.com
+    req = urllib2.Request("http://api.icndb.com/jokes/random?limitTo=[nerdy]&escape=javascript ")
+    try:
+        full_json = urllib2.urlopen(req).read()
+        full = json.loads(full_json)
+        icndb = full['value']['joke']
+    except:
+        icndb = None
     # modules
     if root.find('obspy') is not None:
         temp = \
@@ -304,6 +324,9 @@ def report_html(request, pk):
         'tracebacks': tracebacks,
         'log': log,
         'slowest_tests': slowest_tests,
+        'clurl': clurl,
+        'prurl': prurl,
+        'icndb': icndb
     }
     return render_to_response("report.html", options, RequestContext(request))
 

@@ -55,8 +55,8 @@
     <h3>Report</h3>
     <dl class="dl-horizontal">
 {% if one_version %}
-      <dt>ObsPy Version</dt>
-      <dd title="{{ report.installed }}">
+      <dt style="margin-bottom: 0.5em;">ObsPy Version</dt>
+      <dd style="margin-bottom: 0.5em;" title="{{ report.installed }}">
         {% if report.is_git %}
         <a href="https://github.com/obspy/obspy/tree/{{ report.git_commit_hash }}">{{ report.installed|truncatechars:30 }}</a>
         {% else %}
@@ -64,10 +64,16 @@
         {% endif %}
       </dd>
 {% endif %}
-      <dt>Report File</dt>
-      <dd><a href="{% url 'report_xml' report.pk %}">XML Document</a></dd>
-      <dt>Node Name</dt>
-      <dd>{{ report.node }}</dd>
+{% if ciurl %}
+      <dt>Continuous Integration</dt>
+      <dd><a href="{{ ciurl }}">{{ ciurl }}</a></dd>
+{% endif %}
+{% if prurl %}
+      <dt>GitHub Pull Request</dt>
+      <dd><a href="{{ prurl }}">{{ prurl }}</a></dd>
+{% endif %}
+      <dt style="margin-bottom: 0.5em;">Report File</dt>
+      <dd style="margin-bottom: 0.5em;"><a href="{% url 'report_xml' report.pk %}">XML Document</a></dd>
       <dt>Total Runtime</dt>
       <dd>{{ report.timetaken|floatformat }} sec</dd>
       <dt>Finished</dt>
@@ -105,7 +111,7 @@
       <th class="hidden-xs">Version</th>
 {% endif %}
       <th>Errors /<br />Failures</th>
-      <th class="hidden-xs">Skipped</th>
+      <th class="hidden-xs">Skipped<br/>Tests</th>
       <th class="hidden-xs">Tests<br />(total)</th>
       <th class="hidden-xs">Runtime<br />(total)</th>
       <th>Tracebacks</th>
@@ -201,4 +207,9 @@
 <pre>{{ log }}</pre>
 {% endif %}
 </section>
+
+{% if icndb %}
+<h3>Chuck Norris Fact</h3>
+<p>{{ icndb }}</p>
+{% endif %}
 {% endblock %}
