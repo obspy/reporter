@@ -10,7 +10,6 @@ from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db.models import Q
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response, get_object_or_404, redirect
-from django.template import loader
 from django.template.context import RequestContext
 from django.template.loader import get_template
 from django.views.decorators.cache import cache_page
