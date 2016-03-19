@@ -80,7 +80,7 @@
             {{ report.installed|default:'Unknown' }}
             {% endif %}
           </td>
-          <td class="hidden-xs">{{ report.tests }}</td>
+          <td class="hidden-xs">{{ report.executed_tests }}</td>
           <td class="hidden-xs">{{ report.modules }}</td>
           <td class="hidden-xs">{{ report.node }}</td>
           <td class="hidden-xs">{{ report.version }}</td>
@@ -114,7 +114,7 @@
       <div class="col-sm-9 col-sm-offset-3">
         <h5>System</h5>
         <input type="hidden" name="system" value="{{ system }}" />
-        <ul>
+        <ul class="filter">
           <li><a href="{% append_to_get system='' %}"{% if not system %} class="enabled"{% endif %}>all</a></li>
 {% for value in systems %}
           <li><a href="{% append_to_get system=value %}"{% if system == value %} class="enabled"{% endif %}>{{ value }}</a></li>
@@ -122,7 +122,7 @@
         </ul>
         <h5>Architecture</h5>
         <input type="hidden" name="architecture" value="{{ architecture }}" />
-        <ul>
+        <ul class="filter">
           <li><a href="{% append_to_get architecture='' %}"{% if not architecture %} class="enabled"{% endif %}>all</a></li>
 {% for value in architectures %}
           <li><a href="{% append_to_get architecture=value %}"{% if architecture == value %} class="enabled"{% endif %}>{{ value }}</a></li>
@@ -131,7 +131,7 @@
 
         <h5>Python</h5>
         <input type="hidden" name="version" value="{{ version }}" />
-        <ul>
+        <ul class="filter">
           <li><a href="{% append_to_get version='' %}"{% if not version %} class="enabled"{% endif %}>all</a></li>
 {% for value in versions %}
           <li><a href="{% append_to_get version=value %}"{% if version == value %} class="enabled"{% endif %}>{{ value }}</a></li>
@@ -140,7 +140,7 @@
 
         <h5>Selected Nodes</h5>
         <input type="hidden" name="node" value="{{ node }}" />
-        <ul>
+        <ul class="filter">
           <li style="white-space: nowrap;">
             <a href="{% append_to_get node='' %}"{% if not node %} class="enabled"{% endif %}>all</a>
             <small><a href="{% url 'report_rss' %}"><i class="icon-rss"></i></a></small>

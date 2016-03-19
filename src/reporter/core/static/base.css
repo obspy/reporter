@@ -113,8 +113,6 @@ h5 { font-weight: bold; }
     border-radius:6px 0 6px 6px;
 }
 
-/* footer */
-
 html {
   margin:0;
   padding:0;
@@ -152,4 +150,13 @@ footer {
 
 .table {
   font-size: 12px!important;
+}
+
+ul.filter {
+  list-style-type: none;
+  padding-left: 15px;
+}
+
+dl {
+    margin-bottom: 10px;
 }

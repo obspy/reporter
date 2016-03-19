@@ -160,9 +160,7 @@ TEMPLATES = [{
 # django-debug-toolbar + django-debug-toolbar-template-timings
 
 def show_toolbar(request):
-    if not request.user.is_superuser:
-        return False
-    if request.GET.get('dtb'):
+    if request.user.is_superuser:
         return True
     return False
 

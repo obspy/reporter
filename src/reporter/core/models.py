@@ -33,6 +33,12 @@ class Report(models.Model):
         ordering = ['-datetime']
 
     @property
+    def executed_tests(self):
+        if self.skipped:
+            return self.tests - self.skipped
+        return self.tests
+
+    @property
     def timestamp(self):
         return int(time.mktime(self.datetime.timetuple()))
 

@@ -115,7 +115,7 @@ def index(request):
     # versions
     versions = models.Report.objects.\
         values_list('version', flat=True).\
-        distinct().order_by('version')
+        distinct().order_by('-version')
     try:
         version = request.GET.get('version')
         # plus sign gets replaced to space by browser
@@ -215,7 +215,6 @@ def report_html(request, pk):
         # Safely evaluate a string containing a Python expression
         import ast
         slowest_tests = ast.literal_eval(root.find('slowest_tests').text)
-        import pdb;pdb.set_trace()
     else:
         slowest_tests = []
     # GitHub pull request URL
@@ -259,9 +258,9 @@ def report_html(request, pk):
                 one_version = False
         obj['version'] = version
         obj['tested'] = False
-        obj['status'] = 'success'
         tested = item.find('tested')
         if tested is not None:
+            obj['status'] = 'success'
             module_tracebacks = []
             # timetaken
             try:
@@ -302,11 +301,15 @@ def report_html(request, pk):
             obj['tests'] = int(item.findtext('tests'))
             try:
                 obj['skipped'] = int(item.findtext('skipped'))
+                obj['executed_tests'] = obj['tests'] - obj['skipped']
             except:
                 obj['skipped'] = ''
+                obj['executed_tests'] = obj['tests']
             obj['sum'] = len(errors) + len(failures)
             obj['tracebacks'] = module_tracebacks
             obj['timetaken'] = timetaken
+        else:
+            obj['status'] = 'warning'
         modules.append(obj)
     try:
         log = root.findtext('install_log')
