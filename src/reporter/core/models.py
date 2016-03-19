@@ -5,6 +5,7 @@ import time
 from django.db import models
 from django.db.models import signals
 from mptt.models import MPTTModel, TreeForeignKey
+from taggit.managers import TaggableManager
 
 
 class Report(models.Model):
@@ -30,6 +31,8 @@ class Report(models.Model):
         blank=True, null=True)
     architecture = models.CharField(max_length=16, db_index=True)
     xml = models.TextField(verbose_name='XML Document')
+
+    tags = TaggableManager()
 
     def __unicode__(self):
         return "Report %d" % (self.pk)

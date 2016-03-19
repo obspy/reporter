@@ -3,4 +3,5 @@ django-debug-toolbar
 django-debug-toolbar-template-timings
 django-mptt
 django-mptt-admin
+django-taggit
 lxml

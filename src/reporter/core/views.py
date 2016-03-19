@@ -54,6 +54,10 @@ def index_post(request):
         system=system, architecture=architecture, version=version,
         xml=xml, **kwargs)
     report.save()
+    # create tags
+    tags = kwargs['tags']
+    if tags:
+        report.tags.add(*tags)
     return HttpResponse()
 
 
@@ -88,7 +92,7 @@ def index(request):
     if show == 'errors':
         queryset = queryset.filter(Q(failures__gt=0) | Q(errors__gt=0))
 
-    # systems
+    # filter by system
     systems = models.Report.objects.\
         values_list('system', flat=True).\
         distinct().order_by('system')
@@ -100,7 +104,7 @@ def index(request):
     except:
         system = None
 
-    # architectures
+    # filter by architecture
     architectures = models.Report.objects.\
         values_list('architecture', flat=True).\
         distinct().order_by('architecture')
@@ -112,7 +116,7 @@ def index(request):
     except:
         architecture = None
 
-    # versions
+    # filter by version
     versions = models.Report.objects.\
         values_list('version', flat=True).\
         distinct().order_by('-version')
@@ -126,7 +130,7 @@ def index(request):
     except:
         version = None
 
-    # nodes
+    # filter by node
     nodes = models.SelectedNode.objects.values_list('name', flat=True)
     try:
         node = request.GET.get('node') or None
@@ -135,6 +139,15 @@ def index(request):
     except:
         node = None
 
+    # filter by module
+    try:
+        module = request.GET.get('module') or None
+        if module:
+            queryset = queryset.filter(tags__name__in=[module])
+    except:
+        module = None
+
+    # pagination
     paginator = Paginator(queryset, limit)
     page = request.GET.get('page')
     try:
@@ -299,7 +312,7 @@ def report_html(request, pk):
             obj['tracebacks'] = module_tracebacks
             obj['timetaken'] = timetaken
         else:
-            obj['status'] = 'warning'
+            obj['status'] = 'active'
         modules.append(obj)
     try:
         log = root.findtext('install_log')

@@ -44,6 +44,13 @@ def parse_report_xml(xml):
         kwargs['ciurl'] = root.find('ciurl').text
     else:
         kwargs['ciurl'] = None
+    # installed modules
+    if root.find('obspy') is not None:
+        kwargs['tags'] = sorted([c.tag
+                for c in root.find('obspy').getchildren()
+                if c.tag != 'installed' and c.find('tested') is not None])
+    else:
+        kwargs['tags'] = []
     return kwargs
 
 
