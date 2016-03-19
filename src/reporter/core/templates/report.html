@@ -111,7 +111,7 @@
 
 <div style="font-size: 3em;" class="pull-right text-{{ report.status }} {{ report.status_icon }}"></div>
 <h3>Modules <small>({{ report.modules }})</small></h3>
-<table class="table table-hover table-condensed">
+<table id="modules" class="table table-hover table-condensed tablesorter">
   <thead>
     <tr>
       <th>Module</th>
@@ -123,7 +123,7 @@
       <th style="width: 7em;" class="hidden-xs">Executed<br/>Tests</th>
       <th style="width: 7em;" class="hidden-xs">Skipped<br/>Tests</th>
       <th class="hidden-xs">Runtime</th>
-      <th>Tracebacks</th>
+      <th style="width: 40%;">Tracebacks</th>
     </tr>
   </thead>
   <tbody>
@@ -140,7 +140,7 @@
       <td class="hidden-xs">{{ module.skipped|default:'<span class="muted">-</span>' }}</td>
       <td class="hidden-xs">{{ module.timetaken|floatformat }}s</td>
 {% else %}
-      <td class="muted">Not tested</td>
+      <td class="muted">Not&nbsp;tested</td>
       <td class="hidden-xs"><span class="muted">-</span></td>
       <td class="hidden-xs"><span class="muted">-</span></td>
       <td class="hidden-xs"><span class="muted">-</span></td>
@@ -178,13 +178,10 @@
 {% for traceback in tracebacks %}
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h4 class="panel-title">
-        <a class="text-{{ traceback.status }}"
-           data-toggle="collapse" href="#{{ traceback.id }}">
-          <span class="badge badge-{{ traceback.status }}">{{ traceback.id }}</span>
-          {{ traceback.module }}
-        </a>
-      </h4>
+      <h3 class="panel-title">
+        <a data-toggle="collapse" href="#{{ traceback.id }}"><span class="badge badge-{{ traceback.status }}">{{ traceback.id }}</span></a>
+        <a data-toggle="collapse" href="#{{ traceback.id }}">{{ traceback.module }}</a>
+      </h3>
     </div>
     <div id="{{ traceback.id }}" class="panel-body collapse in">
       <pre>{{ traceback.log|safe }}</pre>
