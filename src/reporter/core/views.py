@@ -48,6 +48,8 @@ def index_post(request):
             return HttpResponseBadRequest(str(e))
     # parse XML document
     kwargs = parse_report_xml(xml)
+    if 'tags' in kwargs:
+        tags = kwargs.pop('tags')
     # create report
     report = models.Report(datetime=datetime.fromtimestamp(timestamp),
         tests=tests, errors=errors, failures=failures, modules=modules,
@@ -55,7 +57,6 @@ def index_post(request):
         xml=xml, **kwargs)
     report.save()
     # create tags
-    tags = kwargs['tags']
     if tags:
         report.tags.add(*tags)
     return HttpResponse()
