@@ -24,6 +24,11 @@ class Report(models.Model):
     system = models.CharField(max_length=16, db_index=True)
     architecture = models.CharField(max_length=16, db_index=True)
     version = models.CharField(max_length=16, db_index=True)
+    pr_url = models.URLField(verbose_name="Pull request URL", blank=True,
+        null=True)
+    ci_url = models.URLField(verbose_name="Continous Integration URL",
+        blank=True, null=True)
+    architecture = models.CharField(max_length=16, db_index=True)
     xml = models.TextField(verbose_name='XML Document')
 
     def __unicode__(self):
