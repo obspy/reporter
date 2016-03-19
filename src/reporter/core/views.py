@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import urllib2
-import json
 from datetime import datetime
+import json
+import urllib2
 
 from django.contrib.syndication.views import Feed
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -12,11 +12,11 @@ from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import loader
 from django.template.context import RequestContext
+from django.template.loader import get_template
 from django.views.decorators.cache import cache_page
 from lxml import etree
-from reporter.core.utils import parse_report_xml, format_traceback
-
 from reporter.core import models
+from reporter.core.utils import parse_report_xml, format_traceback
 
 
 LIMITS = [20, 50, 100, 200]
@@ -216,6 +216,7 @@ def report_html(request, pk):
         # Safely evaluate a string containing a Python expression
         import ast
         slowest_tests = ast.literal_eval(root.find('slowest_tests').text)
+        import pdb;pdb.set_trace()
     else:
         slowest_tests = []
     # GitHub pull request URL
@@ -342,10 +343,12 @@ class LatestReportsFeed(Feed):
             order_by('-datetime')[:20]
 
     def item_title(self, report):
-        return loader.render_to_string('rss_title.html', {'report': report})
+        context = {'report': report}
+        return get_template('rss_title.html').render(context)
 
     def item_description(self, report):
-        return loader.render_to_string('rss.html', {'report': report})
+        context = {'report': report}
+        return get_template('rss.html').render(context)
 
     # item_link is only needed if NewsItem has no get_absolute_url method.
     def item_link(self, item):
@@ -377,10 +380,12 @@ class SelectedNodeReportsFeed(Feed):
             order_by('-datetime')[:20]
 
     def item_title(self, report):
-        return loader.render_to_string('rss_title.html', {'report': report})
+        context = {'report': report}
+        return get_template('rss_title.html').render(context)
 
     def item_description(self, report):
-        return loader.render_to_string('rss.html', {'report': report})
+        context = {'report': report}
+        return get_template('rss.html').render(context)
 
     # item_link is only needed if NewsItem has no get_absolute_url method.
     def item_link(self, item):
