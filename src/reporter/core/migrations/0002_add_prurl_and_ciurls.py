@@ -14,13 +14,13 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='report',
-            name='ci_url',
+            name='ciurl',
             field=models.URLField(blank=True, null=True,
                                   verbose_name=b'Continous Integration URL'),
         ),
         migrations.AddField(
             model_name='report',
-            name='pr_url',
+            name='prurl',
             field=models.URLField(blank=True, null=True,
                                   verbose_name=b'Pull request URL'),
         ),

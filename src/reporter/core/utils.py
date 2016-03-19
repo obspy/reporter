@@ -34,6 +34,16 @@ def parse_report_xml(xml):
         kwargs['node'] = root.findtext('platform/node')
     except:
         kwargs['node'] = None
+    # GitHub pull request URL
+    if root.find('prurl') is not None:
+        kwargs['prurl'] = root.find('prurl').text
+    else:
+        kwargs['prurl'] = None
+    # Continous Integration URL
+    if root.find('ciurl') is not None:
+        kwargs['ciurl'] = root.find('ciurl').text
+    else:
+        kwargs['ciurl'] = None
     return kwargs
 
 
@@ -58,12 +68,7 @@ def format_traceback(text, tree=None):
         linelink = r'#L\5'
     text = escape(unicode(text).encode("utf-8"))
     # extract imgur images
-    parts = text.split("Baseline image", 1)
-    text = parts[0].strip()
-    if len(parts) == 2:
-        imgurs = re.findall('http://i.imgur.com/[\w]*.png', parts[1])
-    else:
-        imgurs = []
+    imgurs = re.findall('http://i.imgur.com/[\w]*.png', text)
     # linkify
     regex = r'(File &quot;)(.*[/\\](obspy[/\\][^&]*))(&quot;, line ([0-9]+),)'
     regex = re.compile(regex, re.UNICODE)

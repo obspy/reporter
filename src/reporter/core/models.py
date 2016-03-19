@@ -24,9 +24,9 @@ class Report(models.Model):
     system = models.CharField(max_length=16, db_index=True)
     architecture = models.CharField(max_length=16, db_index=True)
     version = models.CharField(max_length=16, db_index=True)
-    pr_url = models.URLField(verbose_name="Pull request URL", blank=True,
+    prurl = models.URLField(verbose_name="Pull request URL", blank=True,
         null=True)
-    ci_url = models.URLField(verbose_name="Continous Integration URL",
+    ciurl = models.URLField(verbose_name="Continous Integration URL",
         blank=True, null=True)
     architecture = models.CharField(max_length=16, db_index=True)
     xml = models.TextField(verbose_name='XML Document')
@@ -42,6 +42,21 @@ class Report(models.Model):
         if self.skipped:
             return self.tests - self.skipped
         return self.tests
+
+    @property
+    def ciurl_type(self):
+        if 'travis' in self.ciurl:
+            return 'Tra'
+        elif 'appveyor' in self.ciurl:
+            return 'Apv'
+        return None
+
+    @property
+    def prurl_number(self):
+        try:
+            return int(self.prurl.split('/')[-1])
+        except:
+            return None
 
     @property
     def timestamp(self):

@@ -217,16 +217,6 @@ def report_html(request, pk):
         slowest_tests = ast.literal_eval(root.find('slowest_tests').text)
     else:
         slowest_tests = []
-    # GitHub pull request URL
-    if root.find('prurl') is not None:
-        prurl = root.find('prurl').text
-    else:
-        prurl = None
-    # Continous Integration URL
-    if root.find('ciurl') is not None:
-        ciurl = root.find('ciurl').text
-    else:
-        ciurl = None
     # api.icndb.com
     req = urllib2.Request("http://api.icndb.com/jokes/random?limitTo=[nerdy]&escape=javascript ")
     try:
@@ -327,8 +317,6 @@ def report_html(request, pk):
         'tracebacks': tracebacks,
         'log': log,
         'slowest_tests': slowest_tests,
-        'ciurl': ciurl,
-        'prurl': prurl,
         'icndb': icndb
     }
     return render_to_response("report.html", options, RequestContext(request))

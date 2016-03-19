@@ -65,18 +65,26 @@
       </dd>
     </dl>
 {% endif %}
-{% if ciurl %}
     <dl class="dl-horizontal">
       <dt>Continuous Integration</dt>
-      <dd><a href="{{ ciurl }}">{{ ciurl }}</a></dd>
-    </dl>
+      <dd>
+{% if report.ciurl %}
+        <a href="{{ report.ciurl }}">{{ report.ciurl }}</a>
+{% else %}
+        <span class="muted">-</span>
 {% endif %}
-{% if prurl %}
+      </dd>
+    </dl>
     <dl class="dl-horizontal">
       <dt>GitHub Pull Request</dt>
-      <dd><a href="{{ prurl }}">{{ prurl }}</a></dd>
-    </dl>
+      <dd>
+{% if report.prurl_number %}
+        <a href="{{ report.prurl }}">{{ report.prurl }}</a>
+{% else %}
+        <span class="muted">-</span>
 {% endif %}
+      </dd>
+    </dl>
     <dl class="dl-horizontal">
       <dt>Report File</dt>
       <dd><a href="{% url 'report_xml' report.pk %}">XML Document</a></dd>
