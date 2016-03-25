@@ -117,19 +117,27 @@ def index(request):
     except:
         architecture = None
 
-    # filter by version
-    versions = models.Report.objects.\
+    # filter by python version
+    pyversions = models.Report.objects.\
         values_list('version', flat=True).\
         distinct().order_by('-version')
     try:
-        version = request.GET.get('version')
+        pyversion = request.GET.get('pyversion')
         # plus sign gets replaced to space by browser
-        version = version.replace(' ', '+')
-        if version not in versions:
+        pyversion = pyversion.replace(' ', '+')
+        if pyversion not in pyversions:
             raise
-        queryset = queryset.filter(version=version)
+        queryset = queryset.filter(version=pyversion)
     except:
-        version = None
+        pyversion = None
+
+    # filter by ObsPy version
+    try:
+        version = request.GET.get('version') or None
+        if version:
+            queryset = queryset.filter(installed=version)
+    except:
+        pass
 
     # filter by node
     nodes = models.SelectedNode.objects.values_list('name', flat=True)
@@ -168,8 +176,8 @@ def index(request):
         'systems': systems,
         'architecture': architecture,
         'architectures': architectures,
-        'version': version,
-        'versions': versions,
+        'pyversion': pyversion,
+        'pyversions': pyversions,
         'node': node,
         'nodes': nodes,
         'show': show,

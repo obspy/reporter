@@ -146,11 +146,11 @@
         </ul>
 
         <h5>Python</h5>
-        <input type="hidden" name="version" value="{{ version }}" />
+        <input type="hidden" name="pyversion" value="{{ pyversion }}" />
         <ul class="filter">
-          <li><a href="{% append_to_get version='' %}"{% if not version %} class="enabled"{% endif %}>all</a></li>
-{% for value in versions %}
-          <li><a href="{% append_to_get version=value %}"{% if version == value %} class="enabled"{% endif %}>{{ value }}</a></li>
+          <li><a href="{% append_to_get pyversion='' %}"{% if not pyversion %} class="enabled"{% endif %}>all</a></li>
+{% for value in pyversions %}
+          <li><a href="{% append_to_get pyversion=value %}"{% if pyversion == value %} class="enabled"{% endif %}>{{ value }}</a></li>
 {% endfor %}
         </ul>
 
