@@ -109,7 +109,8 @@ class Report(models.Model):
             return False
         # new style dev version (see obspy/obspy#955)
         # e.g. 0.9.2.dev0+2003.g1b283f1b40.dirty.qulogic.pep440
-        if '.dev0+' in self.installed:
+        # n.b.: since obspy/obspy#1338 we have ".post0" instead of ".dev0"
+        if '.dev0+' in self.installed or '.post0+' in self.installed:
             local_version = self.installed.split("+")[1].split(".")
             if len(local_version) > 1 and local_version[1].startswith("g"):
                 if len(local_version[1]) != 11:
