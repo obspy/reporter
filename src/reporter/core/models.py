@@ -145,7 +145,7 @@ class Report(models.Model):
     @property
     def git_commit_hash(self):
         if self.is_git:
-            if '.dev0+' in self.installed:
+            if '.dev0+' in self.installed or '.post0+' in self.installed:
                 local_version = self.installed.split("+")[1].split(".")
                 if len(local_version) > 1 and local_version[1].startswith("g"):
                     return local_version[1][1:]
