@@ -329,3 +329,6 @@ pre > code {
     padding-top: 40px;
 }
 
+.gitter-chat-embed {
+    top: 50px;
+}
