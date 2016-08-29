@@ -2,19 +2,458 @@
 {% load staticfiles %}
 
 
-{% block title %}ObsPy - A Python framework for Seismology{% endblock %}
+{% block title %}ObsPy - A Python Toolbox for Seismology{% endblock %}
 
 
-{% block header %}
-  <h1>ObsPy <small>A Python framework for Seismology</small></h1>
-{% endblock %}
+{% block extrahead %}
+    {# Code highlighting style sheet#}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/androidstudio.min.css">
 
+    <script type="text/javascript">
+        var shiftWindow = function() { scrollBy(0, -90) };
+        if (location.hash) {
+            shiftWindow();
+        }
+        window.addEventListener("hashchange", shiftWindow);
+    </script>
 
-{% block content %}
+    {# We only want the background image at this one page. #}
+    <style>
+        body {
+            background-color: #FCFEE3;
+            background-image: url('/static/img/background.jpg');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+        }
+    </style>
 {% endblock %}
 
 
 {% block extrafoot %}
-  <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
-  <script src="{% static 'base.js' %}" defer></script>
+    {# Code highlighting for the carousel. #}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    {# Gitter sidecar #}
+    <script>
+        ((window.gitter = {}).chat = {}).options = {
+            room: 'obspy/obspy'
+        };
+    </script>
+    <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+
+    {# Github buttons #}
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    {# Twitter button and timeline widget #}
+    <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+{% endblock %}
+
+{% block content %}
+
+    <section id="home">
+
+        <div class="row">
+            <div id="header" class="col-md-8 center-block text-center">
+                <img id="obspy_logo"
+                     src="{% static 'img/obspy_logo_full.svg' %}"></img>
+                <p>
+                    ObsPy is an open-source project dedicated to provide a Python framework for processing seismological data. It
+                    provides parsers for common file formats, clients to access data centers and seismological signal processing
+                    routines which allow the manipulation of seismological time series.
+                </p>
+
+                <p>
+                    The goal of the ObsPy project is to <strong>facilitate rapid application development for seismology</strong>.
+                </p>
+
+                <a class="btn btn-primary" href="https://github.com/obspy/obspy/wiki" target="_blank">Wiki</a>
+                <a class="btn btn-primary" href="http://docs.obspy.org" target="_blank">Current Documentation</a>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+                        Other Docs ▼
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="http://docs.obspy.org/master" target="_blank">
+                                Development Version
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://docs.obspy.org/archive/obspy-1.0.1-documentation.tgz" target="_blank">v1.0.1</a>
+                        </li>
+                        <li>
+                            <a href="https://docs.obspy.org/archive/obspy-1.0.0-documentation.tgz" target="_blank">v1.0.0</a>
+                        </li>
+                        <li>
+                            <a href="https://docs.obspy.org/archive/0.10.2/" target="_blank">v0.10.2</a>
+                        </li>
+                        <li>
+                            <a href="https://docs.obspy.org/archive/0.9.2/" target="_blank">v0.9.2</a>
+                        </li>
+                        <li>
+                            <a href="https://docs.obspy.org/archive" target="_blank">Older Versions</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <p id="version">Current Version: <code>1.0.2</code></p>
+
+                <p>
+                    Please remember to <a href="https://github.com/obspy/obspy/wiki#acknowledging">acknowledge</a> the use of ObsPy!
+                </p>
+
+                <a href="https://twitter.com/obspy" class="twitter-follow-button" data-show-count="false">Follow @obspy</a>
+                <a class="github-button" href="https://github.com/obspy" aria-label="Follow @obspy on GitHub">Follow @obspy</a>
+                <a class="github-button" href="https://github.com/obspy/obspy"
+                   data-icon="octicon-eye"
+                   data-count-href="/obspy/obspy/watchers"
+                   data-count-api="/repos/obspy/obspy#subscribers_count"
+                   data-count-aria-label="# watchers on GitHub"
+                   aria-label="Watch obspy/obspy on GitHub">Watch</a>
+                <a class="github-button" href="https://github.com/obspy/obspy"
+                   data-icon="octicon-star"
+                   data-count-href="/obspy/obspy/stargazers"
+                   data-count-api="/repos/obspy/obspy#stargazers_count"
+                   data-count-aria-label="# stargazers on GitHub"
+                   aria-label="Star obspy/obspy on GitHub">Star</a>
+
+            </div>
+        </div>
+
+        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+            </ol>
+
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+
+                <div class="item active">
+                    <div class="container-fluid">
+                        <div class="carousel-item">
+                            <div class="row">
+                                <h3>
+                                    Any Seismic Data Format! Anytime! Anywhere!
+                                </h3>
+                                <hr/>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-7">
+                                            <pre><code class="python">>>> from obspy import read
+                                            >>> st = read("http://examples.obspy.org/IU_ULN_2015.mseed")
+                                            >>> st.plot()
+                                            </code></pre>
+
+                                    <ul>
+                                        <li>Can read (and mostly write)
+                                            <code>(Mini)SEED</code>,
+                                            <code>SAC</code>,
+                                            <code>SEG-Y</code>,
+                                            <code>AH (Ad Hoc)</code>,
+                                            <code>ASCII</code>,
+                                            <code>CSS</code>,
+                                            <code>DataMark (Win)</code>,
+                                            <code>GSE2/GSE1</code>,
+                                            <code>Kinemetrics Evt</code>,
+                                            <code>K-NET and KiK-net</code>,
+                                            <code>PDAS</code>,
+                                            <code>SEISAN</code>,
+                                            <code>SEG-2</code>,
+                                            <code>SU (Seismic Unix)</code>,
+                                            <code>Q and ASC (Seismic Handler)</code>,
+                                            <code>WAV</code>, and
+                                            <code>Nanometrics Y</code> files.
+                                        </li>
+                                        <li>Automatic Format Detection!</li>
+                                        <li>Generally Awesome!</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-5">
+                                    <p>
+                                        <img class="img-responsive"
+                                             src="{% static 'img/example_images/simple_waveform.png' %}"></img>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="container-fluid">
+                        <div class="carousel-item">
+                            <div class="row" id="gallery-carousel-item">
+                                <img class="img-responsive"
+                                     src="{% static 'img/obspy_collage.jpg' %}"></img>
+
+                                <div>
+                                    <a class="btn btn-warning btn-lg"
+                                       href="http://docs.obspy.org/gallery.html"
+                                       target="_blank">
+                                        View Gallery
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Controls -->
+            <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+
+        <hr/>
+
+        <div class="row" id="getting-started">
+            <div id="getting-started-header" class="col-md-4">
+                <p style="text-align: right; font-weight: 900; font-size: 230%">CURIOUS?</p>
+                <p><span style="font-weight:800">3 STEPS</span> TO GET STARTED,</p>
+                <p style="text-align: right">JOIN <span style="font-weight:800">THOUSANDS OF OTHERS</span>,</p>
+                <p style="color: #a10000; font-weight:800">AND BECOME A HAPPY SEISMOLOGIST!</p>
+            </div>
+            <div class="col-md-8">
+                <div class="panel panel-success">
+                    <div class="panel-heading"><strong>1. INSTALL</strong></div>
+                    <div class="panel-body">
+                        <div class="media">
+                            <div class="media-left media-middle">
+                                <img class="media-object" src="{% static 'img/sand.jpg' %}" alt="laptop">
+                            </div>
+                            <div class="media-body media-middle">
+                                <p>
+                                    ObsPy works on machines from big to small, from large supercomputers to the tiny
+                                    Raspberry Pi. It runs perfectly fine on <code>Windows</code>, <code>Linux</code>,
+                                    <code>Unix</code>, <code>OSX</code>, and is completely free to use on all of them.
+                                </p>
+                                <p style="text-align:center">
+                                    <strong>
+                                        <a href="https://github.com/obspy/obspy/wiki#installation">
+                                            Click here for installation instructions for all platform.
+                                        </a>
+                                    </strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading"><strong>2. LEARN</strong></div>
+                    <div class="panel-body">
+                        <div class="media">
+                            <div class="media-body media-middle">
+                                <p>
+                                    Learn ObsPy by having a look at our
+                                    <a href="http://docs.obspy.org/tutorial/index.html">tutorial</a>,
+                                    <a href="http://docs.obspy.org/gallery.html">gallery</a>,
+                                    <a href="http://docs.obspy.org">documentation</a>,
+                                    <a href="https://github.com/obspy/docs">workshop materials</a>, and a
+                                    <a href="https://www.youtube.com/watch?v=kFwdjfiK4gk">video introduction</a>.
+                                    If your Python skills are lacking, improve them by using a large number of online resources (
+                                    <a href="https://learnpythonthehardway.org/book/">1</a>,
+                                    <a href="http://www.diveintopython.net/">2</a>,
+                                    <a href="https://docs.python.org/2/tutorial/index.html">3</a>,
+                                    <a href="http://www.greenteapress.com/thinkpython/thinkpython.html">4</a>,
+                                    <a href="http://www.scipy-lectures.org/">5</a>,
+                                    <a href="http://www.labri.fr/perso/nrougier/teaching/numpy/numpy.html">6</a>,
+                                    <a href="http://www.labri.fr/perso/nrougier/teaching/matplotlib/matplotlib.html">7</a>).
+                                    Also make sure to join
+                                    <a href="http://lists.swapbytes.de/mailman/listinfo/obspy-users">our mailing list</a> to stay
+                                    up-to-date and be able to ask for help if you ever get stuck somewhere. There is also a chat button
+                                    at the bottom right of this page!
+                                </p>
+                            </div>
+                            <div class="media-right media-middle">
+                                <img class="media-object" src="{% static 'img/books.jpg' %}" alt="books">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading"><strong>3. USE</strong></div>
+                    <div class="panel-body">
+                        <div class="media">
+                            <div class="media-left media-middle">
+                                <img class="media-object" src="{% static 'img/rocket.jpg' %}" alt="rocket">
+                            </div>
+                            <div class="media-body media-middle">
+                                <p>
+                                    You are now ready to accelerate your science! Depending on your problem, make sure to checkout out
+                                    a curated list of
+                                    <a href="https://github.com/obspy/obspy/wiki#use-cases--applications-using-obspy">projects utilizing
+                                        ObsPy</a>,
+                                    as well as papers that produce insights with the help of ObsPy:
+                                    <a href="https://scholar.google.de/scholar?cites=14340313791097274856">1</a>,
+                                    <a href="https://scholar.google.de/scholar?cites=11799560152216664274">2</a>, and
+                                    <a href="https://scholar.google.de/scholar?cites=14382546556791972278">3</a>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="row">
+            <div class="col-md-12" id="news-header">
+                <span style="font-size: 160%; font-weight: 900; color: #a10000;">THE LATEST NEWS</span>
+                AND BE
+                <span style="font-weight: 800">EVEN MORE</span>
+                UP TO DATE ON
+                <span style="font-size: 160%; font-weight: 900; color: #a10000;">TWITTER!</span>
+            </div>
+            <div class="col-md-8" id="news">
+
+                <dl>
+
+                    <dt>
+                        <span class="label label-default">Aug 03 2016</span> Release of ObsPy 1.0.2
+                    </dt>
+                    <dd>
+                        <p>
+                            This is the second bug fix release in the 1.0 release cycle. It does not change functionality/API but fixes
+                            quite a
+                            number of bugs resulting in an overall more stable ObsPy package.
+                        </p>
+                        <p>
+                            We recommend all users to upgrade through one of the usual channels. Please see the full changelog for all
+                            details: <a href="https://github.com/obspy/obspy/releases/tag/1.0.2">Release Including Full Changelog</a>
+                        </p>
+                    </dd>
+
+
+                    <dt>
+                        <span class="label label-default">Mar 24 2016</span> Release of ObsPy 1.0.1
+                    </dt>
+
+                    <dd>
+                        <p>
+                            This is the first bug fix release in the 1.0 release cycle. It does not change functionality/API but fixes
+                            several bugs in
+                            1.0.0, most notably fixing decryption of encrypted data from requests on restricted data via ArcLink and some
+                            bugs when
+                            working with SAC headers in the rewritten SAC module.
+                        </p>
+
+                        <p>
+                            We recommend all users to upgrade through one of the usual channels. Please see the full changelog for all
+                            details: <a href="https://github.com/obspy/obspy/releases/tag/1.0.1">Release Including Full Changelog</a>
+                        </p>
+                    </dd>
+
+
+                    <dt>
+                        <span class="label label-default">Feb 19 2016</span> Release of ObsPy 1.0.0
+                    </dt>
+                    <dd>
+                        <p>
+                            This is a big release with significant internal changes, new features, stability improvements, and
+                            much more to prepare ObsPy for future challenges and get rid of accumulated technical debt. It is now
+                            stable enough to officially declare it version 1.0. Changes are broad and numerous - follow these links to
+                            learn more:
+                        <ul>
+                            <li><a href="https://github.com/obspy/obspy/wiki/What%27s-New-in-ObsPy-1.0">What's New in ObsPy 1.0</a></li>
+                            <li><a href="https://github.com/obspy/obspy/releases/tag/1.0.0">Release Including Full Changelog</a></li>
+                        </ul>
+                        </p>
+                    </dd>
+
+
+                    <dt>
+                        <span class="label label-default">May 15 2015</span> Release of ObsPy 0.10.2
+                    </dt>
+                    <dd>
+                        <p>
+                            ObsPy 0.10.2 is a maintenance release and it contains a number of bug fixes and minor feature improvements
+                            so we advise all users to upgrade through one of the usual channels.
+                        </p>
+                        <p>
+                            <a href="https://github.com/obspy/obspy/releases/tag/0.10.2">Release Including Full Changelog</a>
+                        </p>
+                    </dd>
+
+
+                    <dt>
+                        <span class="label label-default">March 20 2015</span> Release of ObsPy 0.10.1
+                    </dt>
+                    <dd>
+                        <p>
+                            ObsPy 0.10.1 is once again our biggest release yet with over 2200 single commits from 25 individual
+                            contributors!
+                            We strongly encourage all users to update to the new version as it will effectively end support for the 0.9.x
+                            line.
+                        </p>
+                        <p>
+                            Major new features are Python 3 support, a new TauP implementation, Anaconda packages, ...
+                        <ul>
+                            <li><a href="https://github.com/obspy/obspy/wiki/What%27s-New-in-ObsPy-0.10.1">What's New in ObsPy 0.10.1</a>
+                            </li>
+                            <li><a href="https://github.com/obspy/obspy/releases/tag/0.10.1">Release Including Full Changelog</a></li>
+                        </ul>
+                        </p>
+                    </dd>
+
+
+                    <dt>
+                        <span class="label label-default">May 4 2014</span> Release of ObsPy 0.9.2
+                    </dt>
+                    <dd>
+                        <p>
+                            ObsPy 0.9.2 is a maintenance release and contains the collective bug fixes and minor feature improvements
+                            of around 150 commits so we advise all users to upgrade.
+                        </p>
+                        <p>
+                            <a href="https://github.com/obspy/obspy/releases/tag/0.9.2">Release Including Full Changelog</a>
+                        </p>
+                    </dd>
+
+
+                    <dt>
+                        <span class="label label-default">January 9 2014</span> Release of ObsPy 0.9.0
+                    </dt>
+                    <dd>
+                        <p>
+                            ObsPy 0.9.0 offers (amongst many other things) two major new features: support for the FDSN webservices
+                            and the FDSN StationXML format.
+                        </p>
+                        <p>
+                        <ul>
+                            <li><a href="https://github.com/obspy/obspy/wiki/Migration-to-ObsPy-0.9.0">Migration to ObsPy 0.9.0</a>
+                            </li>
+                            <li><a href="https://github.com/obspy/obspy/releases/tag/0.9.0">Release Including Full Changelog</a></li>
+                        </ul>
+                        </p>
+                    </dd>
+
+                </dl>
+            </div>
+
+            <div class="col-md-4" id="twitter">
+                <a class="twitter-timeline"
+                   data-width="500"
+                   data-height="400"
+                   data-dnt="true"
+                   data-theme="light"
+                   data-chrome="transparent nofooter"
+                   href="https://twitter.com/obspy">Tweets by obspy</a>
+            </div>
+        </div>
+
+    </section>
 {% endblock %}

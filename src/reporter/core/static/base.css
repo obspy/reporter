@@ -178,3 +178,154 @@ ul.filter {
 dl {
     margin-bottom: 0.5em;
 }
+
+/*============================================================================================*/
+/*============================================================================================*/
+/*EVERYTHING BELOW HERE IS FOR THE HOMEPAGE*/
+/*============================================================================================*/
+/*============================================================================================*/
+
+/* HEADER */
+#obspy_logo {
+    width: 60%;
+}
+
+.center-block {
+    float: none !important
+}
+
+#header {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#version {
+    margin-top: 10px;
+}
+
+/* CODE BOX IN CAROUSEL */
+pre {
+    padding: 0px;
+    box-shadow: 1px 1px 7px 1px rgba(0, 0, 0, 0.5);
+    border: none;
+}
+
+pre > code {
+    text-align: left;
+}
+
+/* CUSTOMIZE THE CAROUSEL */
+
+.carousel {
+    height: 400px;
+    margin-bottom: 60px;
+    margin-top: 40px;
+}
+
+/* Color of the line under the heading */
+.carousel hr {
+    border-color: #c8baa2;
+}
+
+.carousel-item > div > h3 {
+    text-align: center;
+}
+
+.carousel-item {
+    margin-left: 12%;
+    margin-right: 12%;
+    padding-top: 20px;
+}
+
+.carousel .item {
+    height: 400px;
+}
+
+.carousel-indicators > li {
+    border-color: #777;
+}
+
+.carousel-control {
+    border-radius: 7px;
+    color: black;
+}
+
+.carousel-control.left {
+    background-image: linear-gradient(to right, rgb(255, 255, 255) 0, rgba(0, 0, 0, .0001) 100%);
+}
+
+.carousel-control.right {
+    background-image: linear-gradient(to left, rgb(255, 255, 255) 0, rgba(0, 0, 0, .0001) 100%);
+}
+
+#gallery-carousel-item div {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    padding-top: 25%
+}
+
+#gallery-carousel-item a {
+    display: block;
+    margin: 0 auto;
+    width: 250px;
+}
+
+/* EVERYTHING REGARDING THE GETTING STARTED SECTION */
+
+#getting-started {
+    padding-top: 30px;
+    padding-bottom: 20px;
+}
+
+#getting-started-header {
+    font-size: x-large;
+    padding-top: 50px;
+}
+
+.panel {
+    background-color: rgba(255, 255, 255, 0.4);
+    border-width: 0px;
+    box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.1);
+}
+
+.panel-success > .panel-heading {
+    background-image: linear-gradient(to bottom, #f0e2d8 0, #e9d9c6 100%);
+    color: #757575;
+    border-width: 0px;
+}
+
+.panel .media-middle {
+    padding: 5px;
+}
+
+.panel .media-body {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.panel img {
+    border-radius: 9999px;
+    box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.3);
+    padding: 1px;
+    width: 128px;
+    height: 128px;
+}
+
+/* STYLING FOR THE NEWS SECTION */
+
+#news {
+    max-height: 400px;
+    overflow: auto;
+    padding: 20px;
+}
+
+#news-header {
+    font-size: x-large;
+    text-align: right;
+    padding-bottom: 40px;
+    padding-top: 40px;
+}
+
