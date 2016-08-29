@@ -1,4 +1,3 @@
-/* reporter */
 a.enabled {
     color: black;
     cursor: default;
@@ -195,12 +194,29 @@ dl {
 }
 
 #header {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 #version {
     margin-top: 10px;
+}
+
+/*SHORT NEWS*/
+
+#short-news .panel-heading {
+    padding: 2px;
+    padding-right: 20px;
+    border-radius: 0px;
+    text-align: right;
+}
+
+#short-news .panel-body {
+    padding: 4px;
+}
+
+#short-news-twitter .panel-body {
+    padding: 0px;
 }
 
 /* CODE BOX IN CAROUSEL */
@@ -219,7 +235,7 @@ pre > code {
 .carousel {
     height: 400px;
     margin-bottom: 60px;
-    margin-top: 40px;
+    margin-top: 10px;
 }
 
 /* Color of the line under the heading */
@@ -317,7 +333,7 @@ pre > code {
 /* STYLING FOR THE NEWS SECTION */
 
 #news {
-    max-height: 400px;
+    max-height: 600px;
     overflow: auto;
     padding: 20px;
 }

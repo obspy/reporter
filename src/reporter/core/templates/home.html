@@ -55,7 +55,7 @@
     <section id="home">
 
         <div class="row">
-            <div id="header" class="col-md-8 center-block text-center">
+            <div id="header" class="col-md-8 text-center">
                 <img id="obspy_logo"
                      src="{% static 'img/obspy_logo_full.svg' %}"></img>
                 <p>
@@ -121,6 +121,34 @@
                    data-count-aria-label="# stargazers on GitHub"
                    aria-label="Star obspy/obspy on GitHub">Star</a>
 
+            </div>
+            <div class="col-md-4" id="short-news">
+                <div class="panel panel-success">
+                    <div class="panel-heading"><strong>LATEST NEWS</strong></div>
+                    <div class="panel-body">
+                        <ul>
+                            <li><span class="label label-default">Aug 03 2016</span> <strong>Release of ObsPy 1.0.2</strong></li>
+                            <li><span class="label label-default">Mar 24 2016</span> <strong>Release of ObsPy 1.0.1</strong></li>
+                        </ul>
+                        <a href="#news">More news...</a>
+                    </div>
+                </div>
+                <div class="panel panel-success" id="short-news-twitter">
+                    <div class="panel-heading">
+                        <strong>
+                            FOLLOW <a target="_black" href="https://twitter.com/obspy">@OBSPY</a> ON TWITTER
+                        </strong>
+                    </div>
+                    <div class="panel-body">
+                        <a class="twitter-timeline"
+                           data-width="700"
+                           data-height="250"
+                           data-dnt="true"
+                           data-theme="light"
+                           data-chrome="transparent nofooter noheader noborders"
+                           href="https://twitter.com/obspy">Tweets by obspy</a>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -443,7 +471,7 @@
         <hr/>
 
         <div class="row">
-            <div class="col-md-12" id="news-header">
+            <div class="col-md-12" id="news-header" name="news">
                 <span style="font-size: 160%; font-weight: 900; color: #a10000;">THE LATEST NEWS</span>
                 AND BE
                 <span style="font-weight: 800">EVEN MORE</span>
@@ -579,7 +607,7 @@
             <div class="col-md-4" id="twitter">
                 <a class="twitter-timeline"
                    data-width="500"
-                   data-height="400"
+                   data-height="600"
                    data-dnt="true"
                    data-theme="light"
                    data-chrome="transparent nofooter"
