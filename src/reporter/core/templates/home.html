@@ -127,6 +127,10 @@
             <ol class="carousel-indicators">
                 <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
                 <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="4"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="5"></li>
             </ol>
 
             <!-- Wrapper for slides -->
@@ -186,10 +190,135 @@
                 <div class="item">
                     <div class="container-fluid">
                         <div class="carousel-item">
-                            <div class="row" id="gallery-carousel-item">
-                                <img class="img-responsive"
-                                     src="{% static 'img/obspy_collage.jpg' %}"></img>
+                            <div class="row">
+                                <h3>
+                                    Access Data From All Over the World
+                                </h3>
+                                <hr/>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-7">
+                                            <pre><code class="python">>>> from obspy.clients.fdsn import Client
+                                            >>> c = Client("IRIS")
+                                            >>> c.get_stations(network="IU").plot();
+                                            </code></pre>
 
+                                    <ul>
+                                        <li>Access waveform, station, and event data.</li>
+                                        <li>Supports
+                                            the <code>FDSN web services</code> (IRIS, ORFEUS, Geonet, RESIF, INGV, ETH, GFZ, ...),
+                                            <code>ArcLink</code>,
+                                            <code>Filesystems</code> (e.g. SDS),
+                                            <code>NEIC</code>,
+                                            <code>SeisHub</code>,
+                                            <code>Earthworm</code>,
+                                            <code>SeedLink</code>, and the
+                                            <code>IRIS Syngine</code> service.
+                                        </li>
+                                        <li>Fully integrated with the rest of ObsPy!</li>
+                                        <li>Large scale downloading with the
+                                            <a href="http://docs.obspy.org/packages/autogen/obspy.clients.fdsn.mass_downloader.html">mass
+                                                downloader</a>.
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-5">
+                                    <p>
+                                        <img class="img-responsive"
+                                             src="{% static 'img/example_images/iu_stations.png' %}"></img>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="container-fluid">
+                        <div class="carousel-item">
+                            <div class="row">
+                                <h3>
+                                    Comprehensive Signal Processing Toolbox
+                                </h3>
+                                <hr/>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                            <pre><code class="python">>>> from obspy import read, read_inventory
+                                            >>> st = read("http://examples.obspy.org/IU_ULN_2015-07-18T02.mseed")
+                                            >>> inv = read_inventory("http://examples.obspy.org/IU_ULN.xml")
+                                            >>> st.remove_response(inv, output="VEL")
+                                            </code></pre>
+
+                                    <ul>
+                                        <li>Instrument correction from <code>StationXML</code>, <code>SEED</code>,
+                                            <code>RESP</code>, and custom data structures.
+                                        </li>
+                                        <li>Signal filtering, tapering, detrending, resampling, and much more.</li>
+                                        <li>Advanced algorithms, e.g. array analysis, multi-station triggers, ...</li>
+                                        <li>Direct access to the full power of the scientific Python ecosystem.</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>
+                                        <img class="img-responsive"
+                                             src="{% static 'img/example_images/bode-plot.png' %}"></img>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="container-fluid">
+                        <div class="carousel-item">
+                            <div class="row">
+                                <h3>
+                                    Worldwide Community
+                                </h3>
+                                <hr/>
+                            </div>
+                            <div class="row gallery-carousel-item">
+                                <img class="img-responsive center-block" style="height: 230px"
+                                     src="{% static 'img/usage.png' %}"></img>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="container-fluid">
+                        <div class="carousel-item">
+                            <div class="row">
+                                <h3>
+                                    Other Projects Utilize the Power of ObsPy!
+                                </h3>
+                                <hr/>
+                            </div>
+                            <div class="row gallery-carousel-item">
+                                <img class="img-responsive"
+                                     src="{% static 'img/obspy_projects.png' %}"></img>
+
+                                <div>
+                                    <a class="btn btn-warning btn-lg"
+                                       href="https://github.com/obspy/obspy/wiki#use-cases--applications-using-obspy"
+                                       target="_blank">
+                                        View Projects
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="container-fluid">
+                        <div class="carousel-item">
+                            <div class="row gallery-carousel-item">
+                                <img class="img-responsive"
+                                     style="border-radius: 5px; box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.3); padding: 2px;"
+                                     src="{% static 'img/obspy_collage.jpg' %}"></img>
                                 <div>
                                     <a class="btn btn-warning btn-lg"
                                        href="http://docs.obspy.org/gallery.html"
@@ -201,6 +330,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
 
 

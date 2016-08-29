@@ -258,7 +258,7 @@ pre > code {
     background-image: linear-gradient(to left, rgb(255, 255, 255) 0, rgba(0, 0, 0, .0001) 100%);
 }
 
-#gallery-carousel-item div {
+.gallery-carousel-item div {
     position: absolute;
     left: 0;
     top: 0;
@@ -267,7 +267,7 @@ pre > code {
     padding-top: 25%
 }
 
-#gallery-carousel-item a {
+.gallery-carousel-item a {
     display: block;
     margin: 0 auto;
     width: 250px;
