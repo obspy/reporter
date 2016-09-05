@@ -340,6 +340,7 @@ pre > code {
     max-height: 600px;
     overflow: auto;
     padding: 20px;
+    background: rgba(255, 255, 255, 0.2);
 }
 
 #news-header {
@@ -382,7 +383,7 @@ pre > code {
     color: black;
 }
 
-.octicon {
+.gha-activity-icon .octicon {
     color: #495961;
 }
 
