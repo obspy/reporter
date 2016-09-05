@@ -237,9 +237,9 @@ pre > code {
 /* CUSTOMIZE THE CAROUSEL */
 
 .carousel {
-    height: 400px;
     margin-bottom: 60px;
     margin-top: 10px;
+    min-height: 420;
 }
 
 /* Color of the line under the heading */
@@ -258,7 +258,8 @@ pre > code {
 }
 
 .carousel .item {
-    height: 400px;
+    padding-bottom: 40px;
+    min-height: 420px;
 }
 
 .carousel-indicators > li {
