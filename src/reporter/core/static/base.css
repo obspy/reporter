@@ -149,6 +149,7 @@ body {
 }
 
 #content {
+    padding-top: 20px;
     padding-bottom: 80px; /* Height of the footer element */
 }
 
@@ -212,6 +213,10 @@ dl {
 
 #short-news .panel-body {
     padding: 4px;
+}
+
+#short-news ul {
+    padding-left: 20px;
 }
 
 #short-news-twitter .panel-body {
@@ -346,4 +351,10 @@ pre > code {
 
 .gitter-chat-embed {
     top: 50px;
+}
+
+
+/* Limit the width of the main block for very wide screens. */
+#home-major-content {
+    max-width: 1000px;
 }

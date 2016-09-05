@@ -53,27 +53,30 @@
 {% block content %}
 
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-12 col-lg-8 col-lg-offset-1">
+            <div id="home-major-content" class="center-block">
 
-            <div class="row">
-                <div class="text-center" id="header">
-                    {% include "home/header.html" %}
+                <div class="row">
+                    <div class="text-center" id="header">
+                        {% include "home/header.html" %}
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                {% include "home/carousel.html" %}
-            </div>
+                <div class="row">
+                    {% include "home/carousel.html" %}
+                </div>
 
-            <hr/>
+                <hr/>
 
-            <div class="row" id="getting-started">
-                {% include "home/getting_started.html" %}
+                <div class="row" id="getting-started">
+                    {% include "home/getting_started.html" %}
+                </div>
             </div>
 
         </div>
 
-        <div class="col-md-2" id="short-news">
+        {# Only visible for large medias #}
+        <div class="col-lg-2 col-lg-offset-1 visible-lg-block" id="short-news">
             {% include "home/short_news.html" %}
         </div>
     </div>
