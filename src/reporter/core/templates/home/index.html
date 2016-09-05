@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+
+{% block title %}ObsPy - A Python Toolbox for Seismology{% endblock %}
+
+
+{% block extrahead %}
+    {# Code highlighting style sheet #}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/androidstudio.min.css">
+
+    <script type="text/javascript">
+        var shiftWindow = function() { scrollBy(0, -90) };
+        if (location.hash) {
+            shiftWindow();
+        }
+        window.addEventListener("hashchange", shiftWindow);
+    </script>
+
+    {# We only want the background image at this one page. #}
+    <style>
+        body {
+            background-color: #FCFEE3;
+            background-image: url('/static/img/background.jpg');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+        }
+    </style>
+{% endblock %}
+
+
+{% block extrafoot %}
+    {# Code highlighting for the carousel. #}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    {# Stuff for the github feed. #}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
+    <script type="text/javascript" src="{% static 'libs/github-activity-0.1.4.min.js' %}"></script>
+
+    {# Gitter sidecar #}
+    <script>
+        ((window.gitter = {}).chat = {}).options = {
+            room: 'obspy/obspy'
+        };
+    </script>
+    <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+
+    {# Github buttons #}
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    {# Twitter button and timeline widget #}
+    <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12 col-lg-8 col-lg-offset-1">
+            <div id="home-major-content" class="center-block">
+
+                <div class="row">
+                    <div class="text-center" id="header">
+                        {% include "home/header.html" %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    {% include "home/carousel.html" %}
+                </div>
+
+                <hr/>
+
+                <div class="row" id="getting-started">
+                    {% include "home/getting_started.html" %}
+                </div>
+            </div>
+
+        </div>
+
+        {# Only visible for large medias #}
+        <div class="col-lg-2 col-lg-offset-1 visible-lg-block" id="short-news">
+            {% include "home/short_news.html" %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-lg-8 col-lg-offset-2">
+            {% include "home/news_and_twitter.html" %}
+        </div>
+    </div>
+
+{% endblock %}
