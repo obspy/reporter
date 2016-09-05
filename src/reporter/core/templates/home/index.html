@@ -6,7 +6,7 @@
 
 
 {% block extrahead %}
-    {# Code highlighting style sheet#}
+    {# Code highlighting style sheet #}
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/styles/androidstudio.min.css">
 
     <script type="text/javascript">
@@ -33,6 +33,10 @@
     {# Code highlighting for the carousel. #}
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
+
+    {# Stuff for the github feed. #}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
+    <script type="text/javascript" src="{% static 'libs/github-activity-0.1.4.min.js' %}"></script>
 
     {# Gitter sidecar #}
     <script>

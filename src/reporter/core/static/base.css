@@ -353,6 +353,38 @@ pre > code {
     top: 50px;
 }
 
+/* GITHUB FEED */
+#github-feed {
+    max-height: 600px;
+    overflow: auto;
+}
+
+.gha-feed {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.gha-header {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+}
+
+.gha-user-icon, .gha-gravatar, .gha-push-small, .gha-footer, .gha-push, .gha-user-info p {
+    display: none;
+}
+
+.gha-github-icon {
+    padding: 0px;
+}
+
+.gha-time {
+    color: black;
+}
+
+.octicon {
+    color: #495961;
+}
 
 /* Limit the width of the main block for very wide screens. */
 #home-major-content {

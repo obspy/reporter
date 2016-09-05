@@ -1,13 +1,20 @@
 {% load staticfiles %}
 
+
 <div class="col-md-12" id="news-header" name="news">
     <span style="font-size: 160%; font-weight: 900; color: #a10000;">THE LATEST NEWS</span>
     AND BE
     <span style="font-weight: 800">EVEN MORE</span>
     UP TO DATE ON
-    <span style="font-size: 160%; font-weight: 900; color: #a10000;">TWITTER!</span>
+    <span style="font-size: 160%; font-weight: 900; color: #a10000;">
+    {# Github on large screens, twitter on smaller ones. #}
+    <span class="hidden-lg">TWITTER!</span>
+    <span class="visible-lg-inline">GITHUB!</span>
+    </span>
 </div>
-<div class="col-md-8" id="news">
+
+
+<div class="col-md-6" id="news">
 
     <dl>
 
@@ -133,7 +140,9 @@
     </dl>
 </div>
 
-<div class="col-md-4" id="twitter">
+
+{# Github on large screens, twitter on smaller ones. #}
+<div class="col-md-6 hidden-lg" id="twitter">
     <a class="twitter-timeline"
        data-width="100%"
        data-height="600"
@@ -143,3 +152,6 @@
        href="https://twitter.com/obspy">Tweets by obspy</a>
 </div>
 
+
+<div class="col-md-6 visible-lg-block" id="github-feed">
+</div>
