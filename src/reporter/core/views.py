@@ -149,6 +149,14 @@ def index(request):
     except:
         node = None
 
+    # filter by PR number
+    try:
+        pr = request.GET.get('pr') or None
+        if pr:
+            queryset = queryset.filter(prurl__endswith='/' + pr)
+    except:
+        pr = None
+
     # filter by module
     try:
         module = request.GET.get('module') or None

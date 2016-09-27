@@ -26,7 +26,7 @@ class Report(models.Model):
     architecture = models.CharField(max_length=16, db_index=True)
     version = models.CharField(max_length=16, db_index=True)
     prurl = models.URLField(
-        verbose_name="Pull request URL", blank=True, null=True)
+        verbose_name="Pull request URL", blank=True, null=True, db_index=True)
     ciurl = models.URLField(
         verbose_name="Continous Integration URL", blank=True, null=True)
     architecture = models.CharField(max_length=16, db_index=True)
