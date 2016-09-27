@@ -145,7 +145,7 @@ def index(request):
     try:
         node = request.GET.get('node') or None
         if node:
-            queryset = queryset.filter(node=node)
+            queryset = queryset.filter(node__contains=node)
     except:
         node = None
 
