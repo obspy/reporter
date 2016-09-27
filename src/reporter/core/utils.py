@@ -46,9 +46,9 @@ def parse_report_xml(xml):
         kwargs['ciurl'] = None
     # installed modules
     if root.find('obspy') is not None:
-        kwargs['tags'] = sorted([c.tag
-                for c in root.find('obspy').getchildren()
-                if c.tag != 'installed' and c.find('tested') is not None])
+        kwargs['tags'] = sorted(
+            [c.tag for c in root.find('obspy').getchildren()
+             if c.tag != 'installed' and c.find('tested') is not None])
     else:
         kwargs['tags'] = []
     return kwargs
@@ -94,9 +94,11 @@ def format_traceback(text, tree=None):
 
 
 def fetch_credits():
-    contributors = urllib2.urlopen('https://raw.githubusercontent.com/obspy/' \
+    contributors = urllib2.urlopen(
+        'https://raw.githubusercontent.com/obspy/'
         'obspy/master/obspy/CONTRIBUTORS.txt').read()
-    funds = urllib2.urlopen('https://raw.githubusercontent.com/obspy/' \
+    funds = urllib2.urlopen(
+        'https://raw.githubusercontent.com/obspy/'
         'obspy/master/misc/docs/source/credits/FUNDS.txt').read()
     # sort and split
     contributors = sorted(contributors.splitlines())

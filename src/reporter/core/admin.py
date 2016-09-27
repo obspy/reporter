@@ -7,7 +7,8 @@ from reporter.core import models
 
 
 class ReportAdmin(admin.ModelAdmin):
-    list_display = ['id', 'errors', 'failures', 'skipped', 'tests', 'modules',
+    list_display = [
+        'id', 'errors', 'failures', 'skipped', 'tests', 'modules',
         'installed', 'node', 'system', 'architecture', 'version', 'timetaken',
         'datetime']
     search_fields = ['installed', 'node', 'system', 'architecture', 'version']

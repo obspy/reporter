@@ -19,16 +19,16 @@ class Report(models.Model):
     skipped = models.IntegerField(blank=True, null=True)
     modules = models.IntegerField()
     timetaken = models.FloatField(blank=True, null=True)
-    installed = models.CharField(max_length=255, blank=True, null=True,
-        db_index=True)
+    installed = models.CharField(
+        max_length=255, blank=True, null=True, db_index=True)
     node = models.CharField(max_length=64)
     system = models.CharField(max_length=16, db_index=True)
     architecture = models.CharField(max_length=16, db_index=True)
     version = models.CharField(max_length=16, db_index=True)
-    prurl = models.URLField(verbose_name="Pull request URL", blank=True,
-        null=True)
-    ciurl = models.URLField(verbose_name="Continous Integration URL",
-        blank=True, null=True)
+    prurl = models.URLField(
+        verbose_name="Pull request URL", blank=True, null=True)
+    ciurl = models.URLField(
+        verbose_name="Continous Integration URL", blank=True, null=True)
     architecture = models.CharField(max_length=16, db_index=True)
     xml = models.TextField(verbose_name='XML Document')
 
@@ -167,10 +167,11 @@ class SelectedNode(models.Model):
 
 
 class MenuItem(MPTTModel):
-    parent = TreeForeignKey('self', null=True, blank=True,
-        related_name='children')
+    parent = TreeForeignKey(
+        'self', null=True, blank=True, related_name='children')
     name = models.CharField(max_length=50, help_text='Use "-" for dividers')
-    icon = models.CharField(max_length=100, blank=True, null=True,
+    icon = models.CharField(
+        max_length=100, blank=True, null=True,
         help_text="see http://getbootstrap.com/components/#glyphicons-glyphs")
     url = models.CharField(max_length=200, blank=True, null=True)
 
