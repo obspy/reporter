@@ -92,7 +92,7 @@
     <dl class="dl-horizontal">
       <dt>Total Runtime</dt>
       <dd>{{ report.timetaken|floatformat }} sec</dd>
-      <dt>Finished</dt>
+      <dt>Report Date/Time</dt>
       <dd>{{ report.datetime }}</dd>
     </dl>
   </div>
@@ -145,7 +145,17 @@
       <td>{{ module.sum|default:'<span class="muted">-</span>' }}</td>
       <td class="hidden-xs">{{ module.tests }}</td>
       <td class="hidden-xs">{{ module.executed_tests|default:'<span class="muted">-</span>' }}</td>
-      <td class="hidden-xs">{{ module.skipped|default:'<span class="muted">-</span>' }}</td>
+      <td class="hidden-xs">
+      {% if module.skipped %}
+        {% if skipped_tests %}
+          <a href="#skippedtests">{{ module.skipped }}</a>
+        {% else %}
+          {{ module.skipped }}
+        {% endif %}
+      {% else %}
+        <span class="muted">-</span>
+      {% endif %}
+      </td>
       <td class="hidden-xs">{{ module.timetaken|floatformat }}s</td>
 {% else %}
       <td class="muted">Not&nbsp;tested</td>
@@ -173,7 +183,17 @@
       <th>{{ report.sum|default:'<span class="muted">-</span>' }}</th>
       <th class="hidden-xs">{{ report.tests }}</th>
       <th class="hidden-xs">{{ report.executed_tests }}</th>
-      <th class="hidden-xs">{{ report.skipped|default:'<span class="muted">-</span>' }}</th>
+      <th class="hidden-xs">
+      {% if report.skipped %}
+        {% if skipped_tests %}
+          <a href="#skippedtests">{{ report.skipped }}</a>
+        {% else %}
+          {{ report.skipped }}
+        {% endif %}
+      {% else %}
+        <span class="muted">-</span>
+      {% endif %}
+      </th>
       <th class="hidden-xs">{{ report.timetaken|floatformat }}s</th>
       <th>{{ tracebacks|length|default:'<span class="muted">-</span>' }}</th>
     </tr>
@@ -206,12 +226,12 @@
 {% endif %}
 
 {% if skipped_tests %}
-<h3>Skipped Tests <small>({{ skipped_tests|length }})</small></h3>
+<h3 id="skippedtests">Skipped Tests <small>({{ skipped_tests|length }})</small></h3>
 <table class="table table-hover">
   <tr>
     <th class="col-xs-1">Submodule</th>
     <th>Test</th>
-    <th>Skip message</th>
+    <th>Skip Message</th>
   </tr>
 {% for test in skipped_tests %}
   <tr>
