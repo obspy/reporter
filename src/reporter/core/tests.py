@@ -2,7 +2,7 @@
 
 from django.test import TestCase
 
-from reporter.core.utils import format_traceback
+from . import utils
 
 
 TB_SOURCE_1 = """
@@ -48,5 +48,5 @@ class ReporterTest(TestCase):
         """
         Tests for format_traceback utility function
         """
-        self.assertEqual(format_traceback(TB_SOURCE_1), TB_RESULT_1)
-        self.assertEqual(format_traceback(TB_SOURCE_2), TB_RESULT_2)
+        self.assertEqual(utils.format_traceback(TB_SOURCE_1), TB_RESULT_1)
+        self.assertEqual(utils.format_traceback(TB_SOURCE_2), TB_RESULT_2)

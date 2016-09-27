@@ -4,7 +4,7 @@ from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.db.models.signals import post_save, post_delete
 
-from reporter.core import models
+from . import models
 
 
 def invalidate_menu_cache(sender, instance, **kwargs):  # @UnusedVariable

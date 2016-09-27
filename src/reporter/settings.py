@@ -75,7 +75,6 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 MIDDLEWARE_CLASSES = [
@@ -144,8 +143,6 @@ TEMPLATES = [{
         'context_processors': [
             'django.contrib.auth.context_processors.auth',
             'django.template.context_processors.debug',
-        #    'django.core.context_processors.i18n',
-        #    'django.core.context_processors.media',
             'django.template.context_processors.static',
             'django.template.context_processors.tz',
             'django.template.context_processors.request',
@@ -184,8 +181,7 @@ if DEBUG:
         'debug_toolbar.panels.signals.SignalsPanel',
         'debug_toolbar.panels.logging.LoggingPanel',
         'debug_toolbar.panels.redirects.RedirectsPanel',
-    #    'template_timings_panel.panels.TemplateTimings.TemplateTimings',
     ]
 
 # Override the settings with local modifications.
-from settings_local import *  # @UnusedWildImport
+from settings_local import *  # @UnusedWildImport @IgnorePep8

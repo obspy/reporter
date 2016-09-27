@@ -4,8 +4,7 @@ Management command to reindex database using XML stored document.
 """
 from django.core.management.base import BaseCommand
 
-from reporter.core.models import Report
-from reporter.core.utils import parse_report_xml
+from reporter.core import models, utils
 
 
 class Command(BaseCommand):
@@ -13,9 +12,9 @@ class Command(BaseCommand):
     help = "Reindex database using XML stored document"  # @ReservedAssignment
 
     def handle(self, **options):  # @UnusedVariable
-        for report in Report.objects.order_by('-id'):
+        for report in models.Report.objects.order_by('-id'):
             print(report.id)
-            options = parse_report_xml(report.xml)
+            options = utils.parse_report_xml(report.xml)
             for key, value in options.items():
                 if key == 'tags':
                     report.tags.all().delete()

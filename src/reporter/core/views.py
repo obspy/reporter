@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import ast
 from datetime import datetime
 import json
 import urllib2
@@ -9,16 +10,15 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db.models import Q
 from django.http.response import HttpResponse, HttpResponseBadRequest
-from django.shortcuts import render_to_response, get_object_or_404, redirect
-from django.template.context import RequestContext
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import get_template
 from django.views.decorators.cache import cache_page
 from lxml import etree
-from reporter.core import models
-from reporter.core.utils import parse_report_xml, format_traceback
+
+from . import models, utils
 
 
-LIMITS = [20, 50, 100, 200]
+LIMITS = [50, 100, 200]
 
 
 def index_post(request):
@@ -47,11 +47,12 @@ def index_post(request):
         except Exception, e:
             return HttpResponseBadRequest(str(e))
     # parse XML document
-    kwargs = parse_report_xml(xml)
+    kwargs = utils.parse_report_xml(xml)
     if 'tags' in kwargs:
         tags = kwargs.pop('tags')
     # create report
-    report = models.Report(datetime=datetime.fromtimestamp(timestamp),
+    report = models.Report(
+        datetime=datetime.fromtimestamp(timestamp),
         tests=tests, errors=errors, failures=failures, modules=modules,
         system=system, architecture=architecture, version=version,
         xml=xml, **kwargs)
@@ -168,7 +169,7 @@ def index(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         reports = paginator.page(paginator.num_pages)
 
-    options = {
+    context = {
         'limit': limit,
         'limits': LIMITS,
         'reports': reports,
@@ -182,11 +183,11 @@ def index(request):
         'nodes': nodes,
         'show': show,
     }
-    return render_to_response("index.html", options, RequestContext(request))
+    return render(request, "index.html", context)
 
 
 def home(request):
-    return render_to_response("home.html", {}, RequestContext(request))
+    return render(request, "home.html")
 
 
 def cache_page_if_not_latest(decorator):
@@ -235,12 +236,12 @@ def report_html(request, pk):
     # slowest tests
     if root.find('slowest_tests') is not None:
         # Safely evaluate a string containing a Python expression
-        import ast
         slowest_tests = ast.literal_eval(root.find('slowest_tests').text)
     else:
         slowest_tests = []
     # api.icndb.com
-    req = urllib2.Request("http://api.icndb.com/jokes/random?limitTo=[nerdy]&escape=javascript ")
+    req = urllib2.Request(
+        "http://api.icndb.com/jokes/random?limitTo=[nerdy]&escape=javascript")
     try:
         full_json = urllib2.urlopen(req).read()
         full = json.loads(full_json)
@@ -287,7 +288,7 @@ def report_html(request, pk):
                     tb['module'] = obj['name']
                     tb['id'] = len(tracebacks) + 1
                     tb['log'], tb['imgurs'] = \
-                        format_traceback(error.text, git_hash)
+                        utils.format_traceback(error.text, git_hash)
                     tb['status'] = 'warning'
                     module_tracebacks.append(tb)
                     tracebacks.append(tb)
@@ -302,7 +303,7 @@ def report_html(request, pk):
                     tb['module'] = obj['name']
                     tb['id'] = len(tracebacks) + 1
                     tb['log'], tb['imgurs'] = \
-                        format_traceback(error.text, git_hash)
+                        utils.format_traceback(error.text, git_hash)
                     tb['status'] = 'danger'
                     module_tracebacks.append(tb)
                     tracebacks.append(tb)
@@ -330,7 +331,7 @@ def report_html(request, pk):
         log = unicode(log).encode("utf-8")
     except:
         log = None
-    options = {
+    context = {
         'report': report,
         'one_version': one_version,
         'platform': platform,
@@ -341,7 +342,7 @@ def report_html(request, pk):
         'slowest_tests': slowest_tests,
         'icndb': icndb
     }
-    return render_to_response("report.html", options, RequestContext(request))
+    return render(request, "report.html", context)
 
 
 class LatestReportsFeed(Feed):
@@ -422,8 +423,8 @@ def report_latest(request):  # @UnusedVariable
 
 
 def snippet_navbar(request):
-    return render_to_response("navbar.html", {}, RequestContext(request))
+    return render(request, "navbar.html")
 
 
 def snippet_footer(request):
-    return render_to_response("footer.html", {}, RequestContext(request))
+    return render(request, "footer.html")

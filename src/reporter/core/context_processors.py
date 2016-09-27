@@ -2,14 +2,14 @@
 
 from django.core.cache import cache
 from django.utils.safestring import mark_safe
-from reporter.core import models
-from reporter.core.utils import fetch_credits
+
+from . import models, utils
 
 
 CACHE_TIMEOUT = 60 * 60 * 24
 
 # get credits + split contributers
-CONTRIBUTORS, FUNDS = fetch_credits()
+CONTRIBUTORS, FUNDS = utils.fetch_credits()
 
 
 def _recursive_node(node):

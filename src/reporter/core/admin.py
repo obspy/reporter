@@ -3,7 +3,7 @@
 from django.contrib import admin
 from django_mptt_admin.admin import DjangoMpttAdmin
 
-from reporter.core import models
+from . import models
 
 
 class ReportAdmin(admin.ModelAdmin):
