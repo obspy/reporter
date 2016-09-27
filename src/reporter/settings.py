@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-DEBUG = True
+DEBUG = False
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
