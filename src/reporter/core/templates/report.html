@@ -205,11 +205,29 @@
 </div>
 {% endif %}
 
-{% if slowest_tests %}
-<h3>Slowest Tests</h3>
+{% if skipped_tests %}
+<h3>Skipped Tests <small>({{ skipped_tests|length }})</small></h3>
 <table class="table table-hover">
   <tr>
-    <th>Runtime</th>
+    <th class="col-xs-1">Submodule</th>
+    <th>Test</th>
+    <th>Skip message</th>
+  </tr>
+{% for test in skipped_tests %}
+  <tr>
+    <td>{{ test.0 }}</td>
+    <td>{{ test.3 }} ({{ test.1 }}.{{ test.2 }})</td>
+    <td>{{ test.4 }}</td>
+  </tr>
+{% endfor %}
+</table>
+{% endif %}
+
+{% if slowest_tests %}
+<h3>Slowest Tests <small>({{ slowest_tests|length }})</small></h3>
+<table class="table table-hover">
+  <tr>
+    <th class="col-xs-1">Runtime</th>
     <th>Test</th>
   </tr>
 {% for test in slowest_tests %}

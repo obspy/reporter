@@ -241,6 +241,13 @@ def report_html(request, pk):
                     for i in root.find('dependencies').getchildren()])
     else:
         dependencies = []
+    # skipped tests
+    if root.find('skipped_tests_details') is not None:
+        # Safely evaluate a string containing a Python expression
+        skipped_tests = ast.literal_eval(
+            root.find('skipped_tests_details').text)
+    else:
+        skipped_tests = []
     # slowest tests
     if root.find('slowest_tests') is not None:
         # Safely evaluate a string containing a Python expression
@@ -348,6 +355,7 @@ def report_html(request, pk):
         'tracebacks': tracebacks,
         'log': log,
         'slowest_tests': slowest_tests,
+        'skipped_tests': skipped_tests,
         'icndb': icndb
     }
     return render(request, "report.html", context)
