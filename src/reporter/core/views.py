@@ -140,6 +140,17 @@ def index(request):
     except:
         pass
 
+    # filter by a git commit SHA in an untagged version
+    try:
+        git = request.GET.get('git') or None
+        if git:
+            # obspy version numbers contain only the first 10 characters of the
+            # git commit SHA
+            git = git[:10]
+            queryset = queryset.filter(installed__contains=git)
+    except:
+        pass
+
     # filter by node
     nodes = models.SelectedNode.objects.values_list('name', flat=True)
     try:
