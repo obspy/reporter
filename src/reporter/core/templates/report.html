@@ -6,7 +6,7 @@
 
 
 {% block extrahead %}
-<link href="{% static 'libs/twentytwenty/css/twentytwenty.css' %}" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mhayes-twentytwenty/1.0.0/css/twentytwenty.min.css" integrity="sha256-2Wze5epdlzF8qLSkEqbpZ54nJACNd5Vk87ymLv9vcqw=" crossorigin="anonymous" />
 <script type="text/javascript">
   var shiftWindow = function() { scrollBy(0, -90) };
   if (location.hash) shiftWindow();
@@ -16,7 +16,8 @@
 
 
 {% block extrafoot %}
-<script src="{% static 'libs/twentytwenty/js/jquery.twentytwenty.js' %}" defer></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mhayes-twentytwenty/1.0.0/js/jquery.twentytwenty.min.js" integrity="sha256-D2l9+EHv9C1Jk7FXmUNFnbtmFHowHewFTkbZTnzqdsg=" crossorigin="anonymous"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mhayes-twentytwenty/1.0.0/js/jquery.event.move.min.js" integrity="sha256-fqXzZX48vO+Q2Uz6Wkh3veStRw4i24PfRgW7twugCxo=" crossorigin="anonymous"></script>
 {% endblock %}
 
 

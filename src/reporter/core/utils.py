@@ -76,6 +76,8 @@ def format_traceback(text, tree=None):
     text = escape(unicode(text).encode("utf-8"))
     # extract imgur images
     imgurs = re.findall('http://i.imgur.com/[\w]*.png', text)
+    # ensure https links in imgur images
+    imgurs = [i.replace('http://', 'https://') for i in imgurs]
     # linkify
     regex = r'(File &quot;)(.*[/\\](obspy[/\\][^&]*))(&quot;, line ([0-9]+),)'
     regex = re.compile(regex, re.UNICODE)
