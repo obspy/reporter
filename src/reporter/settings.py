@@ -187,7 +187,10 @@ if DEBUG:
 ###############################################################################
 # django-csp
 ###############################################################################
-CSP_DEFAULT_SRC = ["'self'"]
+CSP_DEFAULT_SRC = [
+    "'self'",
+    "https://cdnjs.cloudflare.com:443"  # fonts
+]
 CSP_SCRIPT_SRC = ["'self'", "https://cdnjs.cloudflare.com:443"]
 CSP_IMG_SRC = ["'self'", "https://i.imgur.com:443"]
 CSP_STYLE_SRC = ["'self'", "https://cdnjs.cloudflare.com:443"]

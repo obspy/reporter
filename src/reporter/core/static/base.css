@@ -158,5 +158,9 @@ ul.filter {
 }
 
 dl {
-    margin-bottom: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.status-icon {
+  font-size: 3em;
 }

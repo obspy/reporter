@@ -27,7 +27,7 @@
 
     <form class="form-inline" role="form" action="{% url 'index' %}" method="get">
       <div class="checkbox">
-        <select name="limit" class="form-control input-sm" onchange="submit();">
+        <select name="limit" class="form-control input-sm onchange-submit">
 {% for value in limits %}
           <option value="{{ value }}"{% if value == limit %} selected="selected"{% endif %}>{{ value }}</option>
 {% endfor %}
@@ -37,12 +37,12 @@
 
       <div class="pull-right">
         <label class="radio-inline">
-          <input type="radio" name="show" value="" onchange="submit();"
+          <input type="radio" name="show" value="" class="onchange-submit"
             {% if not show %}checked="checked"{% endif %}>
             show all
         </label>
         <label class="radio-inline">
-          <input type="radio" name="show" value="errors" onchange="submit();"
+          <input type="radio" name="show" value="errors" class="onchange-submit"
             {% if show == 'errors' %}checked="checked"{% endif %}>
             errors only
         </label>
@@ -157,12 +157,12 @@
         <h5>Selected Nodes</h5>
         <input type="hidden" name="node" value="{{ node }}" />
         <ul class="filter">
-          <li style="white-space: nowrap;">
+          <li class="text-nowrap">
             <a href="{% append_to_get node='' %}"{% if not node %} class="enabled"{% endif %}>all</a>
             <small><a href="{% url 'report_rss' %}"><i class="icon-rss"></i></a></small>
           </li>
 {% for value in nodes %}
-          <li style="white-space: nowrap;">
+          <li class="text-nowrap">
             <a href="{% append_to_get node=value,version='',architecture='',system='' %}"{% if node == value %} class="enabled"{% endif %}>{{ value }}</a>
             <small><a href="{% url 'report_rss_selectednode' name=value %}"><i class="icon-feed"></i></a></small>
           </li>

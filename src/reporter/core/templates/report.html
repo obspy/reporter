@@ -7,11 +7,6 @@
 
 {% block extrahead %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mhayes-twentytwenty/1.0.0/css/twentytwenty.min.css" integrity="sha256-2Wze5epdlzF8qLSkEqbpZ54nJACNd5Vk87ymLv9vcqw=" crossorigin="anonymous" />
-<script type="text/javascript">
-  var shiftWindow = function() { scrollBy(0, -90) };
-  if (location.hash) shiftWindow();
-  window.addEventListener("hashchange", shiftWindow);
-</script>
 {% endblock %}
 
 
@@ -119,7 +114,7 @@
 </div>
 
 
-<div style="font-size: 3em;" class="pull-right text-{{ report.status }} {{ report.status_icon }}"></div>
+<div class="status-icon pull-right text-{{ report.status }} {{ report.status_icon }}"></div>
 <h3>Modules <small>({{ report.modules }})</small></h3>
 <table id="modules" class="table table-hover table-condensed tablesorter">
   <thead>
@@ -129,11 +124,11 @@
       <th class="hidden-xs">Version</th>
 {% endif %}
       <th>Errors /<br />Failures</th>
-      <th style="width: 7em;" class="hidden-xs">Tests</th>
-      <th style="width: 7em;" class="hidden-xs">Executed<br/>Tests</th>
-      <th style="width: 7em;" class="hidden-xs">Skipped<br/>Tests</th>
-      <th class="hidden-xs">Runtime</th>
-      <th style="width: 40%;">Tracebacks</th>
+      <th class="col-md-1" class="hidden-xs">Tests</th>
+      <th class="col-md-1" class="hidden-xs">Executed<br/>Tests</th>
+      <th class="col-md-1" class="hidden-xs">Skipped<br/>Tests</th>
+      <th class="col-md-1 hidden-xs">Runtime</th>
+      <th class="col-md-4">Tracebacks</th>
     </tr>
   </thead>
   <tbody>
