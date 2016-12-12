@@ -183,5 +183,18 @@ if DEBUG:
         'debug_toolbar.panels.redirects.RedirectsPanel',
     ]
 
+
+###############################################################################
+# django-csp
+###############################################################################
+CSP_DEFAULT_SRC = ["'self'"]
+CSP_SCRIPT_SRC = ["'self'", "https://cdnjs.cloudflare.com:443"]
+CSP_IMG_SRC = ["'self'", "https://i.imgur.com:443"]
+CSP_STYLE_SRC = ["'self'", "https://cdnjs.cloudflare.com:443"]
+MIDDLEWARE_CLASSES += (
+    'csp.middleware.CSPMiddleware',
+)
+
+
 # Override the settings with local modifications.
 from settings_local import *  # @UnusedWildImport @IgnorePep8

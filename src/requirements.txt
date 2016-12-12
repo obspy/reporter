@@ -3,4 +3,5 @@ django-debug-toolbar
 django-mptt
 django-mptt-admin
 django-taggit
+django-csp
 lxml

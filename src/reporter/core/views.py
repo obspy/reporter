@@ -205,10 +205,6 @@ def index(request):
     return render(request, "index.html", context)
 
 
-def home(request):
-    return render(request, "home.html")
-
-
 def cache_page_if_not_latest(decorator):
     def _decorator(view):
         decorated_view = decorator(view)
