@@ -12,7 +12,8 @@ from django.contrib.syndication.views import Feed
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db.models import Q
-from django.http.response import HttpResponse, HttpResponseBadRequest
+from django.http.response import HttpResponse, HttpResponseBadRequest, \
+    JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import get_template
 from django.views.decorators.cache import cache_page
@@ -63,7 +64,10 @@ def index_post(request):
     # create tags
     if tags:
         report.tags.add(*tags)
-    return HttpResponse()
+    return JsonResponse({
+        'url': request.build_absolute_uri(reverse('report_html',
+                                                  args=(report.pk, )))
+        })
 
 
 def index(request):
