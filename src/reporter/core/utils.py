@@ -95,6 +95,12 @@ def format_traceback(text, tree=None):
     return text, imgurs
 
 
+def split(a, n):
+    k, m = divmod(len(a), n)
+    return [a[i * k + min(i, m):(i + 1) * k + min(i + 1, m)]
+            for i in xrange(n)]
+
+
 def fetch_credits():
     contributors = urllib2.urlopen(
         'https://raw.githubusercontent.com/obspy/'
@@ -105,5 +111,5 @@ def fetch_credits():
     # sort and split
     contributors = sorted(contributors.splitlines())
     funds = funds.splitlines()
-    contributors = (contributors[0::2], contributors[1::2])
+    contributors = split(contributors, 4)
     return contributors, funds
