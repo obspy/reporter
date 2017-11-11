@@ -18,6 +18,9 @@ Note that the passed arguments are evaluated within the template context.
 
 see also: http://djangosnippets.org/snippets/1627/
 """
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from django import template
 
 

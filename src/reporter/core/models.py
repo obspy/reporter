@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import time
 
 from django.db import models
@@ -58,7 +61,7 @@ class Report(models.Model):
     def prurl_number(self):
         try:
             return int(self.prurl.split('/')[-1])
-        except:
+        except Exception:
             return None
 
     @property
@@ -177,8 +180,8 @@ class MenuItem(MPTTModel):
 
     def __unicode__(self):
         return "%s" % (self.name)
-
-    def move_to(self, *args, **kwargs):
-        # manually submit post_save signal on node move
-        signals.post_save.send(sender=MenuItem, instance=self, created=False)
-        return super(MenuItem, self).move_to(*args, **kwargs)
+# 
+#     def move_to(self, *args, **kwargs):
+#         # manually submit post_save signal on node move
+#         signals.post_save.send(sender=MenuItem, instance=self, created=False)
+#         return super(MenuItem, self).move_to(*args, **kwargs)

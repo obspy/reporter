@@ -77,7 +77,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -101,7 +101,7 @@ INSTALLED_APPS = [
     'taggit',
     'mptt',
     'django_mptt_admin',
-    'reporter.core',
+    'reporter.core.apps.ReporterCoreAppConfig',
 ]
 
 # A sample logging configuration. The only tangible logging
@@ -195,9 +195,9 @@ CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
 CSP_SCRIPT_SRC = ["'self'", "https://cdnjs.cloudflare.com:443"]
 CSP_IMG_SRC = ["'self'", "https://i.imgur.com:443"]
 CSP_STYLE_SRC = ["'self'", "https://cdnjs.cloudflare.com:443"]
-MIDDLEWARE_CLASSES += (
+MIDDLEWARE += [
     'csp.middleware.CSPMiddleware',
-)
+]
 
 
 # Override the settings with local modifications.

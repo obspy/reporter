@@ -2,6 +2,9 @@
 """
 Management command to reindex database using XML stored document.
 """
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from django.core.management.base import BaseCommand
 
 from reporter.core import models, utils

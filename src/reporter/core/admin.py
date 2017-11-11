@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from django.contrib import admin
 from django_mptt_admin.admin import DjangoMpttAdmin
 
 from . import models
 
 
+@admin.register(models.Report)
 class ReportAdmin(admin.ModelAdmin):
     list_display = [
         'id', 'errors', 'failures', 'skipped', 'tests', 'modules',
@@ -17,16 +21,11 @@ class ReportAdmin(admin.ModelAdmin):
     readonly_fields = ['id']
 
 
-admin.site.register(models.Report, ReportAdmin)
-
-
+@admin.register(models.SelectedNode)
 class SelectedNodeAdmin(admin.ModelAdmin):
     list_display = ['name']
 
-admin.site.register(models.SelectedNode, SelectedNodeAdmin)
 
-
+@admin.register(models.MenuItem)
 class MenuItemAdmin(DjangoMpttAdmin):
     list_display = ['name']
-
-admin.site.register(models.MenuItem, MenuItemAdmin)

@@ -1,35 +1,44 @@
 # -*- coding: utf-8 -*-
-"""
-Custom middleware.
-"""
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import re
-
-
-RE_MULTI_SPACE = re.compile(r"[ ]{2,}")
-RE_MULTI_BREAK = re.compile(r"[\n]{2,}")
-RE_LEFT_SPACE = re.compile(r"\n[ ]+")
-RE_RIGHT_SPACE = re.compile(r"[ ]+\n")
 
 
 class MinifyHTMLMiddleware(object):
     """
     Minifies HTML content - does not respect <code>, <textarea> or <pre> tags!
     """
-    def process_response(self, request, response):  # @UnusedVariable
-        # fix "Bad value X-UA-Compatible for attribute http-equiv" W3C
-        response['X-UA-Compatible'] = 'IE=edge,chrome=1'
-        # compress
-        try:
-            content_type = response['content-type']
-        except:
-            return response
-        if 'text/html' in content_type:
-            return self._minify(request, response)
+    RE_MULTI_SPACE = re.compile(b"[ ]{2,}")
+    RE_MULTI_BREAK = re.compile(b"[\n]{2,}")
+    RE_LEFT_SPACE = re.compile(b"\n[ ]+")
+    RE_RIGHT_SPACE = re.compile(b"[ ]+\n")
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        self.process_response(request, response)
         return response
 
-    def _minify(self, request, response):  # @UnusedVariable
-        response.content = RE_LEFT_SPACE.sub(r"\n", response.content)
-        response.content = RE_RIGHT_SPACE.sub(r"\n", response.content)
-        response.content = RE_MULTI_SPACE.sub(r" ", response.content)
-        response.content = RE_MULTI_BREAK.sub(r"\n", response.content)
+    def process_response(self, request, response):
+        # skip admin pages
+        if request.path.startswith('/admin'):
+            return response
+        # skip non-HTML pages
+        content_type = response.get('content-type') or ''
+        if not content_type.startswith('text/html'):
+            return response
+        # minimise
+        response.content = self._minify_content(response.content)
         return response
+
+    @classmethod
+    def _minify_content(cls, content):
+        content = cls.RE_LEFT_SPACE.sub(b"\n", content)
+        content = cls.RE_RIGHT_SPACE.sub(b"\n", content)
+        content = cls.RE_MULTI_SPACE.sub(b" ", content)
+        content = cls.RE_MULTI_BREAK.sub(b"\n", content)
+        return content
