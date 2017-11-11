@@ -12,11 +12,11 @@ def parse_report_xml(xml):
     root = etree.fromstring(xml)
     try:
         obspy_installed = root.xpath('/report/obspy/installed')[0].text
-    except:
+    except Exception:
         obspy_installed = None
     try:
         core_installed = root.xpath('/report/obspy/core/installed')[0].text
-    except:
+    except Exception:
         core_installed = None
     installed = obspy_installed or core_installed or None
     if installed and installed.startswith('0.0.0-'):
@@ -24,15 +24,15 @@ def parse_report_xml(xml):
     kwargs['installed'] = installed
     try:
         kwargs['timetaken'] = float(root.xpath('/report/timetaken')[0].text)
-    except:
+    except Exception:
         kwargs['timetaken'] = None
     try:
         kwargs['skipped'] = int(root.xpath('/report/skipped')[0].text)
-    except:
+    except Exception:
         kwargs['skipped'] = None
     try:
         kwargs['node'] = root.findtext('platform/node')
-    except:
+    except Exception:
         kwargs['node'] = None
     # GitHub pull request URL
     if root.find('prurl') is not None:

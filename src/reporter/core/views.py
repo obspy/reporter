@@ -39,7 +39,7 @@ def index_post(request):
     # check if XML is parseable
     try:
         etree.fromstring(xml)
-    except:
+    except Exception:
         # otherwise try to correct broken XML
         try:
             parser = etree.XMLParser(recover=True)
@@ -84,7 +84,7 @@ def index(request):
         limit = int(request.GET.get('limit'))
         if limit not in LIMITS:
             raise
-    except:
+    except Exception:
         limit = LIMITS[0]
 
     queryset = models.Report.objects.all()
@@ -103,7 +103,7 @@ def index(request):
         if system not in systems:
             raise
         queryset = queryset.filter(system=system)
-    except:
+    except Exception:
         system = None
 
     # filter by architecture
@@ -115,7 +115,7 @@ def index(request):
         if architecture not in architectures:
             raise
         queryset = queryset.filter(architecture=architecture)
-    except:
+    except Exception:
         architecture = None
 
     # filter by python version
@@ -129,7 +129,7 @@ def index(request):
         if pyversion not in pyversions:
             raise
         queryset = queryset.filter(version=pyversion)
-    except:
+    except Exception:
         pyversion = None
 
     # filter by ObsPy version
@@ -137,7 +137,7 @@ def index(request):
         version = request.GET.get('version') or None
         if version:
             queryset = queryset.filter(installed=version)
-    except:
+    except Exception:
         pass
 
     # filter by a git commit SHA in an untagged version
@@ -148,7 +148,7 @@ def index(request):
             # git commit SHA
             git = git[:10]
             queryset = queryset.filter(installed__contains=git)
-    except:
+    except Exception:
         pass
 
     # filter by node
@@ -157,7 +157,7 @@ def index(request):
         node = request.GET.get('node') or None
         if node:
             queryset = queryset.filter(node__contains=node)
-    except:
+    except Exception:
         node = None
 
     # filter by PR number
@@ -165,7 +165,7 @@ def index(request):
         pr = request.GET.get('pr') or None
         if pr:
             queryset = queryset.filter(prurl__endswith='/' + pr)
-    except:
+    except Exception:
         pr = None
 
     # filter by module
@@ -173,7 +173,7 @@ def index(request):
         module = request.GET.get('module') or None
         if module:
             queryset = queryset.filter(tags__name__in=[module])
-    except:
+    except Exception:
         module = None
 
     # pagination
@@ -217,7 +217,7 @@ def cache_page_if_not_latest(decorator):
                     cacheit = False
                 else:
                     cacheit = True
-            except:
+            except Exception:
                 pass
             if cacheit:
                 # view with @cache
@@ -268,7 +268,7 @@ def report_html(request, pk):
         full_json = urllib2.urlopen(req).read()
         full = json.loads(full_json)
         icndb = full['value']['joke']
-    except:
+    except Exception:
         icndb = None
     # modules
     if root.find('obspy') is not None:
@@ -300,7 +300,7 @@ def report_html(request, pk):
             # timetaken
             try:
                 timetaken = float(item.findtext('timetaken'))
-            except:
+            except Exception:
                 timetaken = None
             # failures
             if item.find('failures') is not None:
@@ -337,7 +337,7 @@ def report_html(request, pk):
             try:
                 obj['skipped'] = int(item.findtext('skipped'))
                 obj['executed_tests'] = obj['tests'] - obj['skipped']
-            except:
+            except Exception:
                 obj['skipped'] = ''
                 obj['executed_tests'] = obj['tests']
             obj['sum'] = len(errors) + len(failures)
@@ -351,7 +351,7 @@ def report_html(request, pk):
         if not log:
             raise
         log = unicode(log).encode("utf-8")
-    except:
+    except Exception:
         log = None
     context = {
         'report': report,
@@ -390,6 +390,7 @@ class LatestReportsFeed(Feed):
     def item_link(self, item):
         return reverse('report_html', args=[item.pk])
 
+
 report_rss = LatestReportsFeed()
 
 
@@ -426,6 +427,7 @@ class SelectedNodeReportsFeed(Feed):
     # item_link is only needed if NewsItem has no get_absolute_url method.
     def item_link(self, item):
         return reverse('report_html', args=[item.pk])
+
 
 report_rss_selectednode = SelectedNodeReportsFeed()
 
