@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
-
 import re
-import urllib2
+from urllib.request import urlopen
 
 from django.utils.html import escape
 from lxml import etree
@@ -76,7 +73,7 @@ def format_traceback(text, tree=None):
         linelink = ""
     else:
         linelink = r'#L\5'
-    text = escape(unicode(text).encode("utf-8"))
+    text = escape(str(text).encode("utf-8"))
     # extract imgur images
     imgurs = re.findall('http://i.imgur.com/[\w]*.png', text)
     # ensure https links in imgur images
@@ -101,14 +98,14 @@ def format_traceback(text, tree=None):
 def split(a, n):
     k, m = divmod(len(a), n)
     return [a[i * k + min(i, m):(i + 1) * k + min(i + 1, m)]
-            for i in xrange(n)]
+            for i in range(n)]
 
 
 def fetch_credits():
-    contributors = urllib2.urlopen(
+    contributors = urlopen(
         'https://raw.githubusercontent.com/obspy/'
         'obspy/master/obspy/CONTRIBUTORS.txt').read()
-    funds = urllib2.urlopen(
+    funds = urlopen(
         'https://raw.githubusercontent.com/obspy/'
         'obspy/master/misc/docs/source/credits/FUNDS.txt').read()
     # sort and split

@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
-
 import ast
 from datetime import datetime
 import json
-import urllib2
+from urllib.request import urlopen
 
 from django.contrib.syndication.views import Feed
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db.models import Q
 from django.http.response import HttpResponse, HttpResponseBadRequest, \
     JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import get_template
+from django.urls.base import reverse
+from django.urls.exceptions import NoReverseMatch
 from django.views.decorators.cache import cache_page
 from lxml import etree
 
@@ -38,7 +36,7 @@ def index_post(request):
         modules = int(request.POST.get('modules'))
         system = request.POST.get('system')[:16]
         architecture = request.POST.get('architecture')[:16]
-    except Exception, e:
+    except Exception as e:
         return HttpResponseBadRequest(str(e))
     # check if XML is parseable
     try:
@@ -48,7 +46,7 @@ def index_post(request):
         try:
             parser = etree.XMLParser(recover=True)
             xml = etree.tostring(etree.fromstring(xml, parser=parser))
-        except Exception, e:
+        except Exception as e:
             return HttpResponseBadRequest(str(e))
     # parse XML document
     kwargs = utils.parse_report_xml(xml)
@@ -269,10 +267,9 @@ def report_html(request, pk):
     else:
         slowest_tests = []
     # api.icndb.com
-    req = urllib2.Request(
-        "http://api.icndb.com/jokes/random?limitTo=[nerdy]&escape=javascript")
+    url = "http://api.icndb.com/jokes/random?limitTo=[nerdy]&escape=javascript"
     try:
-        full_json = urllib2.urlopen(req).read()
+        full_json = urlopen(url).read()
         full = json.loads(full_json)
         icndb = full['value']['joke']
     except Exception:
@@ -357,7 +354,7 @@ def report_html(request, pk):
         log = root.findtext('install_log')
         if not log:
             raise
-        log = unicode(log).encode("utf-8")
+        log = str(log).encode("utf-8")
     except Exception:
         log = None
     context = {

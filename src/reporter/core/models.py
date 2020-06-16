@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
-
 import time
 
 from django.db import models
-from django.db.models import signals
 from mptt.models import MPTTModel, TreeForeignKey
 from taggit.managers import TaggableManager
 
@@ -171,7 +167,8 @@ class SelectedNode(models.Model):
 
 class MenuItem(MPTTModel):
     parent = TreeForeignKey(
-        'self', null=True, blank=True, related_name='children')
+        'self', null=True, blank=True, related_name='children',
+        on_delete=models.CASCADE)
     name = models.CharField(max_length=50, help_text='Use "-" for dividers')
     icon = models.CharField(
         max_length=100, blank=True, null=True,
@@ -180,8 +177,3 @@ class MenuItem(MPTTModel):
 
     def __unicode__(self):
         return "%s" % (self.name)
-# 
-#     def move_to(self, *args, **kwargs):
-#         # manually submit post_save signal on node move
-#         signals.post_save.send(sender=MenuItem, instance=self, created=False)
-#         return super(MenuItem, self).move_to(*args, **kwargs)

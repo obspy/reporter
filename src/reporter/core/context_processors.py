@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function,
-                        unicode_literals)
-
 from django.core.cache import cache
 from django.utils.safestring import mark_safe
 
@@ -39,7 +36,6 @@ def static(request):  # @UnusedVariable
     backup_funds = cache.get('backup_funds') or funds
     backup_contributors = cache.get('backup_contributors') or contributors
     if not funds or not contributors:
-        print('no cache')
         try:
             contributors, funds = utils.fetch_credits()
         except Exception:
@@ -47,7 +43,6 @@ def static(request):  # @UnusedVariable
             cache.set('funds', backup_funds, CACHE_TIMEOUT)
             cache.set('contributors', backup_contributors, CACHE_TIMEOUT)
         else:
-            print('new cache')
             cache.set('funds', funds, CACHE_TIMEOUT)
             cache.set('contributors', contributors, CACHE_TIMEOUT)
             # overwrite/set our new backup - no cache timeout
