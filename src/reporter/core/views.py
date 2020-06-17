@@ -354,7 +354,7 @@ def report_html(request, pk):
         log = root.findtext('install_log')
         if not log:
             raise
-        log = str(log).encode("utf-8")
+        log = str(log)
     except Exception:
         log = None
     context = {

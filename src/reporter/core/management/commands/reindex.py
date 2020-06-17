@@ -10,7 +10,7 @@ from reporter.core import models, utils
 
 class Command(BaseCommand):
     args = ""
-    help = "Reindex database using XML stored document"  # @ReservedAssignment
+    help = "Reindex database using stored XML documents"  # @ReservedAssignment
 
     def handle(self, **options):  # @UnusedVariable
         for report in models.Report.objects.order_by('-id'):

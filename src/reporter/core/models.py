@@ -3,6 +3,7 @@
 import time
 
 from django.db import models
+from django.urls.base import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 from taggit.managers import TaggableManager
 
@@ -33,11 +34,14 @@ class Report(models.Model):
 
     tags = TaggableManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return "Report %d" % (self.pk)
 
     class Meta:
         ordering = ['-datetime']
+
+    def get_absolute_url(self):
+        return reverse('report_html', kwargs={'pk': self.pk})
 
     @property
     def executed_tests(self):
@@ -158,7 +162,7 @@ class SelectedNode(models.Model):
     """
     name = models.CharField(max_length=64, primary_key=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return "SelectedNode %s" % (self.name)
 
     class Meta:
@@ -175,5 +179,5 @@ class MenuItem(MPTTModel):
         help_text="see http://getbootstrap.com/components/#glyphicons-glyphs")
     url = models.CharField(max_length=200, blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s" % (self.name)
