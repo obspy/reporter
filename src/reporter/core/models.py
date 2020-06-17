@@ -28,7 +28,7 @@ class Report(models.Model):
     prurl = models.URLField(
         verbose_name="Pull request URL", blank=True, null=True, db_index=True)
     ciurl = models.URLField(
-        verbose_name="Continous Integration URL", blank=True, null=True)
+        verbose_name="Continuous Integration URL", blank=True, null=True)
     architecture = models.CharField(max_length=16, db_index=True)
     xml = models.TextField(verbose_name='XML Document')
 
