@@ -105,9 +105,11 @@ def fetch_credits():
     contributors = urlopen(
         'https://raw.githubusercontent.com/obspy/'
         'obspy/master/obspy/CONTRIBUTORS.txt').read()
+    contributors = contributors.decode('utf-8')
     funds = urlopen(
         'https://raw.githubusercontent.com/obspy/'
         'obspy/master/misc/docs/source/credits/FUNDS.txt').read()
+    funds = funds.decode('utf-8')
     # sort and split
     contributors = sorted(contributors.splitlines())
     funds = funds.splitlines()
