@@ -52,7 +52,7 @@
     <h3>Report</h3>
 {% if one_version %}
     <dl class="dl-horizontal">
-      <dt>ObsPy Version</dt>
+      <dt>ObsPy version</dt>
       <dd title="{{ report.installed }}">
         {% if report.is_git %}
         <a href="https://github.com/obspy/obspy/tree/{{ report.git_commit_hash }}">{{ report.installed|truncatechars:30 }}</a>
@@ -83,13 +83,13 @@
       </dd>
     </dl>
     <dl class="dl-horizontal">
-      <dt>Report File</dt>
-      <dd><a href="{% url 'report_xml' report.pk %}">XML Document</a></dd>
+      <dt>Report file</dt>
+      <dd><a href="{% url 'report_xml' report.pk %}">XML document</a></dd>
     </dl>
     <dl class="dl-horizontal">
-      <dt>Total Runtime</dt>
+      <dt>Total runtime</dt>
       <dd>{{ report.timetaken|floatformat }} sec</dd>
-      <dt>Report Date/Time</dt>
+      <dt>Report date/time</dt>
       <dd>{{ report.datetime }}</dd>
     </dl>
   </div>
@@ -123,10 +123,10 @@
 {% if not one_version %}
       <th class="hidden-xs">Version</th>
 {% endif %}
-      <th>Errors /<br />Failures</th>
+      <th>Errors / Failures</th>
       <th class="col-md-1 hidden-xs">Tests</th>
-      <th class="col-md-1 hidden-xs">Executed<br/>Tests</th>
-      <th class="col-md-1 hidden-xs">Skipped<br/>Tests</th>
+      <th class="col-md-1 hidden-xs">Executed tests</th>
+      <th class="col-md-1 hidden-xs">Skipped tests</th>
       <th class="col-md-1 hidden-xs">Runtime</th>
       <th class="col-md-4">Tracebacks</th>
     </tr>
@@ -223,12 +223,12 @@
 {% endif %}
 
 {% if skipped_tests %}
-<h3 id="skippedtests">Skipped Tests <small>({{ skipped_tests|length }})</small></h3>
+<h3 id="skippedtests">Skipped tests <small>({{ skipped_tests|length }})</small></h3>
 <table class="table table-hover">
   <tr>
     <th class="col-xs-1">Submodule</th>
     <th>Test</th>
-    <th>Skip Message</th>
+    <th>Skip message</th>
   </tr>
 {% for test in skipped_tests %}
   <tr>
@@ -241,7 +241,7 @@
 {% endif %}
 
 {% if slowest_tests %}
-<h3>Slowest Tests <small>({{ slowest_tests|length }})</small></h3>
+<h3>Slowest tests <small>({{ slowest_tests|length }})</small></h3>
 <table class="table table-hover">
   <tr>
     <th class="col-xs-1">Runtime</th>
@@ -263,7 +263,7 @@
 </section>
 
 {% if icndb %}
-<h3>Chuck Norris Fact</h3>
+<h3>Chuck Norris fact</h3>
 <p>{{ icndb }}</p>
 {% endif %}
 {% endblock %}

@@ -13,7 +13,7 @@
 
 
 {% block header %}
-  <h1>Test Reports
+  <h1>Test reports
     <small>Overview of the latest {{ limit }} test reports</small>
   </h1>
 {% endblock %}
@@ -23,7 +23,7 @@
 <section id="reports">
 
 <div class="row">
-  <div class="col-sm-10">
+  <div class="col-md-10">
 
     <form class="form-inline" role="form" action="{% url 'index' %}" method="get">
       <div class="checkbox">
@@ -55,14 +55,14 @@
       <thead>
         <tr>
           <th>Report</th>
-          <th title="Number of reported errors/failures">Errors /<br />Failures</th>
-          <th>ObsPy<br />Version</th>
+          <th title="Number of reported errors/failures">Errors</th>
+          <th>ObsPy version</th>
           <th class="hidden-xs" title="Continous Integration URL">CI</th>
           <th class="hidden-xs" title="GitHub pull request URL">PR</th>
           <th class="hidden-xs" title="Number of executed tests">Tests</th>
           <th class="hidden-xs" title="Number of tested modules">Mods</th>
           <th class="hidden-xs" title="Test node name">Node</th>
-          <th class="hidden-xs">Python<br />Version</th>
+          <th class="hidden-xs" title="Python version">Python</th>
           <th class="hidden-xs">System</th>
           <th class="hidden-xs hidden-sm">Finished</th>
         </tr>
@@ -124,39 +124,11 @@
     </ul>
 
   </div>
-  <div class="col-sm-2">
+  <div class="col-md-2">
 
-    <div class="row">
-      <div class="col-sm-9 col-sm-offset-3">
-        <h5>System</h5>
-        <input type="hidden" name="system" value="{{ system }}" />
-        <ul class="filter">
-          <li><a href="{% append_to_get system='' %}"{% if not system %} class="enabled"{% endif %}>all</a></li>
-{% for value in systems %}
-          <li><a href="{% append_to_get system=value %}"{% if system == value %} class="enabled"{% endif %}>{{ value }}</a></li>
-{% endfor %}
-        </ul>
-        <h5>Architecture</h5>
-        <input type="hidden" name="architecture" value="{{ architecture }}" />
-        <ul class="filter">
-          <li><a href="{% append_to_get architecture='' %}"{% if not architecture %} class="enabled"{% endif %}>all</a></li>
-{% for value in architectures %}
-          <li><a href="{% append_to_get architecture=value %}"{% if architecture == value %} class="enabled"{% endif %}>{{ value }}</a></li>
-{% endfor %}
-        </ul>
-
-        <h5>Python</h5>
-        <input type="hidden" name="pyversion" value="{{ pyversion }}" />
-        <ul class="filter">
-          <li><a href="{% append_to_get pyversion='' %}"{% if not pyversion %} class="enabled"{% endif %}>all</a></li>
-{% for value in pyversions %}
-          <li><a href="{% append_to_get pyversion=value %}"{% if pyversion == value %} class="enabled"{% endif %}>{{ value }}</a></li>
-{% endfor %}
-        </ul>
-
-        <h5>Selected Nodes</h5>
+        <h5>Selected nodes</h5>
         <input type="hidden" name="node" value="{{ node }}" />
-        <ul class="filter">
+        <ul class="list-inline filter">
           <li class="text-nowrap">
             <a href="{% append_to_get node='' %}"{% if not node %} class="enabled"{% endif %}>all</a>
             <small><a href="{% url 'report_rss' %}"><i class="icon-rss"></i></a></small>
@@ -169,8 +141,38 @@
 {% endfor %}
         </ul>
 
-      </div>
-    </div>
+        <h5>System</h5>
+        <input type="hidden" name="system" value="{{ system }}" />
+        <ul class="list-inline filter">
+          <li><a href="{% append_to_get system='' %}"{% if not system %} class="enabled"{% endif %}>all</a></li>
+{% for value in systems %}
+          <li><a href="{% append_to_get system=value %}"{% if system == value %} class="enabled"{% endif %}>{{ value }}</a></li>
+{% endfor %}
+        </ul>
+        <h5>Architecture</h5>
+        <input type="hidden" name="architecture" value="{{ architecture }}" />
+        <ul class="list-inline filter">
+          <li><a href="{% append_to_get architecture='' %}"{% if not architecture %} class="enabled"{% endif %}>all</a></li>
+{% for value in architectures %}
+          <li><a href="{% append_to_get architecture=value %}"{% if architecture == value %} class="enabled"{% endif %}>{{ value }}</a></li>
+{% endfor %}
+        </ul>
+
+        <h5>Python</h5>
+        <input type="hidden" name="pyversion" value="{{ pyversion }}" />
+        <ul class="list-inline filter">
+          <li><a href="{% append_to_get pyversion='' %}"{% if not pyversion %} class="enabled"{% endif %}>all</a></li>
+{% for value in pyversions %}
+          <li><a href="{% append_to_get pyversion=value %}"{% if pyversion == value %} class="enabled"{% endif %}>{{ value }}</a></li>
+{% endfor %}
+        </ul>
+
+        <h5>Other filter options</h5>
+        <ul class="filter">
+          <li><code>?pr=...</code></li>
+          <li><code>?module=...</code></li>
+          <li><code>?git=...</code></li>
+        </ul>
 
   </div>
 </div>
