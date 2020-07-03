@@ -26,12 +26,6 @@ urlpatterns = [
     url(r'^rss/(?P<name>[\w-]+)/$',
         view=views.report_rss_selectednode,
         name='report_rss_selectednode'),
-    url(r'^snippets/navbar.html$',
-        view=views.snippet_navbar,
-        name='snippet_navbar'),
-    url(r'^snippets/footer.html$',
-        view=views.snippet_footer,
-        name='snippet_footer'),
 ]
 
 
