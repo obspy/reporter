@@ -75,7 +75,7 @@ def format_traceback(text, tree=None):
         linelink = r'#L\5'
     text = escape(text)
     # extract imgur images
-    imgurs = re.findall('http://i.imgur.com/[\w]*.png', text)
+    imgurs = re.findall(r'http://i.imgur.com/[\w]*.png', text)
     # ensure https links in imgur images
     imgurs = [i.replace('http://', 'https://') for i in imgurs]
     # linkify
