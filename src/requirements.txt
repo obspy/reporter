@@ -5,3 +5,4 @@ django-mptt-admin
 django-taggit
 django-csp
 lxml
+psycopg2-binary
