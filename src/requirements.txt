@@ -1,8 +1,14 @@
 django
-django-debug-toolbar
 django-mptt
 django-mptt-admin
 django-taggit
 django-csp
 lxml
+
+# optional
 psycopg2-binary
+
+# developer resources
+# django-debug-toolbar
+# black
+# pyupgrade

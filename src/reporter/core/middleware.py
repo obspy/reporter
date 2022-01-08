@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import re
 
 
@@ -7,6 +5,7 @@ class MinifyHTMLMiddleware(object):
     """
     Minifies HTML content - does not respect <code>, <textarea> or <pre> tags!
     """
+
     RE_MULTI_SPACE = re.compile(b"[ ]{2,}")
     RE_MULTI_BREAK = re.compile(b"[\n]{2,}")
     RE_LEFT_SPACE = re.compile(b"\n[ ]+")
@@ -22,11 +21,11 @@ class MinifyHTMLMiddleware(object):
 
     def process_response(self, request, response):
         # skip admin pages
-        if request.path.startswith('/admin'):
+        if request.path.startswith("/admin"):
             return response
         # skip non-HTML pages
-        content_type = response.get('content-type') or ''
-        if not content_type.startswith('text/html'):
+        content_type = response.get("content-type") or ""
+        if not content_type.startswith("text/html"):
             return response
         # minimise
         response.content = self._minify_content(response.content)

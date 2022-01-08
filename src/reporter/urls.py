@@ -6,6 +6,6 @@ admin.autodiscover()
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('reporter.core.urls')),
+    path("admin/", admin.site.urls),
+    path("", include("reporter.core.urls")),
 ]

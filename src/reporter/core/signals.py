@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.db.models.signals import post_save, post_delete
@@ -14,6 +12,6 @@ from . import models
 @receiver(node_moved, sender=models.MenuItem)
 def invalidate_menu_cache(sender, instance, **kwargs):  # @UnusedVariable
     # context cache
-    cache.delete('menu')
+    cache.delete("menu")
     # template cache
-    cache.delete(make_template_fragment_key('rendered_menu'))
+    cache.delete(make_template_fragment_key("rendered_menu"))

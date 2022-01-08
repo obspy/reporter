@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Management command to reindex database using XML stored document.
 """
@@ -13,11 +12,11 @@ class Command(BaseCommand):
     help = "Reindex database using stored XML documents"  # @ReservedAssignment
 
     def handle(self, **options):  # @UnusedVariable
-        for report in models.Report.objects.order_by('-id'):
+        for report in models.Report.objects.order_by("-id"):
             print(report.id)
             options = utils.parse_report_xml(report.xml)
             for key, value in options.items():
-                if key == 'tags':
+                if key == "tags":
                     report.tags.all().delete()
                     report.tags.add(*value)
                 else:
