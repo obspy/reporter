@@ -114,3 +114,29 @@ def fetch_credits():
     funds = funds.splitlines()
     contributors = split(contributors, 4)
     return contributors, funds
+
+
+def cache_page_if_not_latest(model, decorator):
+    def _decorator(view):
+        decorated_view = decorator(view)
+
+        def _view(request, *args, **kwargs):
+            cacheit = False
+            try:
+                pk = int(kwargs["pk"])
+                if pk == model.objects.latest("datetime").pk:
+                    cacheit = False
+                else:
+                    cacheit = True
+            except Exception:
+                pass
+            if cacheit:
+                # view with @cache
+                return decorated_view(request, *args, **kwargs)
+            else:
+                # view without @cache
+                return view(request, *args, **kwargs)
+
+        return _view
+
+    return _decorator

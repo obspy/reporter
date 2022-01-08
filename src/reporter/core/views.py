@@ -12,7 +12,10 @@ from django.template.loader import get_template
 from django.urls.base import reverse
 from django.urls.exceptions import NoReverseMatch
 from django.views.decorators.cache import cache_page
+from django.views.decorators.http import require_http_methods
 from lxml import etree
+
+from reporter.core.utils import cache_page_if_not_latest
 
 from . import models, utils
 
@@ -20,7 +23,8 @@ from . import models, utils
 LIMITS = [50, 100, 200]
 
 
-def index_post(request):
+@require_http_methods(["POST"])
+def core_post_xml(request):
     # get headers
     try:
         # parse POST parameters
@@ -60,30 +64,31 @@ def index_post(request):
         architecture=architecture,
         version=version,
         xml=xml,
-        **kwargs
+        **kwargs,
     )
     report.save()
     # create tags
     if tags:
         report.tags.add(*tags)
     return JsonResponse(
-        {"url": request.build_absolute_uri(reverse("report_html", args=(report.pk,)))}
+        {"url": request.build_absolute_uri(reverse("core_html", args=(report.pk,)))}
     )
 
 
-def index(request):
+def core_index(request):
     # check for POST
     if request.method == "POST":
-        return index_post(request)
+        return core_post_xml(request)
+
     # redirect old GET URLs
     if "id" in request.GET:
         try:
-            return redirect("report_html", pk=request.GET.get("id"))
+            return redirect("core_html", pk=request.GET.get("id"))
         except NoReverseMatch:
             pass
     elif "xml_id" in request.GET:
         try:
-            return redirect("report_xml", pk=request.GET.get("xml_id"))
+            return redirect("core_xml", pk=request.GET.get("xml_id"))
         except NoReverseMatch:
             pass
 
@@ -219,34 +224,8 @@ def index(request):
     return render(request, "index.html", context)
 
 
-def cache_page_if_not_latest(decorator):
-    def _decorator(view):
-        decorated_view = decorator(view)
-
-        def _view(request, *args, **kwargs):
-            cacheit = False
-            try:
-                pk = int(kwargs["pk"])
-                if pk == models.Report.objects.latest("datetime").pk:
-                    cacheit = False
-                else:
-                    cacheit = True
-            except Exception:
-                pass
-            if cacheit:
-                # view with @cache
-                return decorated_view(request, *args, **kwargs)
-            else:
-                # view without @cache
-                return view(request, *args, **kwargs)
-
-        return _view
-
-    return _decorator
-
-
-@cache_page_if_not_latest(decorator=cache_page(60 * 60))
-def report_html(request, pk):
+@cache_page_if_not_latest(model=models.Report, decorator=cache_page(60 * 60))
+def core_html(request, pk):
     report = get_object_or_404(models.Report, pk=pk)
     # check if XML is parseable
     root = etree.fromstring(report.xml)
@@ -413,10 +392,7 @@ class LatestReportsFeed(Feed):
 
     # item_link is only needed if NewsItem has no get_absolute_url method.
     def item_link(self, item):
-        return reverse("report_html", args=[item.pk])
-
-
-report_rss = LatestReportsFeed()
+        return reverse("core_html", args=[item.pk])
 
 
 class SelectedNodeReportsFeed(Feed):
@@ -426,15 +402,13 @@ class SelectedNodeReportsFeed(Feed):
         return get_object_or_404(models.SelectedNode, name=name)
 
     def title(self, node):
-        return "ObsPy Reporter (%s)" % (node.name)
+        return f"ObsPy Reporter ({node.name})"
 
     def link(self, node):
-        return reverse("report_rss_selectednode", args=[node.name])
+        return reverse("core_rss_selectednode", args=[node.name])
 
     def description(self, node):
-        return "Latest failing test reports on tests.obspy.org for node " + "%s" % (
-            node.name
-        )
+        return f"Latest failing test reports on tests.obspy.org for node {node.name}"
 
     def items(self, node):
         return (
@@ -453,14 +427,14 @@ class SelectedNodeReportsFeed(Feed):
 
     # item_link is only needed if NewsItem has no get_absolute_url method.
     def item_link(self, item):
-        return reverse("report_html", args=[item.pk])
-
-
-report_rss_selectednode = SelectedNodeReportsFeed()
+        return reverse("core_html", args=[item.pk])
 
 
 @cache_page(60 * 60 * 24 * 7)
-def report_xml(request, pk):  # @UnusedVariable
+def core_xml(request, pk):  # @UnusedVariable
+    """
+    Returns XML document of given report.
+    """
     report = get_object_or_404(models.Report, pk=pk)
     xml_doc = report.xml
     if not xml_doc.startswith("<?xml"):
@@ -468,7 +442,19 @@ def report_xml(request, pk):  # @UnusedVariable
     return HttpResponse(xml_doc, content_type="text/xml")
 
 
-def report_latest(request):  # @UnusedVariable
-    # redirect to latest report
+@cache_page(60 * 60 * 24 * 7)
+def core_json(request, pk):  # @UnusedVariable
+    """
+    Returns JSON document of given report.
+    """
+    report = get_object_or_404(models.Report, pk=pk)
+    json_doc = report.json
+    return JsonResponse(json_doc)
+
+
+def core_latest(request):  # @UnusedVariable
+    """
+    Redirect to latest report.
+    """
     obj = models.Report.objects.latest("datetime")
-    return redirect("report_html", pk=obj.id)
+    return redirect("core_html", pk=obj.id)

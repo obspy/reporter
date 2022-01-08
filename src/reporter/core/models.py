@@ -39,7 +39,7 @@ class Report(models.Model):
         ordering = ["-datetime"]
 
     def get_absolute_url(self):
-        return reverse("report_html", kwargs={"pk": self.pk})
+        return reverse("core_html", kwargs={"pk": self.pk})
 
     @property
     def executed_tests(self):

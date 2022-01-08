@@ -1,9 +1,11 @@
 django
 django-mptt
 django-mptt-admin
-django-taggit
 django-csp
 lxml
+
+# django-taggit==dev due to https://github.com/jazzband/django-taggit/pull/778
+https://github.com/jazzband/django-taggit/archive/refs/heads/master.zip
 
 # optional
 psycopg2-binary

@@ -34,15 +34,15 @@
 <section id="report">
 <ul class="pager">
 {% if report.next_id %}
-  <li class="previous"><a href="{% url 'report_html' report.next_id %}">&laquo; Next</a></li>
+  <li class="previous"><a href="{% url 'core_html' report.next_id %}">&laquo; Next</a></li>
 {% else %}
-  <li class="previous disabled"><a href="{% url 'report_html' report.id %}">&laquo; Next</a></li>
+  <li class="previous disabled"><a href="{% url 'core_html' report.id %}">&laquo; Next</a></li>
 {% endif %}
   <li><a href="/">Return to Overview</a></li>
 {% if report.previous_id %}
-  <li class="next"><a href="{% url 'report_html' report.previous_id %}">Previous &raquo;</a></li>
+  <li class="next"><a href="{% url 'core_html' report.previous_id %}">Previous &raquo;</a></li>
 {% else %}
-  <li class="next disabled"><a href="{% url 'report_html' report.id %}">Previous &raquo;</a></li>
+  <li class="next disabled"><a href="{% url 'core_html' report.id %}">Previous &raquo;</a></li>
 {% endif %}
 </ul>
 
@@ -74,7 +74,7 @@
     </dl>
     <dl class="dl-horizontal">
       <dt>Report file</dt>
-      <dd><a href="{% url 'report_xml' report.pk %}">XML document</a></dd>
+      <dd><a href="{% url 'core_xml' report.pk %}">XML document</a></dd>
     </dl>
     <dl class="dl-horizontal">
       <dt>Total runtime</dt>

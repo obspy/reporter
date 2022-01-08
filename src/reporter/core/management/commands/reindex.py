@@ -1,5 +1,5 @@
 """
-Management command to reindex database using XML stored document.
+Management command to reindex database using stored XML document.
 """
 
 from django.core.management.base import BaseCommand
@@ -14,11 +14,14 @@ class Command(BaseCommand):
     def handle(self, **options):  # @UnusedVariable
         for report in models.Report.objects.order_by("-id"):
             print(report.id)
-            options = utils.parse_report_xml(report.xml)
-            for key, value in options.items():
-                if key == "tags":
-                    report.tags.all().delete()
-                    report.tags.add(*value)
-                else:
-                    setattr(report, key, value)
-            report.save()
+            if report.xml:
+                options = utils.parse_report_xml(report.xml)
+                for key, value in options.items():
+                    if key == "tags":
+                        report.tags.all().delete()
+                        report.tags.add(*value)
+                    else:
+                        setattr(report, key, value)
+                report.save()
+            elif report.json:
+                pass
