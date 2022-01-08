@@ -79,8 +79,7 @@ def format_traceback(text, tree=None):
     regex = r"(File &quot;)(.*[/\\](obspy[/\\][^&]*))(&quot;, line ([0-9]+),)"
     regex = re.compile(regex)
     regex_sub = (
-        r'\1<a href="https://github.com/obspy/obspy/blob/'
-        + r'%s/\3%s">\2</a>\4' % (tree, linelink)
+        rf'\1<a href="https://github.com/obspy/obspy/blob/{tree}/\3{linelink}">\2</a>\4'
     )
     text = regex.sub(regex_sub, text)
     # replace backslashes in href links

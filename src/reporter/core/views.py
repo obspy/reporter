@@ -286,7 +286,7 @@ def core_html(request, pk):
     git_hash = report.git_commit_hash
     for key, item in temp:
         obj = {}
-        obj["name"] = "obspy.%s" % (key)
+        obj["name"] = f"obspy.{key}"
         version = item.findtext("installed")
         if version:
             if version.startswith("0.0.0-"):

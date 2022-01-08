@@ -33,7 +33,7 @@ class Report(models.Model):
     tags = TaggableManager()
 
     def __str__(self):
-        return "Report %d" % (self.pk)
+        return f"Report {self.pk}"
 
     class Meta:
         ordering = ["-datetime"]
@@ -154,7 +154,7 @@ class SelectedNode(models.Model):
     name = models.CharField(max_length=64, primary_key=True)
 
     def __str__(self):
-        return "SelectedNode %s" % (self.name)
+        return f"SelectedNode {self.name}"
 
     class Meta:
         ordering = ["name"]
@@ -174,4 +174,4 @@ class MenuItem(MPTTModel):
     url = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return "%s" % (self.name)
+        return self.name
