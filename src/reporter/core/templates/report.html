@@ -63,16 +63,6 @@
     </dl>
 {% endif %}
     <dl class="dl-horizontal">
-      <dt>Continuous Integration</dt>
-      <dd>
-{% if report.ciurl %}
-        <a href="{{ report.ciurl }}">{{ report.ciurl }}</a>
-{% else %}
-        <span class="muted">-</span>
-{% endif %}
-      </dd>
-    </dl>
-    <dl class="dl-horizontal">
       <dt>GitHub Pull Request</dt>
       <dd>
 {% if report.prurl_number %}

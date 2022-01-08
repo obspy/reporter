@@ -57,7 +57,6 @@
           <th>Report</th>
           <th title="Number of reported errors/failures">Errors</th>
           <th>ObsPy version</th>
-          <th class="hidden-xs" title="Continous Integration URL">CI</th>
           <th class="hidden-xs" title="GitHub pull request URL">PR</th>
           <th class="hidden-xs" title="Number of executed tests">Tests</th>
           <th class="hidden-xs" title="Number of tested modules">Mods</th>
@@ -80,13 +79,6 @@
             <a href="https://github.com/obspy/obspy/tree/{{ report.git_commit_hash }}" title="{{ report.installed }}">{{ report.installed|truncatechars:35 }}</a>
             {% else %}
             <span title="{{ report.installed }}">{{ report.installed|default:'Unknown'|truncatechars:35 }}</span>
-            {% endif %}
-          </td>
-          <td class="hidden-xs">
-            {% if report.ciurl %}
-              <a href="{{ report.ciurl }}">{{ report.ciurl_type }}</a>
-            {% else %}
-              <span class="muted">-</span>
             {% endif %}
           </td>
           <td class="hidden-xs">

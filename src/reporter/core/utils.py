@@ -37,11 +37,6 @@ def parse_report_xml(xml):
         kwargs["prurl"] = root.find("prurl").text
     else:
         kwargs["prurl"] = None
-    # Continous Integration URL
-    if root.find("ciurl") is not None:
-        kwargs["ciurl"] = root.find("ciurl").text
-    else:
-        kwargs["ciurl"] = None
     # installed modules
     if root.find("obspy") is not None:
         kwargs["tags"] = sorted(
