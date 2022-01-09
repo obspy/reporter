@@ -75,6 +75,7 @@ STATICFILES_FINDERS = (
 )
 
 MIDDLEWARE = [
+    "reporter.core.middleware.ReporterSecurityMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",

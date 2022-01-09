@@ -1,5 +1,30 @@
 import re
 
+from django.conf import settings
+from django.http import HttpResponsePermanentRedirect
+from django.utils.deprecation import MiddlewareMixin
+
+
+class ReporterSecurityMiddleware(MiddlewareMixin):
+    def __init__(self, get_response):
+        super().__init__(get_response)
+        self.redirect = settings.SECURE_SSL_REDIRECT
+        self.redirect_host = settings.SECURE_SSL_HOST
+        self.redirect_exempt = [re.compile(r) for r in settings.SECURE_REDIRECT_EXEMPT]
+
+    def process_request(self, request):
+        path = request.path.lstrip("/")
+        if (
+            self.redirect
+            and not request.is_secure()
+            and not any(pattern.search(path) for pattern in self.redirect_exempt)
+            and not request.method == "POST"
+        ):
+            host = self.redirect_host or request.get_host()
+            return HttpResponsePermanentRedirect(
+                "https://%s%s" % (host, request.get_full_path())
+            )
+
 
 class MinifyHTMLMiddleware:
     """
