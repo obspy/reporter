@@ -1,7 +1,7 @@
 import re
 
 
-class MinifyHTMLMiddleware(object):
+class MinifyHTMLMiddleware:
     """
     Minifies HTML content - does not respect <code>, <textarea> or <pre> tags!
     """

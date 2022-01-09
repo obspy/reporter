@@ -61,7 +61,7 @@ class AppendGetNode(template.Node):
 
         if len(get):
             path += "?%s" % "&amp;".join(
-                ["%s=%s" % (key, value) for (key, value) in get.items() if value]
+                [f"{key}={value}" for (key, value) in get.items() if value]
             )
 
         return path

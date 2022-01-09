@@ -1,4 +1,5 @@
 import ast
+import copy
 from datetime import datetime
 import json
 from urllib.request import urlopen
@@ -6,7 +7,12 @@ from urllib.request import urlopen
 from django.contrib.syndication.views import Feed
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
-from django.http.response import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http.response import (
+    HttpResponse,
+    HttpResponseBadRequest,
+    JsonResponse,
+    Http404,
+)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import get_template
 from django.urls.base import reverse
@@ -24,11 +30,71 @@ LIMITS = [50, 100, 200]
 
 
 @require_http_methods(["POST"])
-def core_post_xml(request):
+def report_post_v2(request):
+    """
+    Upload new report as JSON document - API version 2
+    """
+    if request.content_type != "application/json":
+        raise HttpResponseBadRequest("Wrong content type")
+
     # get headers
     try:
         # parse POST parameters
-        xml = request.POST.get("xml")
+        data = json.loads(request.body)
+        # check if pytest report
+        data["environment"]["Packages"]["pytest"]
+    except Exception as e:
+        return HttpResponseBadRequest(str(e))
+
+    # required data
+    try:
+        tests = int(data["summary"].get("total", 0))
+        errors = int(data["summary"].get("failed", 0)) + int(
+            data["summary"].get("error", 0)
+        )
+        version = data["environment"].get("Python", "")[:16]
+        timestamp = float(data.get("created", 0))
+        system = data["platform_info"].get("system", "")[:16]
+        architecture = data["platform_info"].get("architecture")[:16]
+    except Exception as e:
+        return HttpResponseBadRequest(str(e))
+
+    # parse XML document
+    kwargs = utils.parse_json(data)
+    # get installed modules
+    modules = utils.get_modules_from_json(data)
+
+    # create report
+    report = models.Report(
+        datetime=datetime.fromtimestamp(timestamp),
+        tests=tests,
+        errors=errors,
+        failures=0,
+        modules=len(modules),
+        system=system,
+        architecture=architecture,
+        version=version,
+        json=data,
+        **kwargs,
+    )
+    report.save()
+    # create tags
+    if modules:
+        report.tags.add(*modules)
+    return JsonResponse(
+        {"url": request.build_absolute_uri(reverse("report_html", args=(report.pk,)))}
+    )
+
+
+@require_http_methods(["POST"])
+def report_post_v1(request):
+    """
+    Upload new report as XML document - API version 1 (deprecated)
+    """
+    # get headers
+    try:
+        # parse POST parameters
+        data = request.POST.get("xml")
         tests = int(request.POST.get("tests"))
         errors = int(request.POST.get("errors"))
         failures = int(request.POST.get("failures"))
@@ -41,16 +107,16 @@ def core_post_xml(request):
         return HttpResponseBadRequest(str(e))
     # check if XML is parseable
     try:
-        etree.fromstring(xml)
+        etree.fromstring(data)
     except Exception:
         # otherwise try to correct broken XML
         try:
             parser = etree.XMLParser(recover=True)
-            xml = etree.tostring(etree.fromstring(xml, parser=parser))
+            data = etree.tostring(etree.fromstring(data, parser=parser))
         except Exception as e:
             return HttpResponseBadRequest(str(e))
     # parse XML document
-    kwargs = utils.parse_report_xml(xml)
+    kwargs = utils.parse_xml(data)
     if "tags" in kwargs:
         tags = kwargs.pop("tags")
     # create report
@@ -63,7 +129,7 @@ def core_post_xml(request):
         system=system,
         architecture=architecture,
         version=version,
-        xml=xml,
+        xml=data,
         **kwargs,
     )
     report.save()
@@ -71,24 +137,27 @@ def core_post_xml(request):
     if tags:
         report.tags.add(*tags)
     return JsonResponse(
-        {"url": request.build_absolute_uri(reverse("core_html", args=(report.pk,)))}
+        {"url": request.build_absolute_uri(reverse("report_html", args=(report.pk,)))}
     )
 
 
-def core_index(request):
-    # check for POST
+def report_index(request):
+    """
+    Displays start page with table of all recent test reports
+    """
+    # deprecated XML upload end point
     if request.method == "POST":
-        return core_post_xml(request)
+        return report_post_v1(request)
 
     # redirect old GET URLs
     if "id" in request.GET:
         try:
-            return redirect("core_html", pk=request.GET.get("id"))
+            return redirect("report_html", pk=request.GET.get("id"))
         except NoReverseMatch:
             pass
     elif "xml_id" in request.GET:
         try:
-            return redirect("core_xml", pk=request.GET.get("xml_id"))
+            return redirect("report_xml", pk=request.GET.get("xml_id"))
         except NoReverseMatch:
             pass
 
@@ -225,11 +294,173 @@ def core_index(request):
 
 
 @cache_page_if_not_latest(model=models.Report, decorator=cache_page(60 * 60))
-def core_html(request, pk):
+def report_html(request, pk):
+    """
+    Displays HTML overview page for given report
+    """
     report = get_object_or_404(models.Report, pk=pk)
+    if report.xml:
+        return _report_html_xml(request, report)
+    elif report.json:
+        return _report_html_json(request, report)
+    else:
+        return Http404("Not implemented")
+
+
+def _report_html_json(request, report):
+    data = report.json
+    git_hash = report.git_commit_hash
+    tags = sorted(
+        list(report.tags.values_list("name", flat=True)), key=len, reverse=True
+    )
+    # platform information
+    platform = sorted(
+        [
+            (k.replace("_", " ").title(), v)
+            for k, v in data.get("platform_info", {}).items()
+        ]
+    )
+    # dependencies
+    dependencies = sorted(
+        [(k, v or "Not Installed") for k, v in data.get("dependencies", {}).items()]
+    )
+    # warnings
+    warnings = data.get("warnings", {})
+    # inspect tests and derive slowest test, skipped test, tracebacks etc.
+    modules_dict = {}
+    modules_dict_defaults = {
+        "name": "",
+        "tested": False,
+        "status": "active",
+        "tests": 0,
+        "skipped": 0,
+        "executed_tests": 0,
+        "sum": 0,
+        "tracebacks": [],
+        "timetaken": 0,
+    }
+    for tag in sorted(tags):
+        modules_dict[tag] = copy.deepcopy(modules_dict_defaults)
+        modules_dict[tag]["name"] = f"obspy.{tag}"
+
+    skipped_tests = []
+    slowest_tests = []
+    tracebacks = []
+
+    for item in data["tests"]:
+        nodeid = item["nodeid"]
+        outcome = item["outcome"]
+        filename = nodeid.split("::", 1)[0]
+        lineno = item["lineno"]
+
+        # get module using tags
+        parts0 = filename.rsplit(".py", 1)[0].replace("/", ".")
+        module = ""
+        if parts0.startswith("obspy."):
+            temp = parts0[6:]
+            for tag in tags:
+                if temp.startswith(tag):
+                    module = tag
+                    break
+        else:
+            raise NotImplementedError
+
+        # create default entry for tests not in known default modules
+        if not module:
+            module = "other"
+            if "other" not in modules_dict:
+                modules_dict["other"] = copy.deepcopy(modules_dict_defaults)
+                modules_dict["other"]["name"] = "other"
+
+        # parse stages for duration and longrepr (traceback/reason)
+        reason = ""
+        traceback = ""
+        duration = 0
+        for key in ["call", "setup", "teardown"]:
+            duration += item.get(key, {}).get("duration", 0)
+            temp = item.get(key, {}).get("longrepr", "")
+            if temp:
+                if outcome == "skipped":
+                    reason += ast.literal_eval(temp)[2]
+                elif outcome in ["failed", "error"]:
+                    traceback += temp
+
+        modules_dict[module]["timetaken"] += duration
+        modules_dict[module]["tests"] += 1
+
+        # handle tests by outcome
+        if outcome == "skipped":
+            # skipped tests
+            skipped_tests.append(
+                (
+                    module,
+                    nodeid,
+                    reason,
+                    filename,
+                    lineno,
+                )
+            )
+            modules_dict[module]["skipped"] += 1
+        elif outcome == "passed":
+            # passed test -> handle slowest test
+            slowest_tests.append(
+                (
+                    duration,
+                    nodeid,
+                    filename,
+                    lineno,
+                )
+            )
+            modules_dict[module]["tested"] = True
+            if modules_dict[module]["status"] not in ["danger", "warning"]:
+                modules_dict[module]["status"] = "success"
+            modules_dict[module]["executed_tests"] += 1
+        elif outcome in ["failed", "error"]:
+            # failed test -> handle tracebacks
+            tb = {}
+            tb["module"] = module
+            tb["id"] = len(tracebacks) + 1
+            tb["log"] = utils.format_json_traceback(traceback, git_hash, module)
+            tb["imgurs"] = None
+            tb["status"] = "danger"
+            tracebacks.append(tb)
+            # add to modules dict
+            modules_dict[module]["tracebacks"].append(tb)
+            modules_dict[module]["tested"] = True
+            modules_dict[module]["status"] = tb["status"]
+            modules_dict[module]["executed_tests"] += 1
+            modules_dict[module]["sum"] += 1
+    # cleanup
+    slowest_tests = sorted(slowest_tests, reverse=True)[0:20]
+    modules = modules_dict.values()
+    # api.icndb.com
+    url = "http://api.icndb.com/jokes/random?limitTo=[nerdy]&escape=javascript"
+    try:
+        full_json = urlopen(url).read()
+        full = json.loads(full_json)
+        icndb = full["value"]["joke"]
+    except Exception:
+        icndb = None
+    # render page
+    context = {
+        "report": report,
+        "one_version": True,
+        "platform": platform,
+        "dependencies": dependencies,
+        "modules": modules,
+        "tracebacks": tracebacks,
+        "slowest_tests": slowest_tests,
+        "skipped_tests": skipped_tests,
+        "warnings": warnings,
+        "icndb": icndb,
+    }
+    return render(request, "report.html", context)
+
+
+def _report_html_xml(request, report):
     # check if XML is parseable
     root = etree.fromstring(report.xml)
-    # system
+    # platform information
     if root.find("platform") is not None:
         platform = sorted(
             [
@@ -261,14 +492,6 @@ def core_html(request, pk):
         slowest_tests = ast.literal_eval(root.find("slowest_tests").text)
     else:
         slowest_tests = []
-    # api.icndb.com
-    url = "http://api.icndb.com/jokes/random?limitTo=[nerdy]&escape=javascript"
-    try:
-        full_json = urlopen(url).read()
-        full = json.loads(full_json)
-        icndb = full["value"]["joke"]
-    except Exception:
-        icndb = None
     # modules
     if root.find("obspy") is not None:
         temp = sorted(
@@ -311,7 +534,7 @@ def core_html(request, pk):
                     tb = {}
                     tb["module"] = obj["name"]
                     tb["id"] = len(tracebacks) + 1
-                    tb["log"], tb["imgurs"] = utils.format_traceback(
+                    tb["log"], tb["imgurs"] = utils.format_xml_traceback(
                         error.text, git_hash
                     )
                     tb["status"] = "warning"
@@ -327,7 +550,7 @@ def core_html(request, pk):
                     tb = {}
                     tb["module"] = obj["name"]
                     tb["id"] = len(tracebacks) + 1
-                    tb["log"], tb["imgurs"] = utils.format_traceback(
+                    tb["log"], tb["imgurs"] = utils.format_xml_traceback(
                         error.text, git_hash
                     )
                     tb["status"] = "danger"
@@ -350,6 +573,7 @@ def core_html(request, pk):
         else:
             obj["status"] = "active"
         modules.append(obj)
+    # install log
     try:
         log = root.findtext("install_log")
         if not log:
@@ -357,6 +581,15 @@ def core_html(request, pk):
         log = str(log)
     except Exception:
         log = None
+    # api.icndb.com
+    url = "http://api.icndb.com/jokes/random?limitTo=[nerdy]&escape=javascript"
+    try:
+        full_json = urlopen(url).read()
+        full = json.loads(full_json)
+        icndb = full["value"]["joke"]
+    except Exception:
+        icndb = None
+    # render page
     context = {
         "report": report,
         "one_version": one_version,
@@ -373,6 +606,10 @@ def core_html(request, pk):
 
 
 class LatestReportsFeed(Feed):
+    """
+    RSS feed for latest test reports
+    """
+
     title = "ObsPy Reporter"
     link = "/rss/"
     description = "Latest failing test reports on tests.obspy.org."
@@ -392,10 +629,14 @@ class LatestReportsFeed(Feed):
 
     # item_link is only needed if NewsItem has no get_absolute_url method.
     def item_link(self, item):
-        return reverse("core_html", args=[item.pk])
+        return reverse("report_html", args=[item.pk])
 
 
 class SelectedNodeReportsFeed(Feed):
+    """
+    RSS feed for latest test reports filtered by selected node
+    """
+
     description = "Latest updates on tests.obspy.org"
 
     def get_object(self, request, name):  # @UnusedVariable
@@ -405,7 +646,7 @@ class SelectedNodeReportsFeed(Feed):
         return f"ObsPy Reporter ({node.name})"
 
     def link(self, node):
-        return reverse("core_rss_selectednode", args=[node.name])
+        return reverse("report_rss_selectednode", args=[node.name])
 
     def description(self, node):
         return f"Latest failing test reports on tests.obspy.org for node {node.name}"
@@ -427,13 +668,13 @@ class SelectedNodeReportsFeed(Feed):
 
     # item_link is only needed if NewsItem has no get_absolute_url method.
     def item_link(self, item):
-        return reverse("core_html", args=[item.pk])
+        return reverse("report_html", args=[item.pk])
 
 
 @cache_page(60 * 60 * 24 * 7)
-def core_xml(request, pk):  # @UnusedVariable
+def report_xml(request, pk):  # @UnusedVariable
     """
-    Returns XML document of given report.
+    Returns XML document of given report (deprecated)
     """
     report = get_object_or_404(models.Report, pk=pk)
     xml_doc = report.xml
@@ -443,18 +684,18 @@ def core_xml(request, pk):  # @UnusedVariable
 
 
 @cache_page(60 * 60 * 24 * 7)
-def core_json(request, pk):  # @UnusedVariable
+def report_json(request, pk):  # @UnusedVariable
     """
-    Returns JSON document of given report.
+    Returns JSON document of given report
     """
     report = get_object_or_404(models.Report, pk=pk)
     json_doc = report.json
     return JsonResponse(json_doc)
 
 
-def core_latest(request):  # @UnusedVariable
+def report_latest(request):  # @UnusedVariable
     """
-    Redirect to latest report.
+    Redirect to latest report
     """
     obj = models.Report.objects.latest("datetime")
-    return redirect("core_html", pk=obj.id)
+    return redirect("report_html", pk=obj.id)

@@ -6,6 +6,15 @@ from mptt.models import MPTTModel, TreeForeignKey
 from taggit.managers import TaggableManager
 
 
+class ReportManager(models.Manager):
+    """
+    Default queryset manager
+    """
+
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related("tags")
+
+
 class Report(models.Model):
     """
     A test report.
@@ -30,6 +39,7 @@ class Report(models.Model):
     xml = models.TextField(verbose_name="XML document", blank=True, null=True)
     json = models.JSONField(verbose_name="JSON document", blank=True, null=True)
 
+    objects = ReportManager()
     tags = TaggableManager()
 
     def __str__(self):
@@ -39,7 +49,7 @@ class Report(models.Model):
         ordering = ["-datetime"]
 
     def get_absolute_url(self):
-        return reverse("core_html", kwargs={"pk": self.pk})
+        return reverse("report_html", kwargs={"pk": self.pk})
 
     @property
     def executed_tests(self):
@@ -84,17 +94,23 @@ class Report(models.Model):
 
     @property
     def next_id(self):
-        obj = self.get_next_by_datetime()
-        if obj:
-            return obj.id
-        return False
+        """
+        Get next report ID or False if not available
+        """
+        try:
+            return Report.objects.filter(id__gt=self.id).order_by("id").first().id
+        except Exception:
+            return False
 
     @property
     def previous_id(self):
-        obj = self.get_previous_by_datetime()
-        if obj:
-            return obj.id
-        return False
+        """
+        Get previous report ID or False if not available
+        """
+        try:
+            return Report.objects.filter(id__lt=self.id).order_by("-id").first().id
+        except Exception:
+            return False
 
     @property
     def is_git(self):

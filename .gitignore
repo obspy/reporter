@@ -33,5 +33,7 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+settings_local.py
 /static
+/tests
 /.settings

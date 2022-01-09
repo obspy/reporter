@@ -1,13 +1,82 @@
 import re
 from urllib.request import urlopen
 
-from django.utils.html import escape
+from django.conf import settings
+from django.utils.html import escape, linebreaks
 from lxml import etree
 
 
-def parse_report_xml(xml):
+RE_PYTEST = re.compile(r".*.py\w{0,1}[:]\d+[:][ ]{1,}")
+
+
+def get_module_from_nodeid(nodeid):
+    nodeid = nodeid.split("::", 1)[0]
+    nodeid = nodeid.split("/tests/", 1)[0]
+    nodeid = nodeid.split("/scripts/", 1)[0]
+    nodeid = nodeid.split("/__init__.py", 1)[0]
+    nodeid = nodeid.replace("/", ".")
+    if nodeid.startswith("obspy."):
+        nodeid = nodeid[6:]
+    return nodeid
+
+
+def get_modules_from_json(data):
+    try:
+        modules = [
+            get_module_from_nodeid(c["nodeid"])
+            for c in data["collectors"]
+            if c["nodeid"].startswith("obspy/")
+            and c["nodeid"].endswith("/__init__.py")
+            and 1 <= c["nodeid"].count("/") <= 3
+            and c["result"] != []
+        ]
+    except Exception:
+        modules = []
+    # remove duplicates
+    modules = list(dict.fromkeys(modules))
+    # cleanup
+    if "obspy" in modules:
+        modules.remove("obspy")
+    return modules
+
+
+def parse_json(data):
+    """
+    Parse JSON document for additional information
+    """
     kwargs = {}
-    root = etree.fromstring(xml)
+    try:
+        kwargs["installed"] = data["dependencies"]["obspy"]
+        if kwargs["installed"].startswith("0.0.0-"):
+            kwargs["installed"] = kwargs["installed"][6:]
+    except Exception:
+        kwargs["installed"] = None
+    try:
+        kwargs["timetaken"] = float(data["duration"])
+    except Exception:
+        kwargs["timetaken"] = None
+    try:
+        kwargs["skipped"] = int(data["summary"]["skipped"])
+    except Exception:
+        kwargs["skipped"] = None
+    try:
+        kwargs["node"] = data["platform_info"]["node"][:16]
+    except Exception:
+        kwargs["node"] = ""
+    # GitHub pull request URL
+    try:
+        kwargs["prurl"] = data["ci_info"]["pr_url"]
+    except Exception:
+        kwargs["prurl"] = None
+    return kwargs
+
+
+def parse_xml(data):
+    """
+    Parse XML document for additional information (deprecated)
+    """
+    kwargs = {}
+    root = etree.fromstring(data)
     try:
         obspy_installed = root.xpath("/report/obspy/installed")[0].text
     except Exception:
@@ -31,7 +100,7 @@ def parse_report_xml(xml):
     try:
         kwargs["node"] = root.findtext("platform/node")
     except Exception:
-        kwargs["node"] = None
+        kwargs["node"] = ""
     # GitHub pull request URL
     if root.find("prurl") is not None:
         kwargs["prurl"] = root.find("prurl").text
@@ -59,7 +128,30 @@ def replace_backslashes(match):
     return match.group().replace("\\", "/")
 
 
-def format_traceback(text, tree=None):
+def format_json_traceback(text, tree=None, module=None):
+    """
+    Links directly to source files in tracebacks
+    """
+    lines = escape(text.strip()).splitlines()
+    for i, line in enumerate(lines):
+        if line.startswith("E "):
+            # highlight errors
+            lines[i] = f'<span class="text-danger">{line}</span>'
+        elif re.match(RE_PYTEST, line):
+            path, lineno, rest = line.split(":", 2)
+            if line.replace("/", ".").startswith(module):
+                # link the path
+                lines[i] = (
+                    f'<a href="https://github.com/obspy/obspy/blob/{tree}/obspy/'
+                    + f'{path}#L{lineno}" target="_blank">{path}</a>:{lineno}:{rest}'
+                )
+            else:
+                # just highlight
+                lines[i] = f'<span class="text-danger">{path}</span>:{lineno}:{rest}'
+    return linebreaks("\n".join(lines))
+
+
+def format_xml_traceback(text, tree=None):
     """
     Links directly to source files in tracebacks
 
@@ -120,10 +212,15 @@ def cache_page_if_not_latest(model, decorator):
         decorated_view = decorator(view)
 
         def _view(request, *args, **kwargs):
+            # skip caching if in debug mode
+            debug = settings.DEBUG
+            if debug:
+                return view(request, *args, **kwargs)
+            # cache everything except very latest report
             cacheit = False
             try:
                 pk = int(kwargs["pk"])
-                if pk == model.objects.latest("datetime").pk:
+                if pk == model.objects.latest("id").id:
                     cacheit = False
                 else:
                     cacheit = True

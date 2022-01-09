@@ -7,43 +7,48 @@ from . import views
 urlpatterns = [
     path(
         "",
-        view=views.core_index,
-        name="core_index",
+        view=views.report_index,
+        name="report_index",
     ),
     path(
         "<int:pk>/json/",
-        view=views.core_json,
-        name="core_json",
+        view=views.report_json,
+        name="report_json",
     ),
     path(
-        "<int:pk>/xml/",
-        view=views.core_xml,
-        name="core_xml",
+        "<int:pk>/xml/",  # deprecated
+        view=views.report_xml,
+        name="report_xml",
     ),
     path(
         "<int:pk>/",
-        view=views.core_html,
-        name="core_html",
+        view=views.report_html,
+        name="report_html",
     ),
-    # path(
-    #     "report/1.0/",
-    #     view=views.core_report,
-    #     name="core_report",
-    # ),
+    path(
+        "post/v2/",
+        view=views.report_post_v2,
+        name="report_post_v2",
+    ),
+    path(
+        "post/v1/",  # deprecated
+        view=views.report_post_v1,
+        name="report_post_v1",
+    ),
     path(
         "latest/",
-        view=views.core_latest,
-        name="core_latest",
+        view=views.report_latest,
+        name="report_latest",
     ),
     path(
         "rss/",
         view=views.LatestReportsFeed(),
-        name="core_rss",
+        name="report_rss",
     ),
     path(
         "rss/<slug:name>/",
         view=views.SelectedNodeReportsFeed(),
-        name="core_rss_selectednode",
+        name="report_rss_selectednode",
     ),
 ]
 

@@ -8,7 +8,7 @@
 {% block extrahead %}
 {{ block.super }}
 <link rel="alternate" type="application/rss+xml" title="RSS"
-  href="{% url 'core_rss' %}" />
+  href="{% url 'report_rss' %}" />
 {% endblock %}
 
 
@@ -25,7 +25,7 @@
 <div class="row">
   <div class="col-md-10">
 
-    <form class="form-inline" role="form" action="{% url 'core_index' %}" method="get">
+    <form class="form-inline" role="form" action="{% url 'report_index' %}" method="get">
       <div class="checkbox">
         <select name="limit" class="form-control input-sm onchange-submit">
 {% for value in limits %}
@@ -71,7 +71,7 @@
         <tr class="{{ report.status }}">
           <td>
             <i class="text-{{ report.status }} {{ report.status_icon }}"></i>
-            <a class="text-{{ report.status }}" href="{% url 'core_html' report.pk %}"><small>#</small>{{ report.id }}</a>
+            <a class="text-{{ report.status }}" href="{% url 'report_html' report.pk %}"><small>#</small>{{ report.id }}</a>
           </td>
           <td>{{ report.sum|default:'<span class="muted">-</span>' }}</td>
           <td>
@@ -123,12 +123,12 @@
         <ul class="list-inline filter">
           <li class="text-nowrap">
             <a href="{% append_to_get node='' %}"{% if not node %} class="enabled"{% endif %}>all</a>
-            <small><a href="{% url 'core_rss' %}"><i class="icon-rss"></i></a></small>
+            <small><a href="{% url 'report_rss' %}"><i class="icon-rss"></i></a></small>
           </li>
 {% for value in nodes %}
           <li class="text-nowrap">
             <a href="{% append_to_get node=value,version='',architecture='',system='' %}"{% if node == value %} class="enabled"{% endif %}>{{ value }}</a>
-            <small><a href="{% url 'core_rss_selectednode' name=value %}"><i class="icon-feed"></i></a></small>
+            <small><a href="{% url 'report_rss_selectednode' name=value %}"><i class="icon-feed"></i></a></small>
           </li>
 {% endfor %}
         </ul>
