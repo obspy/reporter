@@ -2,11 +2,8 @@ import re
 from urllib.request import urlopen
 
 from django.conf import settings
-from django.utils.html import escape, linebreaks
+from django.utils.html import escape
 from lxml import etree
-
-
-RE_PYTEST = re.compile(r".*.py\w{0,1}[:]\d+[:][ ]{1,}")
 
 
 def get_module_from_nodeid(nodeid):
@@ -128,30 +125,7 @@ def replace_backslashes(match):
     return match.group().replace("\\", "/")
 
 
-def format_json_traceback(text, tree=None, module=None):
-    """
-    Links directly to source files in tracebacks
-    """
-    lines = escape(text.strip()).splitlines()
-    for i, line in enumerate(lines):
-        if line.startswith("E "):
-            # highlight errors
-            lines[i] = f'<span class="text-danger">{line}</span>'
-        elif re.match(RE_PYTEST, line):
-            path, lineno, rest = line.split(":", 2)
-            if line.replace("/", ".").startswith(module):
-                # link the path
-                lines[i] = (
-                    f'<a href="https://github.com/obspy/obspy/blob/{tree}/obspy/'
-                    + f'{path}#L{lineno}" target="_blank">{path}</a>:{lineno}:{rest}'
-                )
-            else:
-                # just highlight
-                lines[i] = f'<span class="text-danger">{path}</span>:{lineno}:{rest}'
-    return linebreaks("\n".join(lines))
-
-
-def format_xml_traceback(text, tree=None):
+def format_traceback(text, tree=None):
     """
     Links directly to source files in tracebacks
 

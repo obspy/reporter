@@ -420,7 +420,7 @@ def _report_html_json(request, report):
             tb = {}
             tb["module"] = module
             tb["id"] = len(tracebacks) + 1
-            tb["log"] = utils.format_json_traceback(traceback, git_hash, module)
+            tb["log"], tb["imgurs"] = utils.format_traceback(traceback, git_hash)
             tb["imgurs"] = None
             tb["status"] = "danger"
             tracebacks.append(tb)
@@ -534,7 +534,7 @@ def _report_html_xml(request, report):
                     tb = {}
                     tb["module"] = obj["name"]
                     tb["id"] = len(tracebacks) + 1
-                    tb["log"], tb["imgurs"] = utils.format_xml_traceback(
+                    tb["log"], tb["imgurs"] = utils.format_traceback(
                         error.text, git_hash
                     )
                     tb["status"] = "warning"
