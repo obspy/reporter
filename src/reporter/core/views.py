@@ -326,6 +326,8 @@ def _report_html_json(request, report):
     )
     # warnings
     warnings = data.get("warnings", {})
+    # remove duplicates
+    warnings = [dict(t) for t in {tuple(d.items()) for d in warnings}]
     # inspect tests and derive slowest test, skipped test, tracebacks etc.
     modules_dict = {}
     modules_dict_defaults = {
