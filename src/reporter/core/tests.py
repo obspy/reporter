@@ -41,9 +41,9 @@ NameError: global name &#39;libtau&#39; is not defined
 
 
 class ReporterTest(TestCase):
-    def test_format_xml_traceback(self):
+    def test_format_traceback(self):
         """
-        Tests for format_xml_traceback utility function
+        Tests for format_traceback utility function
         """
-        self.assertEqual(utils.format_xml_traceback(TB_SOURCE_1), TB_RESULT_1)
-        self.assertEqual(utils.format_xml_traceback(TB_SOURCE_2), TB_RESULT_2)
+        self.assertEqual(utils.format_traceback(TB_SOURCE_1), TB_RESULT_1)
+        self.assertEqual(utils.format_traceback(TB_SOURCE_2), TB_RESULT_2)

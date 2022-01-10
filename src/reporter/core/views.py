@@ -552,7 +552,7 @@ def _report_html_xml(request, report):
                     tb = {}
                     tb["module"] = obj["name"]
                     tb["id"] = len(tracebacks) + 1
-                    tb["log"], tb["imgurs"] = utils.format_xml_traceback(
+                    tb["log"], tb["imgurs"] = utils.format_traceback(
                         error.text, git_hash
                     )
                     tb["status"] = "danger"
