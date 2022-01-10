@@ -35,7 +35,7 @@ def report_post_v2(request):
     Upload new report as JSON document - API version 2
     """
     if request.content_type != "application/json":
-        raise HttpResponseBadRequest("Wrong content type")
+        return HttpResponseBadRequest("Wrong content type")
 
     # get headers
     try:
