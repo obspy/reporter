@@ -424,12 +424,17 @@ def _report_html_json(request, report):
             tb["id"] = len(tracebacks) + 1
             tb["log"], tb["imgurs"] = utils.format_traceback(traceback, git_hash)
             tb["imgurs"] = None
-            tb["status"] = "danger"
+            if "network" in item.get("keywords", []):
+                tb["status"] = "warning"
+            else:
+                tb["status"] = "danger"
             tracebacks.append(tb)
             # add to modules dict
             modules_dict[module]["tracebacks"].append(tb)
             modules_dict[module]["tested"] = True
-            modules_dict[module]["status"] = tb["status"]
+            if modules_dict[module]["status"] != "danger":
+                # set only if not already highest level
+                modules_dict[module]["status"] = tb["status"]
             modules_dict[module]["executed_tests"] += 1
             modules_dict[module]["sum"] += 1
     # cleanup

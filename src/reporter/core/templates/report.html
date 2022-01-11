@@ -195,7 +195,7 @@
 <h3>Tracebacks <small>({{ tracebacks|length }})</small></h3>
 <div class="panel-group">
 {% for traceback in tracebacks %}
-  <div class="panel panel-default">
+  <div class="panel panel-{{ traceback.status }}">
     <div class="panel-heading">
       <h3 class="panel-title">
         <a data-toggle="collapse" href="#{{ traceback.id }}"><span class="badge badge-{{ traceback.status }}">{{ traceback.id }}</span></a>
