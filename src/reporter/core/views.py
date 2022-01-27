@@ -59,7 +59,7 @@ def report_post_v2(request):
     except Exception as e:
         return HttpResponseBadRequest(str(e))
 
-    # parse XML document
+    # parse JSON document
     kwargs = utils.parse_json(data)
     # get installed modules
     modules = utils.get_modules_from_json(data)
@@ -359,13 +359,11 @@ def _report_html_json(request, report):
         parts0 = filename.rsplit(".py", 1)[0].replace("/", ".")
         module = ""
         if parts0.startswith("obspy."):
-            temp = parts0[6:]
-            for tag in tags:
-                if temp.startswith(tag):
-                    module = tag
-                    break
-        else:
-            raise NotImplementedError
+            parts0 = parts0[6:]
+        for tag in tags:
+            if parts0.startswith(tag):
+                module = tag
+                break
 
         # create default entry for tests not in known default modules
         if not module:

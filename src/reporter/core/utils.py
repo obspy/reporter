@@ -22,8 +22,7 @@ def get_modules_from_json(data):
         modules = [
             get_module_from_nodeid(c["nodeid"])
             for c in data["collectors"]
-            if c["nodeid"].startswith("obspy/")
-            and c["nodeid"].endswith("/__init__.py")
+            if c["nodeid"].endswith("/__init__.py")
             and 1 <= c["nodeid"].count("/") <= 3
             and c["result"] != []
         ]
