@@ -23,7 +23,13 @@ def get_modules_from_json(data):
             get_module_from_nodeid(c["nodeid"])
             for c in data["collectors"]
             if c["nodeid"].endswith("/__init__.py")
-            and 1 <= c["nodeid"].count("/") <= 3
+            and (
+                # either it starts with obspy, than max 3 levels
+                (c["nodeid"].startswith("obspy/") and 1 <= c["nodeid"].count("/") <= 3)
+                or
+                # or without obspy, than max 2 levels
+                (not c["nodeid"].startswith("obspy/") and c["nodeid"].count("/") <= 2)
+            )
             and c["result"] != []
         ]
     except Exception:
