@@ -1,4 +1,4 @@
-django
+django<4.1
 django-mptt
 django-mptt-admin
 django-csp
@@ -10,7 +10,8 @@ https://github.com/jazzband/django-taggit/archive/refs/heads/master.zip
 # optional
 psycopg2-binary
 
-# developer resources
+### Developer resources ###
 # django-debug-toolbar
 # black
 # pyupgrade
+# pip-review
