@@ -40,7 +40,7 @@ def report_post_v2(request):
     # get headers
     try:
         # parse POST parameters
-        data = json.loads(request.body)
+        data = json.loads(utils.sanitize_json(request.body))
         # check if pytest report
         data["environment"]["Packages"]["pytest"]
     except Exception as e:

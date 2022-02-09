@@ -1,9 +1,15 @@
 import re
+import unicodedata
 from urllib.request import urlopen
 
 from django.conf import settings
+from django.utils.encoding import force_str
 from django.utils.html import escape
 from lxml import etree
+
+
+RE_POSTGRES_ESCAPE_CHARS = re.compile(r"[&:(|)!><]", re.UNICODE)
+RE_SPACE = re.compile(r"[\s]+", re.UNICODE)
 
 
 def get_module_from_nodeid(nodeid):
@@ -120,6 +126,31 @@ def parse_xml(data):
     else:
         kwargs["tags"] = []
     return kwargs
+
+
+def escape_query(text, re_escape_chars):
+    """
+    normalizes the query text to a format that can be consumed
+    by the backend database
+    """
+    text = force_str(text)
+    text = RE_SPACE.sub(" ", text)  # Standardize spacing.
+    text = re_escape_chars.sub(" ", text)  # Replace harmful characters with space.
+    text = text.strip()
+    return text
+
+
+def sanitize_json(data):
+    """
+    Removes unicode control characters and cleanup JSON for storage in PostgreSQL.
+    """
+    if not data:
+        return ""  #
+    text = force_str(data, encoding="utf-8")
+    text = "".join(ch for ch in text if unicodedata.category(ch)[0] != "C")
+    # Remove U+0000 as this is not permitted for PostgreSQL
+    text = text.replace(r"\u0000", " ")
+    return text
 
 
 def replace_backslashes(match):
