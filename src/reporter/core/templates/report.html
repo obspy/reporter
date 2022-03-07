@@ -236,7 +236,7 @@
 {% for test in skipped_tests %}
   <tr>
     <td>{{ test.0 }}</td>
-    <td><a href="https://github.com/obspy/obspy/blob/{{ report.git_commit_hash }}/{{ test.3 }}#L{{ test.4 }}" target="_blank">{{ test.1 }}</a></td>
+    <td><a href="https://github.com/obspy/obspy/blob/{{ report.git_commit_hash }}/obspy/{{ test.3 }}#L{{ test.4 }}" target="_blank">{{ test.1 }}</a></td>
     <td>{{ test.2 }}</td>
   </tr>
 {% endfor %}
@@ -262,7 +262,7 @@
 {% for test in slowest_tests %}
   <tr>
     <td>{{ test.0|floatformat:3 }}s</td>
-    <td><a href="https://github.com/obspy/obspy/blob/{{ report.git_commit_hash }}/{{ test.2 }}#L{{ test.3 }}" target="_blank">{{ test.1 }}</a></td>
+    <td><a href="https://github.com/obspy/obspy/blob/{{ report.git_commit_hash }}/obspy/{{ test.2 }}#L{{ test.3 }}" target="_blank">{{ test.1 }}</a></td>
   </tr>
 {% endfor %}
 {% endif %}
