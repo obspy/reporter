@@ -37,14 +37,22 @@ def report_post_v2(request):
     if request.content_type != "application/json":
         return HttpResponseBadRequest("Wrong content type")
 
-    # get headers
+    # sanitize JSON data
     try:
         # parse POST parameters
         data = json.loads(utils.sanitize_json(request.body))
-        # check if pytest report
-        data["environment"]["Packages"]["pytest"]
     except Exception as e:
         return HttpResponseBadRequest(str(e))
+
+    # check if pytest report
+    try:
+        assert data["dependencies"]["pytest"]
+    except Exception:
+        # old style pytest-metadata < 2.0
+        try:
+            assert data["environment"]["Packages"]["pytest"]
+        except Exception:
+            return HttpResponseBadRequest("Invalid report - missing pytest dependency")
 
     # required data
     try:
@@ -52,7 +60,7 @@ def report_post_v2(request):
         errors = int(data["summary"].get("failed", 0)) + int(
             data["summary"].get("error", 0)
         )
-        version = data["environment"].get("Python", "")[:16]
+        version = data["platform_info"].get("python_version", "")[:16]
         timestamp = float(data.get("created", 0))
         system = data["platform_info"].get("system", "")[:16]
         architecture = data["platform_info"].get("architecture")[:16]
