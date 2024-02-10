@@ -34,7 +34,6 @@ LANGUAGE_CODE = "en-us"
 SITE_ID = 1
 
 USE_I18N = False
-USE_L10N = False
 USE_TZ = False
 DATETIME_FORMAT = "Y-m-d H:i:s"
 DATE_FORMAT = "Y-m-d"
