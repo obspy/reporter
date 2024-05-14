@@ -7,7 +7,6 @@ from django.utils.encoding import force_str
 from django.utils.html import escape
 from lxml import etree
 
-
 RE_POSTGRES_ESCAPE_CHARS = re.compile(r"[&:(|)!><]", re.UNICODE)
 RE_SPACE = re.compile(r"[\s]+", re.UNICODE)
 
@@ -36,15 +35,15 @@ def get_modules_from_json(data):
                 # or without obspy, than max 2 levels
                 (not c["nodeid"].startswith("obspy/") and c["nodeid"].count("/") <= 2)
             )
-            and c["result"] != []
         ]
     except Exception:
         modules = []
     # remove duplicates
     modules = list(dict.fromkeys(modules))
-    # cleanup
-    if "obspy" in modules:
-        modules.remove("obspy")
+    # cleanup unwanted modules
+    for module in ["obspy", "io", "lib", "clients"]:
+        if module in modules:
+            modules.remove(module)
     return modules
 
 
