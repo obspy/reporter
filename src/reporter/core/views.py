@@ -1,17 +1,17 @@
 import ast
 import copy
-from datetime import datetime
 import json
+from datetime import datetime
 from urllib.request import urlopen
 
 from django.contrib.syndication.views import Feed
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.http.response import (
+    Http404,
     HttpResponse,
     HttpResponseBadRequest,
     JsonResponse,
-    Http404,
 )
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import get_template
@@ -24,7 +24,6 @@ from lxml import etree
 from reporter.core.utils import cache_page_if_not_latest
 
 from . import models, utils
-
 
 LIMITS = [50, 100, 200]
 
@@ -652,7 +651,7 @@ class SelectedNodeReportsFeed(Feed):
 
     description = "Latest updates on tests.obspy.org"
 
-    def get_object(self, request, name):  # @UnusedVariable
+    def get_object(self, request, name):
         return get_object_or_404(models.SelectedNode, name=name)
 
     def title(self, node):
@@ -685,7 +684,7 @@ class SelectedNodeReportsFeed(Feed):
 
 
 @cache_page(60 * 60 * 24 * 7)
-def report_xml(request, pk):  # @UnusedVariable
+def report_xml(request, pk):
     """
     Returns XML document of given report (deprecated)
     """
@@ -697,7 +696,7 @@ def report_xml(request, pk):  # @UnusedVariable
 
 
 @cache_page(60 * 60 * 24 * 7)
-def report_json(request, pk):  # @UnusedVariable
+def report_json(request, pk):
     """
     Returns JSON document of given report
     """
@@ -706,7 +705,7 @@ def report_json(request, pk):  # @UnusedVariable
     return JsonResponse(json_doc)
 
 
-def report_latest(request):  # @UnusedVariable
+def report_latest(request):
     """
     Redirect to latest report
     """

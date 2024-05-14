@@ -37,3 +37,4 @@ settings_local.py
 /static
 /tests
 /.settings
+.vscode/launch.json

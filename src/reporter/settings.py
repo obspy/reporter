@@ -152,8 +152,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 
 # Override the settings with local modifications
-from .settings_local import *  # @UnusedWildImport @IgnorePep8
-
+from .settings_local import *
 
 ###############################################################################
 # django-debug-toolbar

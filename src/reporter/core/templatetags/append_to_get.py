@@ -20,7 +20,6 @@ see also: http://djangosnippets.org/snippets/1627/
 
 from django import template
 
-
 register = template.Library()
 
 
@@ -30,7 +29,7 @@ def easy_tag(func):
     deal with the repetitive parts of parsing template tags
     """
 
-    def inner(parser, token):  # @UnusedVariable
+    def inner(parser, token):
         # print token
         try:
             return func(*token.split_contents())

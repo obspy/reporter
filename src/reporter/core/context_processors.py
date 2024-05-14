@@ -3,7 +3,6 @@ from django.utils.safestring import mark_safe
 
 from . import models, utils
 
-
 CACHE_TIMEOUT = 60 * 60 * 24
 
 
@@ -18,14 +17,14 @@ def _recursive_node(node):
     }
 
 
-def static(request):  # @UnusedVariable
+def static(request):
     """
     A context processor returning basic parameters used on all pages.
     """
     # cache menu structure for 24h
     menu = cache.get("menu")
     if not menu:
-        roots = models.MenuItem.objects.filter(level=0)  # @UndefinedVariable
+        roots = models.MenuItem.objects.filter(level=0)
         menu = []
         for n in roots:
             menu.append(_recursive_node(n))

@@ -9,7 +9,7 @@ from reporter.core import models, utils
 
 class Command(BaseCommand):
     args = "pk or pk:pk"
-    help = "Reindex database"  # @ReservedAssignment
+    help = "Reindex database"
 
     def add_arguments(self, parser):
         parser.add_argument("args", nargs="+")
@@ -24,7 +24,7 @@ class Command(BaseCommand):
                 new_pks = [int(pk)]
             for new_pk in new_pks:
                 try:
-                    report = models.Report.objects.get(pk=new_pk)  # @UndefinedVariable
+                    report = models.Report.objects.get(pk=new_pk)
                 except Exception:
                     print(f"Skipping not existing report {new_pk}")
                     continue
