@@ -30,7 +30,7 @@ class DocumentTypeFilter(admin.SimpleListFilter):
 @admin.register(models.Report)
 class ReportAdmin(admin.ModelAdmin):
     list_display = [
-        "id",
+        "pk",
         "errors",
         "failures",
         "skipped",
@@ -46,6 +46,7 @@ class ReportAdmin(admin.ModelAdmin):
         "display_document_type",
     ]
     search_fields = [
+        "pk",
         "installed",
         "node",
         "system",
@@ -59,7 +60,7 @@ class ReportAdmin(admin.ModelAdmin):
         "version",
     ]
     date_hierarchy = "datetime"
-    readonly_fields = ["id"]
+    readonly_fields = ["pk"]
 
     @admin.display(description="Type")
     def display_document_type(self, obj):
