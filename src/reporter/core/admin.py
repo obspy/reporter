@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django_mptt_admin.admin import DjangoMpttAdmin
+from taggit.models import Tag
 
 from . import models
 
@@ -45,3 +46,15 @@ class SelectedNodeAdmin(admin.ModelAdmin):
 @admin.register(models.MenuItem)
 class MenuItemAdmin(DjangoMpttAdmin):
     list_display = ["name"]
+
+
+# remove TaggedItemInline from default TagAdmin
+admin.site.unregister(Tag)
+
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ["name", "slug"]
+    ordering = ["name", "slug"]
+    search_fields = ["name"]
+    prepopulated_fields = {"slug": ["name"]}
