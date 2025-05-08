@@ -1,0 +1,14 @@
+exclude = [
+    ".git",
+    ".venv",
+    ".vscode",
+    "media",
+    "migrations",
+    "static",
+    "test-reports",
+]
+line-length = 120
+
+[lint]
+extend-select = ["N", "R", "I"]
+ignore = ["E401"]

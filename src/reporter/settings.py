@@ -152,7 +152,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 
 # Override the settings with local modifications
-from .settings_local import *
+from .settings_local import *  # noqa: E402, F403
 
 ###############################################################################
 # django-debug-toolbar

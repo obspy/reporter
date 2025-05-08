@@ -1,0 +1,24 @@
+[project]
+name = "reporter"
+version = "0.1.0"
+description = "ObsPy test reporter app"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "django>=5.2,<5.3",
+    "django-csp",
+    "django-mptt>=0.16.0",
+    "django-mptt-admin>=2.7.2",
+    "django-taggit>=6.1.0",
+    "lxml",
+]
+
+[dependency-groups]
+dev = [
+    "django-debug-toolbar>=5.1.0",
+    "django-debug-toolbar-template-profiler>=2.1.0",
+    "requests>=2.32.3",
+    "ruff>=0.11.2",
+    "psycopg>=3.2.6",
+    "psycopg-binary>=3.2.6",
+]
