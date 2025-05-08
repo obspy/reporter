@@ -308,10 +308,9 @@ def report_html(request, pk):
     report = get_object_or_404(models.Report, pk=pk)
     if report.xml:
         return _report_html_xml(request, report)
-    elif report.json:
+    if report.json:
         return _report_html_json(request, report)
-    else:
-        return Http404("Not implemented")
+    return Http404("Not implemented")
 
 
 def _report_html_json(request, report):
@@ -593,14 +592,6 @@ def _report_html_xml(request, report):
         log = str(log)
     except Exception:
         log = None
-    # api.icndb.com
-    url = "http://api.icndb.com/jokes/random?limitTo=[nerdy]&escape=javascript"
-    try:
-        full_json = urlopen(url).read()
-        full = json.loads(full_json)
-        icndb = full["value"]["joke"]
-    except Exception:
-        icndb = None
     # render page
     context = {
         "report": report,
@@ -612,7 +603,6 @@ def _report_html_xml(request, report):
         "log": log,
         "slowest_tests": slowest_tests,
         "skipped_tests": skipped_tests,
-        "icndb": icndb,
     }
     return render(request, "report.html", context)
 
@@ -648,8 +638,6 @@ class SelectedNodeReportsFeed(Feed):
     """
     RSS feed for latest test reports filtered by selected node
     """
-
-    description = "Latest updates on tests.obspy.org"
 
     def get_object(self, request, name):
         return get_object_or_404(models.SelectedNode, name=name)
