@@ -1,3 +1,10 @@
+__pycache__/
+.pytest_cache/
+pycache/
+build/
+dist/
+wheels/
+*.egg-info
 uv.lock
 *.py[cod]
 /media/

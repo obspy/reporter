@@ -24,6 +24,7 @@ class ReporterSecurityMiddleware(MiddlewareMixin):
             return HttpResponsePermanentRedirect(
                 "https://%s%s" % (host, request.get_full_path())
             )
+        return None
 
 
 class MinifyHTMLMiddleware:
@@ -61,5 +62,4 @@ class MinifyHTMLMiddleware:
         content = cls.RE_LEFT_SPACE.sub(b"\n", content)
         content = cls.RE_RIGHT_SPACE.sub(b"\n", content)
         content = cls.RE_MULTI_SPACE.sub(b" ", content)
-        content = cls.RE_MULTI_BREAK.sub(b"\n", content)
-        return content
+        return cls.RE_MULTI_BREAK.sub(b"\n", content)

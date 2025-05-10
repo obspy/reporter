@@ -6,4 +6,4 @@ class ReporterCoreAppConfig(AppConfig):
     verbose_name = "core"
 
     def ready(self):
-        from . import signals
+        from . import signals  # noqa: F401

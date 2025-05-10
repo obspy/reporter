@@ -2,7 +2,6 @@ from django.test import TestCase
 
 from . import utils
 
-
 TB_SOURCE_1 = """
 Traceback (most recent call last):
   File "/testrun/git/obspy/core/tests/test_quakeml.py", line 516, in test_enums

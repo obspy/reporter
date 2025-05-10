@@ -135,8 +135,7 @@ def escape_query(text, re_escape_chars):
     text = force_str(text)
     text = RE_SPACE.sub(" ", text)  # Standardize spacing.
     text = re_escape_chars.sub(" ", text)  # Replace harmful characters with space.
-    text = text.strip()
-    return text
+    return text.strip()
 
 
 def sanitize_json(data):
@@ -148,8 +147,7 @@ def sanitize_json(data):
     text = force_str(data, encoding="utf-8")
     text = "".join(ch for ch in text if unicodedata.category(ch)[0] != "C")
     # Remove U+0000 as this is not permitted for PostgreSQL
-    text = text.replace(r"\u0000", " ")
-    return text
+    return text.replace(r"\u0000", " ")
 
 
 def replace_backslashes(match):
@@ -201,12 +199,11 @@ def split(a, n):
 
 def fetch_credits():
     contributors = urlopen(
-        "https://raw.githubusercontent.com/obspy/" "obspy/master/obspy/CONTRIBUTORS.txt"
+        "https://raw.githubusercontent.com/obspy/obspy/master/obspy/CONTRIBUTORS.txt"
     ).read()
     contributors = contributors.decode("utf-8")
     funds = urlopen(
-        "https://raw.githubusercontent.com/obspy/"
-        "obspy/master/misc/docs/source/credits/FUNDS.txt"
+        "https://raw.githubusercontent.com/obspy/obspy/master/misc/docs/source/credits/FUNDS.txt"
     ).read()
     funds = funds.decode("utf-8")
     # sort and split
@@ -238,9 +235,8 @@ def cache_page_if_not_latest(model, decorator):
             if cacheit:
                 # view with @cache
                 return decorated_view(request, *args, **kwargs)
-            else:
-                # view without @cache
-                return view(request, *args, **kwargs)
+            # view without @cache
+            return view(request, *args, **kwargs)
 
         return _view
 

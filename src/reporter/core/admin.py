@@ -22,7 +22,7 @@ class DocumentTypeFilter(admin.SimpleListFilter):
         # filter
         if value == "json":
             return queryset.filter(xml=None)
-        elif value == "xml":
+        if value == "xml":
             return queryset.exclude(xml=None)
         return queryset
 
@@ -66,7 +66,7 @@ class ReportAdmin(admin.ModelAdmin):
     def display_document_type(self, obj):
         if obj.json:
             return "JSON"
-        elif obj.xml:
+        if obj.xml:
             return "XML"
         return "-"
 

@@ -77,20 +77,16 @@ class Report(models.Model):
         if self.sum:
             if self.errors:
                 return "danger"
-            else:
-                return "warning"
-        else:
-            return "success"
+            return "warning"
+        return "success"
 
     @property
     def status_icon(self):
         if self.sum:
             if self.errors:
                 return "glyphicon glyphicon-remove"
-            else:
-                return "glyphicon glyphicon-remove"
-        else:
-            return "glyphicon glyphicon-ok"
+            return "glyphicon glyphicon-remove"
+        return "glyphicon glyphicon-ok"
 
     @property
     def next_id(self):
@@ -125,30 +121,28 @@ class Report(models.Model):
                 if len(local_version[1]) != 11:
                     return False
                 return True
-            else:
-                return False
-        elif "0.0.0+archive" in self.installed:
+            return False
+        if "0.0.0+archive" in self.installed:
             return False
         # old style dev version
-        else:
-            if self.installed is None:
-                return False
-            elif self.installed.endswith("-dirty"):
-                return False
-            elif "-g" in self.installed:
-                # GIT
-                return True
-            elif ".dev-r" in self.installed:
-                # SVN
-                return False
-            elif self.installed.startswith("0.5."):
-                return False
-            elif self.installed.startswith("0.6."):
-                return False
-            elif self.installed.startswith("0.7."):
-                return False
-            elif self.installed.count(".") == 2:
-                return True
+        if self.installed is None:
+            return False
+        if self.installed.endswith("-dirty"):
+            return False
+        if "-g" in self.installed:
+            # GIT
+            return True
+        if ".dev-r" in self.installed:
+            # SVN
+            return False
+        if self.installed.startswith("0.5."):
+            return False
+        if self.installed.startswith("0.6."):
+            return False
+        if self.installed.startswith("0.7."):
+            return False
+        if self.installed.count(".") == 2:
+            return True
         return False
 
     @property
