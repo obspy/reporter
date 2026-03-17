@@ -176,7 +176,7 @@ def report_index(request):
     except Exception:
         limit = LIMITS[0]
 
-    queryset = models.Report.objects.all()
+    queryset = models.Report.objects.all().defer("xml", "json")
 
     # errors
     show = request.GET.get("show")

@@ -20,7 +20,7 @@ class Report(models.Model):
     A test report.
     """
 
-    datetime = models.DateTimeField(verbose_name="Date/Time")
+    datetime = models.DateTimeField(verbose_name="Date/Time", db_index=True)
     tests = models.IntegerField()
     errors = models.IntegerField()
     failures = models.IntegerField()
