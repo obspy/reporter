@@ -5,12 +5,13 @@ description = "ObsPy test reporter app"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "django",
+    "django>=5.2.13,<6.0",
     "django-csp",
     "django-mptt",
     "django-mptt-admin",
     "django-taggit",
-    "lxml",
+    "lxml>=6.1.0",
+    "sqlparse>=0.5.5",
 ]
 
 [dependency-groups]

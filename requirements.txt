@@ -2,7 +2,7 @@
 #    uv pip compile pyproject.toml -o requirements.txt
 asgiref==3.8.1
     # via django
-django==5.2.2
+django==5.2.13
     # via
     #   reporter (pyproject.toml)
     #   django-csp
@@ -20,9 +20,11 @@ django-mptt-admin==2.8.0
     # via reporter (pyproject.toml)
 django-taggit==6.1.0
     # via reporter (pyproject.toml)
-lxml==5.4.0
+lxml==6.1.0
     # via reporter (pyproject.toml)
 packaging==25.0
     # via django-csp
-sqlparse==0.5.3
-    # via django
+sqlparse==0.5.5
+    # via
+    #   reporter (pyproject.toml)
+    #   django
