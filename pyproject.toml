@@ -14,12 +14,14 @@ dependencies = [
     "sqlparse>=0.5.5",
 ]
 
+[tool.uv]
+exclude-newer = "14 days"
+exclude-newer-package = { django = false }
+
 [dependency-groups]
 dev = [
+    "psycopg[binary]",
     "django-debug-toolbar",
     "django-debug-toolbar-template-profiler",
-    "requests",
     "ruff",
-    "psycopg",
-    "psycopg-binary",
 ]
