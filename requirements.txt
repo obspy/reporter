@@ -16,15 +16,15 @@ django-mptt==0.18.0
     # via
     #   reporter (pyproject.toml)
     #   django-mptt-admin
-django-mptt-admin==2.9.1
+django-mptt-admin==2.10.0
     # via reporter (pyproject.toml)
 django-taggit==6.1.0
     # via reporter (pyproject.toml)
 lxml==6.1.1
     # via reporter (pyproject.toml)
-packaging==26.2
+packaging==26.3
     # via django-csp
-sqlparse==0.5.5
+sqlparse==0.6.0
     # via
     #   reporter (pyproject.toml)
     #   django
