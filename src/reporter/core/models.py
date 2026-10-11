@@ -32,9 +32,7 @@ class Report(models.Model):
     system = models.CharField(max_length=16, db_index=True)
     architecture = models.CharField(max_length=16, db_index=True)
     version = models.CharField(max_length=16, db_index=True)
-    prurl = models.URLField(
-        verbose_name="Pull request URL", blank=True, null=True, db_index=True
-    )
+    prurl = models.URLField(verbose_name="Pull request URL", blank=True, null=True, db_index=True)
     architecture = models.CharField(max_length=16, db_index=True)
     xml = models.TextField(verbose_name="XML document", blank=True, null=True)
     json = models.JSONField(verbose_name="JSON document", blank=True, null=True)
@@ -59,6 +57,8 @@ class Report(models.Model):
 
     @property
     def prurl_number(self):
+        if not (self.prurl or "").startswith(("https://", "http://")):
+            return None
         try:
             return int(self.prurl.split("/")[-1])
         except Exception:
@@ -171,9 +171,7 @@ class SelectedNode(models.Model):
 
 
 class MenuItem(MPTTModel):
-    parent = TreeForeignKey(
-        "self", null=True, blank=True, related_name="children", on_delete=models.CASCADE
-    )
+    parent = TreeForeignKey("self", null=True, blank=True, related_name="children", on_delete=models.CASCADE)
     name = models.CharField(max_length=50, help_text='Use "-" for dividers')
     icon = models.CharField(
         max_length=100,

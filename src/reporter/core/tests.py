@@ -1,7 +1,10 @@
+import json
+import time
+
 from django.template import Context
 from django.test import RequestFactory, TestCase
 
-from . import utils
+from . import models, utils, views
 from .templatetags.append_to_get import AppendGetNode
 
 TB_SOURCE_1 = """
@@ -57,3 +60,23 @@ class ReporterTest(TestCase):
         request = RequestFactory().get("/", {"q": 'a"b', "pyversion": "3.12.0+"})
         url = AppendGetNode("page=p").render(Context({"request": request, "p": 2}))
         self.assertEqual(url, "/?q=a%22b&amp;pyversion=3.12.0%2B&amp;page=2")
+
+    def test_prurl_number_requires_http_url(self):
+        report = models.Report(prurl="https://github.com/obspy/obspy/pull/123")
+        self.assertEqual(report.prurl_number, 123)
+        report.prurl = "ftp://example.org/pull/123"
+        self.assertIsNone(report.prurl_number)
+
+    def test_report_post_rejects_future_timestamp(self):
+        data = {
+            "created": time.time() + 24 * 60 * 60,
+            "dependencies": {"pytest": "8.0"},
+            "summary": {"total": 1},
+            "platform_info": {},
+        }
+        request = RequestFactory().post(
+            "/post/v2/", json.dumps(data), content_type="application/json"
+        )
+        response = views.report_post_v2(request)
+        self.assertEqual(response.status_code, 400)
+        self.assertIn(b"future", response.content)

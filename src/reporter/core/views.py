@@ -1,6 +1,7 @@
 import ast
 import copy
 import json
+import time
 from datetime import datetime
 
 from django.contrib.syndication.views import Feed
@@ -25,6 +26,7 @@ from reporter.core.utils import cache_page_if_not_latest
 from . import models, utils
 
 LIMITS = [50, 100, 200]
+MAX_CLOCK_SKEW = 10 * 60  # seconds
 
 
 @require_http_methods(["POST"])
@@ -55,11 +57,12 @@ def report_post_v2(request):
     # required data
     try:
         tests = int(data["summary"].get("total", 0))
-        errors = int(data["summary"].get("failed", 0)) + int(
-            data["summary"].get("error", 0)
-        )
+        errors = int(data["summary"].get("failed", 0)) + int(data["summary"].get("error", 0))
         version = data["platform_info"].get("python_version", "")[:16]
         timestamp = float(data.get("created", 0))
+        if timestamp > time.time() + MAX_CLOCK_SKEW:
+            raise ValueError("Report timestamp lies in the future")
+        created = datetime.fromtimestamp(timestamp)
         system = data["platform_info"].get("system", "")[:16]
         architecture = data["platform_info"].get("architecture")[:16]
     except Exception as e:
@@ -72,7 +75,7 @@ def report_post_v2(request):
 
     # create report
     report = models.Report(
-        datetime=datetime.fromtimestamp(timestamp),
+        datetime=created,
         tests=tests,
         errors=errors,
         failures=0,
@@ -87,9 +90,7 @@ def report_post_v2(request):
     # create tags
     if modules:
         report.tags.add(*modules)
-    return JsonResponse(
-        {"url": request.build_absolute_uri(reverse("report_html", args=(report.pk,)))}
-    )
+    return JsonResponse({"url": request.build_absolute_uri(reverse("report_html", args=(report.pk,)))})
 
 
 @require_http_methods(["POST"])
@@ -106,6 +107,9 @@ def report_post_v1(request):
         failures = int(request.POST.get("failures"))
         version = request.POST.get("python_version")[:16]
         timestamp = int(request.POST.get("timestamp"))
+        if timestamp > time.time() + MAX_CLOCK_SKEW:
+            raise ValueError("Report timestamp lies in the future")
+        created = datetime.fromtimestamp(timestamp)
         modules = int(request.POST.get("modules"))
         system = request.POST.get("system")[:16]
         architecture = request.POST.get("architecture")[:16]
@@ -127,7 +131,7 @@ def report_post_v1(request):
         tags = kwargs.pop("tags")
     # create report
     report = models.Report(
-        datetime=datetime.fromtimestamp(timestamp),
+        datetime=created,
         tests=tests,
         errors=errors,
         failures=failures,
@@ -142,9 +146,7 @@ def report_post_v1(request):
     # create tags
     if tags:
         report.tags.add(*tags)
-    return JsonResponse(
-        {"url": request.build_absolute_uri(reverse("report_html", args=(report.pk,)))}
-    )
+    return JsonResponse({"url": request.build_absolute_uri(reverse("report_html", args=(report.pk,)))})
 
 
 def report_index(request):
@@ -183,11 +185,7 @@ def report_index(request):
         queryset = queryset.filter(Q(failures__gt=0) | Q(errors__gt=0))
 
     # filter by system
-    systems = (
-        models.Report.objects.values_list("system", flat=True)
-        .distinct()
-        .order_by("system")
-    )
+    systems = models.Report.objects.values_list("system", flat=True).distinct().order_by("system")
     try:
         system = request.GET.get("system")
         if system not in systems:
@@ -197,11 +195,7 @@ def report_index(request):
         system = None
 
     # filter by architecture
-    architectures = (
-        models.Report.objects.values_list("architecture", flat=True)
-        .distinct()
-        .order_by("architecture")
-    )
+    architectures = models.Report.objects.values_list("architecture", flat=True).distinct().order_by("architecture")
     try:
         architecture = request.GET.get("architecture")
         if architecture not in architectures:
@@ -211,11 +205,7 @@ def report_index(request):
         architecture = None
 
     # filter by python version
-    pyversions = (
-        models.Report.objects.values_list("version", flat=True)
-        .distinct()
-        .order_by("-version")
-    )
+    pyversions = models.Report.objects.values_list("version", flat=True).distinct().order_by("-version")
     try:
         pyversion = request.GET.get("pyversion")
         # plus sign gets replaced to space by browser
@@ -315,20 +305,11 @@ def report_html(request, pk):
 def _report_html_json(request, report):
     data = report.json
     git_hash = report.git_commit_hash
-    tags = sorted(
-        list(report.tags.values_list("name", flat=True)), key=len, reverse=True
-    )
+    tags = sorted(list(report.tags.values_list("name", flat=True)), key=len, reverse=True)
     # platform information
-    platform = sorted(
-        [
-            (k.replace("_", " ").title(), v)
-            for k, v in data.get("platform_info", {}).items()
-        ]
-    )
+    platform = sorted([(k.replace("_", " ").title(), v) for k, v in data.get("platform_info", {}).items()])
     # dependencies
-    dependencies = sorted(
-        [(k, v or "Not Installed") for k, v in data.get("dependencies", {}).items()]
-    )
+    dependencies = sorted([(k, v or "Not Installed") for k, v in data.get("dependencies", {}).items()])
     # warnings
     warnings = data.get("warnings", {})
     # remove duplicates
@@ -463,22 +444,12 @@ def _report_html_xml(request, report):
     root = etree.fromstring(report.xml)
     # platform information
     if root.find("platform") is not None:
-        platform = sorted(
-            [
-                (i.tag.replace("_", " ").title(), i.text)
-                for i in root.find("platform").getchildren()
-            ]
-        )
+        platform = sorted([(i.tag.replace("_", " ").title(), i.text) for i in root.find("platform").getchildren()])
     else:
         platform = []
     # dependencies
     if root.find("dependencies") is not None:
-        dependencies = sorted(
-            [
-                (i.tag, i.text or "Not Installed")
-                for i in root.find("dependencies").getchildren()
-            ]
-        )
+        dependencies = sorted([(i.tag, i.text or "Not Installed") for i in root.find("dependencies").getchildren()])
     else:
         dependencies = []
     # skipped tests
@@ -495,13 +466,7 @@ def _report_html_xml(request, report):
         slowest_tests = []
     # modules
     if root.find("obspy") is not None:
-        temp = sorted(
-            [
-                (c.tag, c)
-                for c in root.find("obspy").getchildren()
-                if c.tag != "installed"
-            ]
-        )
+        temp = sorted([(c.tag, c) for c in root.find("obspy").getchildren() if c.tag != "installed"])
     else:
         temp = []
     modules = []
@@ -535,9 +500,7 @@ def _report_html_xml(request, report):
                     tb = {}
                     tb["module"] = obj["name"]
                     tb["id"] = len(tracebacks) + 1
-                    tb["log"], tb["imgurs"] = utils.format_traceback(
-                        error.text, git_hash
-                    )
+                    tb["log"], tb["imgurs"] = utils.format_traceback(error.text, git_hash)
                     tb["status"] = "warning"
                     module_tracebacks.append(tb)
                     tracebacks.append(tb)
@@ -551,9 +514,7 @@ def _report_html_xml(request, report):
                     tb = {}
                     tb["module"] = obj["name"]
                     tb["id"] = len(tracebacks) + 1
-                    tb["log"], tb["imgurs"] = utils.format_traceback(
-                        error.text, git_hash
-                    )
+                    tb["log"], tb["imgurs"] = utils.format_traceback(error.text, git_hash)
                     tb["status"] = "danger"
                     module_tracebacks.append(tb)
                     tracebacks.append(tb)
@@ -607,9 +568,7 @@ class LatestReportsFeed(Feed):
     description = "Latest failing test reports on tests.obspy.org."
 
     def items(self):
-        return models.Report.objects.filter(
-            Q(failures__gt=0) | Q(errors__gt=0)
-        ).order_by("-datetime")[:20]
+        return models.Report.objects.filter(Q(failures__gt=0) | Q(errors__gt=0)).order_by("-datetime")[:20]
 
     def item_title(self, report):
         context = {"report": report}
@@ -666,11 +625,15 @@ def report_xml(request, pk):
     """
     Returns XML document of given report (deprecated)
     """
-    report = get_object_or_404(models.Report, pk=pk)
+    report = get_object_or_404(models.Report, pk=pk, xml__isnull=False)
     xml_doc = report.xml
     if not xml_doc.startswith("<?xml"):
         xml_doc = '<?xml version="1.0" encoding="UTF-8"?>' + xml_doc
-    return HttpResponse(xml_doc, content_type="text/xml")
+    return HttpResponse(
+        xml_doc,
+        content_type="text/xml",
+        headers={"Content-Disposition": f'attachment; filename="report_{pk}.xml"'},
+    )
 
 
 @cache_page(60 * 60 * 24 * 7)
@@ -678,7 +641,7 @@ def report_json(request, pk):
     """
     Returns JSON document of given report
     """
-    report = get_object_or_404(models.Report, pk=pk)
+    report = get_object_or_404(models.Report, pk=pk, json__isnull=False)
     json_doc = report.json
     return JsonResponse(json_doc)
 
