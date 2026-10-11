@@ -2,7 +2,6 @@ import ast
 import copy
 import json
 from datetime import datetime
-from urllib.request import urlopen
 
 from django.contrib.syndication.views import Feed
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
@@ -41,7 +40,7 @@ def report_post_v2(request):
         # parse POST parameters
         data = json.loads(utils.sanitize_json(request.body))
     except Exception as e:
-        return HttpResponseBadRequest(str(e))
+        return HttpResponseBadRequest(str(e), content_type="text/plain")
 
     # check if pytest report
     try:
@@ -64,7 +63,7 @@ def report_post_v2(request):
         system = data["platform_info"].get("system", "")[:16]
         architecture = data["platform_info"].get("architecture")[:16]
     except Exception as e:
-        return HttpResponseBadRequest(str(e))
+        return HttpResponseBadRequest(str(e), content_type="text/plain")
 
     # parse JSON document
     kwargs = utils.parse_json(data)
@@ -111,7 +110,7 @@ def report_post_v1(request):
         system = request.POST.get("system")[:16]
         architecture = request.POST.get("architecture")[:16]
     except Exception as e:
-        return HttpResponseBadRequest(str(e))
+        return HttpResponseBadRequest(str(e), content_type="text/plain")
     # check if XML is parseable
     try:
         etree.fromstring(data)
@@ -121,7 +120,7 @@ def report_post_v1(request):
             parser = etree.XMLParser(recover=True)
             data = etree.tostring(etree.fromstring(data, parser=parser))
         except Exception as e:
-            return HttpResponseBadRequest(str(e))
+            return HttpResponseBadRequest(str(e), content_type="text/plain")
     # parse XML document
     kwargs = utils.parse_xml(data)
     if "tags" in kwargs:
@@ -444,14 +443,6 @@ def _report_html_json(request, report):
     # cleanup
     slowest_tests = sorted(slowest_tests, reverse=True)[0:20]
     modules = modules_dict.values()
-    # api.icndb.com
-    url = "http://api.icndb.com/jokes/random?limitTo=[nerdy]&escape=javascript"
-    try:
-        full_json = urlopen(url).read()
-        full = json.loads(full_json)
-        icndb = full["value"]["joke"]
-    except Exception:
-        icndb = None
     # render page
     context = {
         "report": report,
@@ -463,7 +454,6 @@ def _report_html_json(request, report):
         "slowest_tests": slowest_tests,
         "skipped_tests": skipped_tests,
         "warnings": warnings,
-        "icndb": icndb,
     }
     return render(request, "report.html", context)
 

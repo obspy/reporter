@@ -1,6 +1,8 @@
-from django.test import TestCase
+from django.template import Context
+from django.test import RequestFactory, TestCase
 
 from . import utils
+from .templatetags.append_to_get import AppendGetNode
 
 TB_SOURCE_1 = """
 Traceback (most recent call last):
@@ -46,3 +48,12 @@ class ReporterTest(TestCase):
         """
         self.assertEqual(utils.format_traceback(TB_SOURCE_1), TB_RESULT_1)
         self.assertEqual(utils.format_traceback(TB_SOURCE_2), TB_RESULT_2)
+
+    def test_format_traceback_escapes_tree(self):
+        log, _ = utils.format_traceback(TB_SOURCE_1, tree='1.0-g"x')
+        self.assertIn('blob/1.0-g&quot;x/obspy/core/tests/test_quakeml.py#L516"', log)
+
+    def test_append_to_get_escapes_query(self):
+        request = RequestFactory().get("/", {"q": 'a"b', "pyversion": "3.12.0+"})
+        url = AppendGetNode("page=p").render(Context({"request": request, "p": 2}))
+        self.assertEqual(url, "/?q=a%22b&amp;pyversion=3.12.0%2B&amp;page=2")

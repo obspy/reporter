@@ -172,11 +172,17 @@ if DEBUG:
 ###############################################################################
 # django-csp
 ###############################################################################
-CSP_DEFAULT_SRC = ["'self'", "https://cdnjs.cloudflare.com:443"]  # fonts
-CSP_EXCLUDE_URL_PREFIXES = ("/admin",)
-CSP_SCRIPT_SRC = ["'self'", "https://cdnjs.cloudflare.com:443"]
-CSP_IMG_SRC = ["'self'", "https://i.imgur.com:443"]
-CSP_STYLE_SRC = ["'self'", "https://cdnjs.cloudflare.com:443"]
+CONTENT_SECURITY_POLICY = {
+    "EXCLUDE_URL_PREFIXES": ("/admin",),
+    "DIRECTIVES": {
+        "default-src": ["'self'", "https://cdnjs.cloudflare.com:443"],  # fonts
+        "script-src": ["'self'", "https://cdnjs.cloudflare.com:443"],
+        "img-src": ["'self'", "https://i.imgur.com:443"],
+        "style-src": ["'self'", "https://cdnjs.cloudflare.com:443"],
+    },
+}
+# registers django-csp's system checks, which reject the pre-4.0 CSP_* settings
+INSTALLED_APPS += ["csp"]
 MIDDLEWARE += [
     "csp.middleware.CSPMiddleware",
 ]

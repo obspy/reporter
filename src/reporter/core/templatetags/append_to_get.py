@@ -18,7 +18,10 @@ Note that the passed arguments are evaluated within the template context.
 see also: http://djangosnippets.org/snippets/1627/
 """
 
+from urllib.parse import urlencode
+
 from django import template
+from django.utils.html import escape
 
 register = template.Library()
 
@@ -58,12 +61,11 @@ class AppendGetNode(template.Node):
 
         path = context["request"].META["PATH_INFO"]
 
-        if len(get):
-            path += "?%s" % "&amp;".join(
-                [f"{key}={value}" for (key, value) in get.items() if value]
-            )
+        params = [(key, value) for (key, value) in get.items() if value]
+        if params:
+            path += "?" + urlencode(params)
 
-        return path
+        return escape(path)
 
 
 @register.tag()

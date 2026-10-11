@@ -168,6 +168,8 @@ def format_traceback(text, tree=None):
         tree = "master"
         linelink = ""
     else:
+        # tree comes from the submitted report: escape it for HTML and re.sub
+        tree = escape(tree).replace("\\", r"\\")
         linelink = r"#L\5"
     text = escape(text)
     # extract imgur images
@@ -199,11 +201,13 @@ def split(a, n):
 
 def fetch_credits():
     contributors = urlopen(
-        "https://raw.githubusercontent.com/obspy/obspy/master/obspy/CONTRIBUTORS.txt"
+        "https://raw.githubusercontent.com/obspy/obspy/master/obspy/CONTRIBUTORS.txt",
+        timeout=5,
     ).read()
     contributors = contributors.decode("utf-8")
     funds = urlopen(
-        "https://raw.githubusercontent.com/obspy/obspy/master/misc/docs/source/credits/FUNDS.txt"
+        "https://raw.githubusercontent.com/obspy/obspy/master/misc/docs/source/credits/FUNDS.txt",
+        timeout=5,
     ).read()
     funds = funds.decode("utf-8")
     # sort and split
