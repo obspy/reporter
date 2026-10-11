@@ -25,22 +25,24 @@ TypeError: findall() takes no keyword arguments
 
 TB_SOURCE_2 = """
 Traceback (most recent call last):
-  File "d:\\obspy\\obspy\taup\tests\test_taup.py", line 26, \
+  File "d:\\obspy\\obspy\\taup\\tests\\test_taup.py", line 26, \
 in test_getTravelTimesAK135
     tt = getTravelTimes(delta=52.474, depth=611.0, model='ak135')
-  File "d:\\obspy\\obspy\taup\taup.py", line 72, in getTravelTimes
+  File "d:\\obspy\\obspy\\taup\\taup.py", line 72, in getTravelTimes
     phase_names, tt, toang, dtdd, dtdh, dddp = libtau.ttimes(delta, depth,
 NameError: global name 'libtau' is not defined
 """
 
 TB_RESULT_2 = """
 Traceback (most recent call last):
-  File &quot;d:\\obspy\\obspy\taup\tests\test_taup.py&quot;, line 26, \
-in test_getTravelTimesAK135
-    tt = getTravelTimes(delta=52.474, depth=611.0, model=&#39;ak135&#39;)
-  File &quot;d:\\obspy\\obspy\taup\taup.py&quot;, line 72, in getTravelTimes
+  File &quot;<a href="https://github.com/obspy/obspy/blob/master/obspy/taup/\
+tests/test_taup.py">d:\\obspy\\obspy\\taup\\tests\\test_taup.py</a>&quot;\
+, line 26, in test_getTravelTimesAK135
+    tt = getTravelTimes(delta=52.474, depth=611.0, model=&#x27;ak135&#x27;)
+  File &quot;<a href="https://github.com/obspy/obspy/blob/master/obspy/taup/\
+taup.py">d:\\obspy\\obspy\\taup\\taup.py</a>&quot;, line 72, in getTravelTimes
     phase_names, tt, toang, dtdd, dtdh, dddp = libtau.ttimes(delta, depth,
-NameError: global name &#39;libtau&#39; is not defined
+NameError: global name &#x27;libtau&#x27; is not defined
 """
 
 
@@ -49,8 +51,8 @@ class ReporterTest(TestCase):
         """
         Tests for format_traceback utility function
         """
-        self.assertEqual(utils.format_traceback(TB_SOURCE_1), TB_RESULT_1)
-        self.assertEqual(utils.format_traceback(TB_SOURCE_2), TB_RESULT_2)
+        self.assertEqual(utils.format_traceback(TB_SOURCE_1)[0], TB_RESULT_1)
+        self.assertEqual(utils.format_traceback(TB_SOURCE_2)[0], TB_RESULT_2)
 
     def test_format_traceback_escapes_tree(self):
         log, _ = utils.format_traceback(TB_SOURCE_1, tree='1.0-g"x')
